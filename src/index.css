@@ -1,0 +1,112 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Explicit keyframes so they're always included in the bundle */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-100%); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33% { transform: translateY(-16px) rotate(2deg); }
+  66% { transform: translateY(-7px) rotate(-1.5deg); }
+}
+
+@keyframes meteor {
+  0% { transform: rotate(215deg) translateX(0); opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: rotate(215deg) translateX(-500px); opacity: 0; }
+}
+
+:root {
+  --color-bg: #F5F0E8;
+  --color-bg-subtle: #EDE7D9;
+  --color-text-primary: #1C1A17;
+  --color-text-secondary: #6B6456;
+  --color-accent: #7D9B76;
+  --color-accent-warm: #C2714F;
+  --color-surface: #FDFAF5;
+  --color-border: #D9D0C1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: "DM Sans", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+@layer utilities {
+  .font-display {
+    font-family: "Cormorant Garamond", Georgia, serif;
+  }
+
+  .text-display {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(64px, 9vw, 130px);
+    font-weight: 300;
+    line-height: 0.93;
+    letter-spacing: -0.02em;
+  }
+
+  .eyebrow {
+    font-family: "DM Sans", sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .section-heading {
+    font-family: "Cormorant Garamond", Georgia, serif;
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      var(--color-text-primary) 0%,
+      var(--color-accent-warm) 40%,
+      var(--color-accent) 60%,
+      var(--color-text-primary) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer-move 3s linear infinite;
+  }
+
+  @keyframes shimmer-move {
+    to { background-position: 200% center; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
