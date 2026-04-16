@@ -1,13 +1,13 @@
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useState, useEffect } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { testimonials } from '../../constants/products'
 
 function StarRating({ stars }: { stars: number }) {
   return (
-    <div className="flex gap-0.5">
+    <div className="flex gap-1 justify-center mt-4">
       {Array.from({ length: stars }).map((_, i) => (
-        <svg key={i} viewBox="0 0 12 12" fill="currentColor" className="w-3 h-3 text-accent-warm">
-          <path d="M6 1l1.12 2.27 2.51.36-1.82 1.77.43 2.5L6 6.77l-2.24 1.18.43-2.5L2.37 3.63l2.51-.36L6 1z"/>
+        <svg key={i} viewBox="0 0 14 14" fill="currentColor" className="w-3 h-3 text-accent-warm">
+          <path d="M7 1l1.4 2.84 3.13.45L9.22 6.41l.54 3.13L7 8.1 4.24 9.54l.54-3.13L2.47 4.29l3.13-.45L7 1z"/>
         </svg>
       ))}
     </div>
@@ -15,68 +15,118 @@ function StarRating({ stars }: { stars: number }) {
 }
 
 export default function Testimonials() {
+  const [activeIndex, setActiveIndex] = useState(0)
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveIndex(i => (i + 1) % testimonials.length)
+    }, 5000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const t = testimonials[activeIndex]
+
   return (
-    <section id="about" ref={ref} className="py-20 md:py-28 px-6 md:px-10 bg-bg-subtle overflow-hidden">
-      <div className="max-w-7xl mx-auto">
+    <section ref={ref} className="relative py-20 md:py-28 px-6 md:px-10 bg-bg-subtle overflow-hidden">
+
+      {/* Large decorative botanical circle — background element */}
+      <div
+        className="absolute -right-32 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full pointer-events-none select-none"
+        style={{ border: '1px solid rgba(217,208,193,0.35)' }}
+        aria-hidden
+      />
+      <div
+        className="absolute -right-24 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full pointer-events-none select-none"
+        style={{ border: '1px solid rgba(217,208,193,0.25)' }}
+        aria-hidden
+      />
+
+      <div className="relative max-w-3xl mx-auto text-center">
+
         {/* Header */}
         <motion.div
-          className="mb-12"
+          className="mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
         >
-          <div className="eyebrow text-text-secondary/60 mb-3">Reviews</div>
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <div className="w-5 h-px bg-text-secondary/30" />
+            <span className="eyebrow text-text-secondary/60">Reviews</span>
+            <div className="w-5 h-px bg-text-secondary/30" />
+          </div>
           <h2 className="section-heading text-text-primary">
             Warsaw loves<br />
-            <span className="italic text-text-secondary">fresh stems.</span>
+            <span className="italic text-text-secondary/75">fresh stems.</span>
           </h2>
         </motion.div>
 
-        {/* Scrolling marquee rows */}
-        <div className="overflow-hidden -mx-6 md:-mx-10 px-6 md:px-0">
-          {/* Row 1 */}
+        {/* Featured quote */}
+        <motion.div
+          className="relative"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
+          {/* Large decorative quotation mark */}
           <div
-            className="flex gap-4 w-max mb-4"
-            style={{ animation: 'marquee 40s linear infinite' }}
+            className="font-brand select-none pointer-events-none absolute -top-2 left-1/2 -translate-x-1/2 leading-none"
+            style={{
+              fontSize: 'clamp(100px, 16vw, 180px)',
+              color: 'rgba(125,155,118,0.12)',
+            }}
+            aria-hidden="true"
           >
-            {[...testimonials, ...testimonials, ...testimonials].map((t, i) => (
-              <div key={i} className="w-72 md:w-80 flex-shrink-0 bg-surface border border-border rounded-2xl p-5">
-                <div className="font-display text-4xl text-border leading-none mb-2">"</div>
-                <p className="font-sans text-[14px] font-light text-text-secondary leading-relaxed mb-4">{t.quote}</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-sans text-[12px] font-[500] text-text-primary">{t.name}</div>
-                    <div className="font-sans text-[11px] text-text-secondary/60">{t.location}</div>
-                  </div>
-                  <StarRating stars={t.stars} />
-                </div>
-              </div>
-            ))}
+            "
           </div>
 
-          {/* Row 2 — reversed */}
-          <div
-            className="flex gap-4 w-max"
-            style={{ animation: 'marquee 50s linear infinite reverse' }}
-          >
-            {[...testimonials.slice().reverse(), ...testimonials.slice().reverse(), ...testimonials.slice().reverse()].map((t, i) => (
-              <div key={i} className="w-72 md:w-80 flex-shrink-0 bg-surface border border-border rounded-2xl p-5">
-                <div className="font-display text-4xl text-border leading-none mb-2">"</div>
-                <p className="font-sans text-[14px] font-light text-text-secondary leading-relaxed mb-4">{t.quote}</p>
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-sans text-[12px] font-[500] text-text-primary">{t.name}</div>
-                    <div className="font-sans text-[11px] text-text-secondary/60">{t.location}</div>
-                  </div>
-                  <StarRating stars={t.stars} />
+          {/* Cycling quote */}
+          <div className="relative z-10 min-h-[180px] md:min-h-[160px] flex flex-col items-center justify-center">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeIndex}
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -18 }}
+                transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                className="flex flex-col items-center"
+              >
+                <p className="font-display text-[22px] md:text-[28px] font-light italic text-text-primary leading-relaxed max-w-2xl">
+                  "{t.quote}"
+                </p>
+
+                {/* Separator */}
+                <div className="mt-6 flex items-center gap-3">
+                  <div className="w-8 h-px bg-border" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-accent/60" />
+                  <div className="w-8 h-px bg-border" />
                 </div>
-              </div>
+
+                <div className="mt-3 font-sans text-[13px] font-[500] text-text-primary">{t.name}</div>
+                <div className="font-sans text-[11px] text-text-secondary/50 mt-0.5 tracking-wide">{t.location}</div>
+                <StarRating stars={t.stars} />
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* Navigation dots */}
+          <div className="flex justify-center gap-2.5 mt-10">
+            {testimonials.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setActiveIndex(i)}
+                aria-label={`Show review ${i + 1}`}
+                className={`h-1.5 rounded-full transition-all duration-300 ${
+                  i === activeIndex
+                    ? 'w-7 bg-accent'
+                    : 'w-1.5 bg-border hover:bg-text-secondary/35'
+                }`}
+              />
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   )

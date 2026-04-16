@@ -1,30 +1,39 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { CartProvider } from './context/CartContext'
+import { ToastProvider } from './components/ui/Toast'
+import CartDrawer from './components/ui/CartDrawer'
 import Navigation from './components/layout/Navigation'
 import Footer from './components/layout/Footer'
-import Hero from './components/sections/Hero'
-import Ticker from './components/sections/Ticker'
-import Products from './components/sections/Products'
-import HowItWorks from './components/sections/HowItWorks'
-import Pricing from './components/sections/Pricing'
-import Testimonials from './components/sections/Testimonials'
-import EmailCapture from './components/sections/EmailCapture'
-import WhatsAppButton from './components/layout/WhatsAppButton'
+import HomePage from './pages/HomePage'
+import ShopPage from './pages/ShopPage'
+import HowItWorksPage from './pages/HowItWorksPage'
+import AboutPage from './pages/AboutPage'
+import CartPage from './pages/CartPage'
+import CheckoutPage from './pages/CheckoutPage'
 
 function App() {
   return (
-    <div className="bg-bg min-h-dvh overflow-x-hidden">
-      <Navigation />
-      <main>
-        <Hero />
-        <Ticker />
-        <Products />
-        <HowItWorks />
-        <Pricing />
-        <Testimonials />
-        <EmailCapture />
-      </main>
-      <Footer />
-      <WhatsAppButton />
-    </div>
+    <ToastProvider>
+      <CartProvider>
+        <BrowserRouter>
+          <div className="bg-bg min-h-dvh overflow-x-hidden">
+            <Navigation />
+            <CartDrawer />
+            <main>
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/shop" element={<ShopPage />} />
+                <Route path="/how-it-works" element={<HowItWorksPage />} />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/cart" element={<CartPage />} />
+                <Route path="/checkout" element={<CheckoutPage />} />
+              </Routes>
+            </main>
+            <Footer />
+          </div>
+        </BrowserRouter>
+      </CartProvider>
+    </ToastProvider>
   )
 }
 

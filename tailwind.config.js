@@ -16,10 +16,14 @@ export default {
         surface: '#FDFAF5',
         border: '#D9D0C1',
         bark: '#1C1A17',
+        forest: '#3B6845',
+        blush: '#EAC4BC',
       },
       fontFamily: {
         display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
-        sans: ['"DM Sans"', 'system-ui', 'sans-serif'],
+        editorial: ['"Fraunces"', '"Cormorant Garamond"', 'Georgia', 'serif'],
+        sans: ['"Instrument Sans"', '"DM Sans"', 'system-ui', 'sans-serif'],
+        brand: ['"Gloock"', 'Georgia', 'serif'],
       },
       animation: {
         'float': 'float 5s ease-in-out infinite',
@@ -31,6 +35,8 @@ export default {
         'meteor': 'meteor var(--speed, 5s) linear infinite',
         'border-beam': 'border-beam calc(var(--duration)*1s) infinite linear',
         'fade-up': 'fadeUp 0.7s ease forwards',
+        'reveal-line': 'revealLine 0.9s cubic-bezier(0.22,1,0.36,1) forwards',
+        'scale-in': 'scaleIn 0.4s cubic-bezier(0.22,1,0.36,1) forwards',
       },
       keyframes: {
         float: {
@@ -57,6 +63,14 @@ export default {
         fadeUp: {
           from: { opacity: '0', transform: 'translateY(30px)' },
           to: { opacity: '1', transform: 'translateY(0)' },
+        },
+        revealLine: {
+          from: { transform: 'scaleX(0)', transformOrigin: 'left' },
+          to: { transform: 'scaleX(1)', transformOrigin: 'left' },
+        },
+        scaleIn: {
+          from: { transform: 'scale(0.94)', opacity: '0' },
+          to: { transform: 'scale(1)', opacity: '1' },
         },
       },
     },
