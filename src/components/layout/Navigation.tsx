@@ -153,8 +153,35 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Mobile right side: cart icon (when items) + hamburger */}
+          {/* Mobile right side: wishlist + cart (when items) + hamburger */}
           <div className="md:hidden flex items-center gap-1">
+            <AnimatePresence>
+              {likedCount > 0 && (
+                <motion.div
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                >
+                  <Link
+                    to="/wishlist"
+                    className="relative p-2 text-text-primary flex items-center justify-center"
+                    aria-label="Wishlist"
+                  >
+                    <Heart size={20} fill="currentColor" strokeWidth={2} />
+                    <motion.span
+                      key={likedCount}
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                      className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-text-primary text-surface font-sans text-[9px] font-bold flex items-center justify-center"
+                    >
+                      {likedCount}
+                    </motion.span>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
             <AnimatePresence>
               {totalItems > 0 && (
                 <motion.button
