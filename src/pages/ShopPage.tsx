@@ -10,6 +10,88 @@ type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc'
 const allTypes = [...new Set(products.map(p => p.name))]
 const allColors = [...new Set(products.map(p => ({ name: p.name, color: p.color })))]
 
+interface FilterSidebarProps {
+  selectedTypes: string[]
+  onToggle: (name: string) => void
+  onClear: () => void
+}
+
+function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps) {
+  return (
+    <div className="flex flex-col gap-8">
+      {/* Flower type */}
+      <div>
+        <div className="eyebrow text-text-secondary/50 mb-4">Flower type</div>
+        <div className="flex flex-col gap-2.5">
+          {allTypes.map(name => (
+            <label key={name} className="flex items-center gap-2.5 cursor-pointer group">
+              <div
+                onClick={() => onToggle(name)}
+                className={`w-4 h-4 rounded border flex items-center justify-center transition-all cursor-pointer flex-shrink-0 ${
+                  selectedTypes.includes(name)
+                    ? 'bg-text-primary border-text-primary'
+                    : 'border-border/70 group-hover:border-text-primary/50'
+                }`}
+              >
+                {selectedTypes.includes(name) && (
+                  <svg className="w-2.5 h-2.5 text-surface" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M2 6l3 3 5-5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                )}
+              </div>
+              <span
+                onClick={() => onToggle(name)}
+                className="font-sans text-[13px] text-text-secondary group-hover:text-text-primary transition-colors"
+              >
+                {name}
+              </span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* Color swatches */}
+      <div>
+        <div className="eyebrow text-text-secondary/50 mb-4">Colour</div>
+        <div className="flex flex-wrap gap-2.5">
+          {allColors.map(({ name, color }) => (
+            <button
+              key={name}
+              onClick={() => onToggle(name)}
+              title={name}
+              className={`w-7 h-7 rounded-full border-2 transition-all ${
+                selectedTypes.includes(name) ? 'border-text-primary scale-110' : 'border-transparent hover:border-text-primary/40'
+              }`}
+              style={{ backgroundColor: color }}
+              aria-label={name}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Price note */}
+      <div className="bg-bg-subtle rounded-xl p-4">
+        <div className="eyebrow text-text-secondary/50 mb-2">Price range</div>
+        <p className="font-sans text-[12px] text-text-secondary leading-relaxed">
+          Stems from <span className="font-[500] text-text-primary">2.20 zł</span> to <span className="font-[500] text-text-primary">6.90 zł</span> each.
+          <br />Minimum order: <span className="font-[500] text-text-primary">10 stems</span>.
+        </p>
+      </div>
+
+      {/* Clear filters */}
+      {selectedTypes.length > 0 && (
+        <button
+          onClick={onClear}
+          className="flex items-center gap-1.5 font-sans text-[12px] text-text-secondary hover:text-accent-warm transition-colors"
+        >
+          <X size={13} />
+          Clear filters
+        </button>
+      )}
+    </div>
+  )
+}
+
 export default function ShopPage() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
@@ -46,82 +128,8 @@ export default function ShopPage() {
     return result
   }, [selectedTypes, sortBy])
 
-  const FilterSidebar = () => (
-    <div className="flex flex-col gap-8">
-      {/* Flower type */}
-      <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">Flower type</div>
-        <div className="flex flex-col gap-2.5">
-          {allTypes.map(name => (
-            <label key={name} className="flex items-center gap-2.5 cursor-pointer group">
-              <div
-                onClick={() => toggleType(name)}
-                className={`w-4 h-4 rounded border flex items-center justify-center transition-all cursor-pointer flex-shrink-0 ${
-                  selectedTypes.includes(name)
-                    ? 'bg-text-primary border-text-primary'
-                    : 'border-border/70 group-hover:border-text-primary/50'
-                }`}
-              >
-                {selectedTypes.includes(name) && (
-                  <svg className="w-2.5 h-2.5 text-surface" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M2 6l3 3 5-5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </div>
-              <span
-                onClick={() => toggleType(name)}
-                className="font-sans text-[13px] text-text-secondary group-hover:text-text-primary transition-colors"
-              >
-                {name}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Color swatches */}
-      <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">Colour</div>
-        <div className="flex flex-wrap gap-2.5">
-          {allColors.map(({ name, color }) => (
-            <button
-              key={name}
-              onClick={() => toggleType(name)}
-              title={name}
-              className={`w-7 h-7 rounded-full border-2 transition-all ${
-                selectedTypes.includes(name) ? 'border-text-primary scale-110' : 'border-transparent hover:border-text-primary/40'
-              }`}
-              style={{ backgroundColor: color }}
-              aria-label={name}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Price note */}
-      <div className="bg-bg-subtle rounded-xl p-4">
-        <div className="eyebrow text-text-secondary/50 mb-2">Price range</div>
-        <p className="font-sans text-[12px] text-text-secondary leading-relaxed">
-          Stems from <span className="font-[500] text-text-primary">2.20 zł</span> to <span className="font-[500] text-text-primary">6.90 zł</span> each.
-          <br />Minimum order: <span className="font-[500] text-text-primary">10 stems</span>.
-        </p>
-      </div>
-
-      {/* Clear filters */}
-      {selectedTypes.length > 0 && (
-        <button
-          onClick={() => setSelectedTypes([])}
-          className="flex items-center gap-1.5 font-sans text-[12px] text-text-secondary hover:text-accent-warm transition-colors"
-        >
-          <X size={13} />
-          Clear filters
-        </button>
-      )}
-    </div>
-  )
-
   return (
-    <div ref={ref} className="pt-24 pb-24 px-6 md:px-10 min-h-dvh bg-bg">
+    <div ref={ref} className="pt-24 pb-24 px-6 md:px-10 min-h-screen bg-bg">
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
@@ -191,7 +199,7 @@ export default function ShopPage() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.55, delay: 0.15 }}
           >
-            <FilterSidebar />
+            <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
           </motion.aside>
 
           {/* Products grid */}
@@ -242,7 +250,7 @@ export default function ShopPage() {
                 <X size={18} />
               </button>
             </div>
-            <FilterSidebar />
+            <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
             <button
               onClick={() => setMobileFiltersOpen(false)}
               className="mt-6 w-full bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.08em] uppercase py-3.5 rounded-xl"

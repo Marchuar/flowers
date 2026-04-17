@@ -13,7 +13,7 @@ export default function CartPage() {
   const orderTotal = totalPrice + deliveryCost
 
   return (
-    <div ref={ref} className="pt-28 pb-24 px-6 md:px-10 min-h-dvh bg-bg">
+    <div ref={ref} className="pt-28 pb-24 px-6 md:px-10 min-h-screen bg-bg">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}
