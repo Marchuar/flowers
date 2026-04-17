@@ -132,7 +132,7 @@ export default function Hero() {
   }, [isMobile])
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-bg pt-16">
+    <section ref={sectionRef} className="relative min-h-svh flex flex-col justify-center overflow-hidden bg-bg pt-16">
 
       {/* Base background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-subtle pointer-events-none" />
