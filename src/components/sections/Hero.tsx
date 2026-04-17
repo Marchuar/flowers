@@ -132,7 +132,7 @@ export default function Hero() {
   }, [isMobile])
 
   return (
-    <section ref={sectionRef} className="relative min-h-[calc(100svh-4rem)] flex flex-col justify-center overflow-hidden bg-bg">
+    <section ref={sectionRef} className="relative min-h-[calc(100svh-4rem)] flex flex-col justify-start md:justify-center overflow-hidden bg-bg">
 
       {/* Base background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-subtle pointer-events-none" />
@@ -235,7 +235,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Main content */}
-      <motion.div style={isMobile ? undefined : { opacity: heroOpacity }} className="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto w-full py-20">
+      <motion.div style={isMobile ? undefined : { opacity: heroOpacity }} className="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto w-full pt-12 pb-12 md:py-20">
 
         {/* Eyebrow with leading rule */}
         <motion.div

@@ -35,6 +35,7 @@ function makeMeteors(count: number) {
 
 function MeteorEffect({ count }: { count: number }) {
   const meteors = useRef(makeMeteors(count))
+
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       {meteors.current.map(m => (
