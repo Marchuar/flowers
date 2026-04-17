@@ -79,7 +79,7 @@ export default function HowItWorks() {
               initial={{ opacity: 0, x: -40 }}
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.7, delay: i * 0.18, ease: [0.22, 1, 0.36, 1] }}
-              className="group flex items-start gap-6 md:gap-10 py-8 border-b border-border/40 last:border-b-0 md:hover:pl-3 transition-all duration-400"
+              className="group flex items-start gap-6 md:gap-10 py-8 border-b border-border/40 last:border-b-0 md:hover:pl-3 transition-[padding-left] duration-400"
             >
               {/* Step number */}
               <div className="flex-shrink-0 w-14 md:w-20">
