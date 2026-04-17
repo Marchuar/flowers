@@ -46,7 +46,7 @@ export default function Pricing() {
     <section id="pricing" ref={ref} className="py-20 md:py-28 px-6 md:px-10 bg-bg-subtle overflow-hidden">
       <div className="max-w-5xl mx-auto">
 
-        {/* Heading — centered */}
+        {/* Heading */}
         <div className="text-center mb-12 md:mb-16">
           <motion.div
             className="flex items-center justify-center gap-3 mb-3"
@@ -78,33 +78,25 @@ export default function Pricing() {
           </motion.p>
         </div>
 
-        {/* ── COMPARISON TABLE — main element ── */}
+        {/* ── COMPARISON TABLE ── */}
         <motion.div
           className="rounded-3xl overflow-hidden shadow-xl border border-border/60"
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.75, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* Column headers */}
-          <div className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
 
-            {/* Feature label */}
+          {/* ── DESKTOP header (3 cols) ── */}
+          <div className="hidden md:grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
             <div className="bg-surface px-8 py-6 border-b border-border/50">
               <span className="eyebrow text-text-secondary/35">Category</span>
             </div>
-
-            {/* Florist header */}
             <div className="bg-bg px-6 py-6 border-b border-l border-border/50 text-center">
               <div className="eyebrow text-text-secondary/40 mb-1.5">Traditional</div>
-              <div
-                className="font-editorial text-[20px] font-light text-text-secondary/60"
-                style={{ fontVariationSettings: "'opsz' 24" }}
-              >
+              <div className="font-editorial text-[20px] font-light text-text-secondary/60" style={{ fontVariationSettings: "'opsz' 24" }}>
                 Florist
               </div>
             </div>
-
-            {/* STEM header — dark, elevated */}
             <div className="bg-text-primary px-6 py-6 border-b border-l border-surface/[0.08] flex flex-col items-center justify-center gap-2 text-center">
               <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-surface/40">Best value</span>
               <span className="font-brand text-[26px] tracking-[0.2em] text-surface leading-none">STEM</span>
@@ -114,53 +106,111 @@ export default function Pricing() {
             </div>
           </div>
 
-          {/* Data rows */}
-          {comparison.map((row, i) => {
-            const isLast = i === comparison.length - 1
-            return (
-              <motion.div
-                key={row.feature}
-                className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]"
-                initial={{ opacity: 0, x: -24 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.55, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {/* Feature name */}
-                <div className={`bg-surface px-8 py-5 md:py-6 ${!isLast ? 'border-b border-border/40' : ''} flex items-center`}>
-                  <span
-                    className="font-editorial text-[17px] md:text-[19px] font-light text-text-primary"
-                    style={{ fontVariationSettings: "'opsz' 24" }}
-                  >
-                    {row.feature}
-                  </span>
-                </div>
+          {/* ── MOBILE header (2 cols) ── */}
+          <div className="md:hidden grid grid-cols-2">
+            <div className="bg-bg px-5 py-5 border-b border-border/50 text-center">
+              <div className="eyebrow text-text-secondary/40 mb-1.5">Traditional</div>
+              <div className="font-editorial text-[18px] font-light text-text-secondary/60" style={{ fontVariationSettings: "'opsz' 24" }}>
+                Florist
+              </div>
+            </div>
+            <div className="bg-text-primary px-5 py-5 border-b border-l border-surface/[0.08] flex flex-col items-center justify-center gap-1.5 text-center">
+              <span className="font-sans text-[8px] tracking-[0.22em] uppercase text-surface/40">Best value</span>
+              <span className="font-brand text-[22px] tracking-[0.2em] text-surface leading-none">STEM</span>
+              <span className="bg-accent/20 text-accent font-sans text-[8px] tracking-[0.1em] uppercase px-2.5 py-0.5 rounded-full">
+                Wholesale
+              </span>
+            </div>
+          </div>
 
-                {/* Florist value */}
-                <div className={`bg-bg px-6 py-5 md:py-6 border-l ${!isLast ? 'border-b border-border/40' : ''} border-border/50 flex items-center justify-center`}>
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-border/60 flex items-center justify-center flex-shrink-0">
-                      <X size={9} className="text-text-secondary/50" strokeWidth={2.5} />
-                    </div>
-                    <span className="font-sans text-[13px] text-text-secondary/45 text-center leading-tight">
-                      {row.traditional}
+          {/* ── DESKTOP rows (3 cols) ── */}
+          <div className="hidden md:block">
+            {comparison.map((row, i) => {
+              const isLast = i === comparison.length - 1
+              return (
+                <motion.div
+                  key={row.feature}
+                  className="grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]"
+                  initial={{ opacity: 0, x: -24 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.55, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <div className={`bg-surface px-8 py-6 ${!isLast ? 'border-b border-border/40' : ''} flex items-center`}>
+                    <span className="font-editorial text-[19px] font-light text-text-primary" style={{ fontVariationSettings: "'opsz' 24" }}>
+                      {row.feature}
                     </span>
                   </div>
-                </div>
-
-                {/* STEM value */}
-                <div className={`bg-text-primary px-6 py-5 md:py-6 border-l border-surface/[0.07] ${!isLast ? 'border-b border-surface/[0.07]' : ''} flex items-center justify-center`}>
-                  <div className="flex items-center gap-2">
-                    <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
-                      <Check size={10} className="text-accent" strokeWidth={2.5} />
+                  <div className={`bg-bg px-6 py-6 border-l ${!isLast ? 'border-b border-border/40' : ''} border-border/50 flex items-center justify-center`}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-border/60 flex items-center justify-center flex-shrink-0">
+                        <X size={9} className="text-text-secondary/50" strokeWidth={2.5} />
+                      </div>
+                      <span className="font-sans text-[13px] text-text-secondary/45 text-center leading-tight">
+                        {row.traditional}
+                      </span>
                     </div>
-                    <span className="font-sans text-[14px] font-[500] text-surface text-center leading-tight">
-                      {row.stem}
+                  </div>
+                  <div className={`bg-text-primary px-6 py-6 border-l border-surface/[0.07] ${!isLast ? 'border-b border-surface/[0.07]' : ''} flex items-center justify-center`}>
+                    <div className="flex items-center gap-2">
+                      <div className="w-5 h-5 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
+                        <Check size={10} className="text-accent" strokeWidth={2.5} />
+                      </div>
+                      <span className="font-sans text-[14px] font-[500] text-surface text-center leading-tight">
+                        {row.stem}
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+
+          {/* ── MOBILE rows (feature name full-width, then 2 cols) ── */}
+          <div className="md:hidden">
+            {comparison.map((row, i) => {
+              const isLast = i === comparison.length - 1
+              return (
+                <motion.div
+                  key={row.feature}
+                  className={!isLast ? 'border-b border-border/40' : ''}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={inView ? { opacity: 1, y: 0 } : {}}
+                  transition={{ duration: 0.45, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  {/* Feature name — full width */}
+                  <div className="bg-surface px-5 py-3 border-b border-border/30">
+                    <span className="font-editorial text-[15px] font-light text-text-primary/75" style={{ fontVariationSettings: "'opsz' 20" }}>
+                      {row.feature}
                     </span>
                   </div>
-                </div>
-              </motion.div>
-            )
-          })}
+                  {/* Values — 2 equal columns */}
+                  <div className="grid grid-cols-2">
+                    <div className="bg-bg px-4 py-4 flex items-center justify-center">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-4 h-4 rounded-full bg-border/60 flex items-center justify-center flex-shrink-0">
+                          <X size={8} className="text-text-secondary/50" strokeWidth={2.5} />
+                        </div>
+                        <span className="font-sans text-[12.5px] text-text-secondary/50 leading-tight">
+                          {row.traditional}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="bg-text-primary px-4 py-4 border-l border-surface/[0.07] flex items-center justify-center">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-4 h-4 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
+                          <Check size={9} className="text-accent" strokeWidth={2.5} />
+                        </div>
+                        <span className="font-sans text-[12.5px] font-[500] text-surface leading-tight">
+                          {row.stem}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+
         </motion.div>
 
         {/* Bottom — price counter + CTA */}

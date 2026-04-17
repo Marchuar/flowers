@@ -30,6 +30,10 @@ export default {
         'float-slow': 'float 7s ease-in-out infinite',
         'float-delay': 'float 6s ease-in-out 1.5s infinite',
         'float-delay2': 'float 8s ease-in-out 3s infinite',
+        'float-mobile': 'float-mobile 5s ease-in-out infinite',
+        'float-mobile-slow': 'float-mobile 7s ease-in-out infinite',
+        'float-mobile-delay': 'float-mobile 6s ease-in-out 1.5s infinite',
+        'float-mobile-delay2': 'float-mobile 8s ease-in-out 3s infinite',
         'marquee': 'marquee var(--duration, 30s) linear infinite',
         'shimmer': 'shimmer 2.5s linear infinite',
         'meteor': 'meteor var(--speed, 5s) linear infinite',
@@ -43,6 +47,11 @@ export default {
           '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
           '33%': { transform: 'translateY(-16px) rotate(2deg)' },
           '66%': { transform: 'translateY(-7px) rotate(-1.5deg)' },
+        },
+        'float-mobile': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '33%': { transform: 'translateY(-16px)' },
+          '66%': { transform: 'translateY(-7px)' },
         },
         marquee: {
           from: { transform: 'translateX(0)' },

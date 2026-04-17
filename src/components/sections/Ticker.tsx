@@ -25,7 +25,7 @@ export default function Ticker() {
     <div className="bg-bark overflow-hidden py-3.5 border-y border-surface/5" aria-hidden="true">
       <div
         className="flex w-max"
-        style={{ animation: 'marquee 28s linear infinite' }}
+        style={{ animation: 'marquee 28s linear infinite', willChange: 'transform' }}
       >
         {allItems.map((item, i) => (
           <TickerItem key={i} text={item} />

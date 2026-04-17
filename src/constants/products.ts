@@ -5,6 +5,7 @@ export interface Product {
   price: string
   priceNote: string
   image: string
+  images?: string[]
   tag?: string
   color: string
 }
@@ -17,6 +18,10 @@ export const products: Product[] = [
     price: 'from 3.50 zł',
     priceNote: 'per stem',
     image: 'https://images.unsplash.com/photo-1518895949257-7621c3c786d7?w=600&h=800&q=85&fit=crop&crop=center',
+    images: [
+      'https://images.unsplash.com/photo-1548094990-c16ca90f1f0d?w=600&h=800&q=85&fit=crop&crop=center',
+      'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=800&q=85&fit=crop&crop=center',
+    ],
     tag: 'Bestseller',
     color: '#E8A0A0',
   },
@@ -27,6 +32,10 @@ export const products: Product[] = [
     price: 'from 2.90 zł',
     priceNote: 'per stem',
     image: 'https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?w=600&h=800&q=85&fit=crop&crop=center',
+    images: [
+      'https://images.unsplash.com/photo-1520763185298-1b434c919102?w=600&h=800&q=85&fit=crop&crop=center',
+      'https://images.unsplash.com/photo-1525310072745-f49212b5ac6d?w=600&h=800&q=85&fit=crop&crop=center',
+    ],
     tag: 'Seasonal',
     color: '#F5C5A0',
   },
@@ -37,6 +46,10 @@ export const products: Product[] = [
     price: 'from 6.90 zł',
     priceNote: 'per stem',
     image: 'https://images.unsplash.com/photo-1468327768560-75b778cbb551?w=600&h=800&q=85&fit=crop&crop=center',
+    images: [
+      'https://images.unsplash.com/photo-1559181567-c3190b1f11f8?w=600&h=800&q=85&fit=crop&crop=center',
+      'https://images.unsplash.com/photo-1463936575829-25148e1db1b8?w=600&h=800&q=85&fit=crop&crop=center',
+    ],
     tag: 'Premium',
     color: '#EFBDBD',
   },
@@ -47,6 +60,10 @@ export const products: Product[] = [
     price: 'from 2.20 zł',
     priceNote: 'per stem',
     image: 'https://images.unsplash.com/photo-1464699908537-0954e50791ee?w=600&h=800&q=85&fit=crop&crop=center',
+    images: [
+      'https://images.unsplash.com/photo-1455103683-2561c5b33a17?w=600&h=800&q=85&fit=crop&crop=center',
+      'https://images.unsplash.com/photo-1490750967868-88df5691cc52?w=600&h=800&q=85&fit=crop&crop=center',
+    ],
     color: '#B5CEAA',
   },
   {
@@ -56,6 +73,10 @@ export const products: Product[] = [
     price: 'from 4.50 zł',
     priceNote: 'per stem',
     image: 'https://images.unsplash.com/photo-1469289759076-d1484757abc3?w=600&h=800&q=85&fit=crop&crop=center',
+    images: [
+      'https://images.unsplash.com/photo-1505188799714-5e0b2e67ef4d?w=600&h=800&q=85&fit=crop&crop=center',
+      'https://images.unsplash.com/photo-1548973600-7a0d02f7c879?w=600&h=800&q=85&fit=crop&crop=center',
+    ],
     color: '#C5B8E8',
   },
   {
@@ -65,6 +86,10 @@ export const products: Product[] = [
     price: 'from 3.20 zł',
     priceNote: 'per stem',
     image: 'https://images.unsplash.com/photo-1606041011872-596597976b25?w=600&h=800&q=85&fit=crop&crop=center',
+    images: [
+      'https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=600&h=800&q=85&fit=crop&crop=center',
+      'https://images.unsplash.com/photo-1513682121497-80211f36a7d3?w=600&h=800&q=85&fit=crop&crop=center',
+    ],
     color: '#F0D090',
   },
 ]

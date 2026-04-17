@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
-import { motion, useScroll, useMotionValueEvent } from 'framer-motion'
-import { Menu, X, ShoppingBag } from 'lucide-react'
+import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
+import { Menu, X, ShoppingBag, Heart } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { useCart } from '../../context/CartContext'
+import { useLikes } from '../../context/LikesContext'
 
 const navLinks = [
-  { label: 'Home', href: '/' },
-  { label: 'Shop', href: '/shop', primary: true },
-  { label: 'How it works', href: '/how-it-works' },
-  { label: 'About', href: '/about' },
+  { label: 'Home', href: '/', mobileOnly: false },
+  { label: 'Shop', href: '/shop', primary: true, mobileOnly: false },
+  { label: 'How it works', href: '/how-it-works', mobileOnly: false },
+  { label: 'About', href: '/about', mobileOnly: false },
+  { label: 'Wishlist', href: '/wishlist', mobileOnly: true },
 ]
 
 export default function Navigation() {
@@ -16,6 +18,7 @@ export default function Navigation() {
   const [mobileOpen, setMobileOpen] = useState(false)
   const { scrollY } = useScroll()
   const { totalItems, openCart } = useCart()
+  const { likedCount } = useLikes()
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setScrolled(latest > 60)
@@ -59,7 +62,7 @@ export default function Navigation() {
 
           {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {navLinks.filter(l => !l.mobileOnly).map((link) => (
               link.primary ? (
                 <NavLink
                   key={link.label}
@@ -100,8 +103,29 @@ export default function Navigation() {
             ))}
           </nav>
 
-          {/* CTA + Cart */}
+          {/* Desktop CTA + Wishlist + Cart */}
           <div className="hidden md:flex items-center gap-3">
+            {/* Wishlist icon */}
+            <Link
+              to="/wishlist"
+              className="relative p-2 text-text-secondary hover:text-text-primary transition-colors"
+              aria-label="Wishlist"
+            >
+              <Heart size={17} fill={likedCount > 0 ? 'currentColor' : 'none'} strokeWidth={2} />
+              {likedCount > 0 && (
+                <motion.span
+                  key={likedCount}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                  className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-text-primary text-surface font-sans text-[9px] font-bold flex items-center justify-center"
+                >
+                  {likedCount}
+                </motion.span>
+              )}
+            </Link>
+
+            {/* Cart icon */}
             <button
               onClick={openCart}
               className="relative p-2 text-text-secondary hover:text-text-primary transition-colors"
@@ -120,6 +144,7 @@ export default function Navigation() {
                 </motion.span>
               )}
             </button>
+
             <Link
               to="/shop"
               className="group relative overflow-hidden bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase px-5 py-2.5 rounded-full transition-colors duration-300 hover:bg-accent"
@@ -128,14 +153,41 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Mobile menu button */}
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden p-2 text-text-primary"
-            aria-label="Toggle menu"
-          >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
+          {/* Mobile right side: cart icon (when items) + hamburger */}
+          <div className="md:hidden flex items-center gap-1">
+            <AnimatePresence>
+              {totalItems > 0 && (
+                <motion.button
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0, opacity: 0 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                  onClick={openCart}
+                  className="relative p-2 text-text-primary"
+                  aria-label="Open cart"
+                >
+                  <ShoppingBag size={20} />
+                  <motion.span
+                    key={totalItems}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                    className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-text-primary text-surface font-sans text-[9px] font-bold flex items-center justify-center"
+                  >
+                    {totalItems}
+                  </motion.span>
+                </motion.button>
+              )}
+            </AnimatePresence>
+
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="p-2 text-text-primary"
+              aria-label="Toggle menu"
+            >
+              {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
         </motion.div>
       </motion.header>
 
@@ -168,7 +220,14 @@ export default function Navigation() {
                   animate={{ opacity: mobileOpen ? 1 : 0, x: mobileOpen ? 0 : -20 }}
                   transition={{ delay: i * 0.06 + 0.1 }}
                 >
-                  {link.label}
+                  {link.href === '/wishlist' ? (
+                    <span className="flex items-center gap-3">
+                      {link.label}
+                      {likedCount > 0 && (
+                        <span className="font-sans text-[16px] font-normal text-text-secondary/60">({likedCount})</span>
+                      )}
+                    </span>
+                  ) : link.label}
                 </motion.span>
               )}
             </NavLink>

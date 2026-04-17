@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useIsMobile } from '../../hooks/useIsMobile'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -107,27 +108,28 @@ function FlowerPink() {
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const headlineRef = useRef<HTMLDivElement>(null)
+  const isMobile = useIsMobile()
   const { scrollY } = useScroll()
-  const flowersY = useTransform(scrollY, [0, 500], [0, -90])
-  const opacity = useTransform(scrollY, [0, 400], [1, 0.25])
+
+  // On mobile: disable parallax (scroll listener overhead + no visual benefit on small screen)
+  const flowersY = useTransform(scrollY, [0, 500], isMobile ? [0, 0] : [0, -90])
+  const heroOpacity = useTransform(scrollY, [0, 400], isMobile ? [1, 1] : [1, 0.25])
 
   useEffect(() => {
     if (!headlineRef.current) return
     const words = headlineRef.current.querySelectorAll('.word')
     const ctx = gsap.context(() => {
-      gsap.fromTo(words,
-        { y: 90, opacity: 0, rotateX: -40 },
-        {
-          y: 0, opacity: 1, rotateX: 0,
-          duration: 0.9,
-          stagger: 0.08,
-          ease: 'power3.out',
-          delay: 0.2,
-        }
+      // On mobile: skip rotateX (avoids 3D perspective compositing cost)
+      gsap.fromTo(
+        words,
+        isMobile ? { y: 40, opacity: 0 } : { y: 90, opacity: 0, rotateX: -40 },
+        isMobile
+          ? { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out', delay: 0.2 }
+          : { y: 0, opacity: 1, rotateX: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.2 }
       )
     })
     return () => ctx.revert()
-  }, [])
+  }, [isMobile])
 
   return (
     <section ref={sectionRef} className="relative min-h-dvh flex flex-col justify-center overflow-hidden bg-bg pt-16">
@@ -135,13 +137,13 @@ export default function Hero() {
       {/* Base background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-subtle pointer-events-none" />
 
-      {/* Warm spotlight from upper-right — echoes the flower colors */}
+      {/* Warm spotlight from upper-right */}
       <div
         className="absolute top-0 right-0 w-[65%] h-[80%] pointer-events-none"
         style={{ background: 'radial-gradient(ellipse at top right, rgba(194,113,79,0.07) 0%, rgba(234,196,188,0.05) 40%, transparent 70%)' }}
       />
 
-      {/* Subtle dot grid — left third of hero, editorial texture */}
+      {/* Subtle dot grid */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
@@ -162,7 +164,11 @@ export default function Hero() {
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="animate-float drop-shadow-[0_24px_48px_rgba(107,140,255,0.3)]">
+          {/* will-change: transform promotes element+filter to GPU layer — blur computed once, not per frame */}
+          <div
+            className="animate-float-mobile md:animate-float drop-shadow-[0_24px_48px_rgba(107,140,255,0.3)]"
+            style={{ willChange: 'transform' }}
+          >
             <FlowerBlue />
           </div>
         </motion.div>
@@ -174,7 +180,10 @@ export default function Hero() {
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="animate-float-delay drop-shadow-[0_20px_40px_rgba(245,162,122,0.3)]">
+          <div
+            className="animate-float-mobile-delay md:animate-float-delay drop-shadow-[0_20px_40px_rgba(245,162,122,0.3)]"
+            style={{ willChange: 'transform' }}
+          >
             <FlowerCoral />
           </div>
         </motion.div>
@@ -186,38 +195,47 @@ export default function Hero() {
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="animate-float-slow drop-shadow-[0_20px_40px_rgba(92,184,92,0.3)]">
+          <div
+            className="animate-float-mobile-slow md:animate-float-slow drop-shadow-[0_20px_40px_rgba(92,184,92,0.3)]"
+            style={{ willChange: 'transform' }}
+          >
             <FlowerGreen />
           </div>
         </motion.div>
 
-        {/* Purple flower — upper left */}
+        {/* Purple flower — hidden on mobile (2 fewer compositor layers) */}
         <motion.div
-          className="absolute w-20 md:w-28 top-[18%] left-[2%] md:left-[4%]"
+          className="absolute w-20 md:w-28 top-[18%] left-[2%] md:left-[4%] hidden md:block"
           initial={{ scale: 0.7, opacity: 0, rotate: 10 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="animate-float-delay2 drop-shadow-[0_20px_40px_rgba(180,127,212,0.3)]">
+          <div
+            className="animate-float-delay2 drop-shadow-[0_20px_40px_rgba(180,127,212,0.3)]"
+            style={{ willChange: 'transform' }}
+          >
             <FlowerPurple />
           </div>
         </motion.div>
 
-        {/* Pink flower — new, far right bottom */}
+        {/* Pink flower — hidden on mobile */}
         <motion.div
-          className="absolute w-16 md:w-24 bottom-[28%] right-[18%] md:right-[22%]"
+          className="absolute w-16 md:w-24 bottom-[28%] right-[18%] md:right-[22%] hidden md:block"
           initial={{ scale: 0.5, opacity: 0, rotate: -8 }}
           animate={{ scale: 1, opacity: 0.7, rotate: 0 }}
           transition={{ duration: 1.1, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
         >
-          <div className="animate-float drop-shadow-[0_16px_32px_rgba(242,160,184,0.3)]">
+          <div
+            className="animate-float drop-shadow-[0_16px_32px_rgba(242,160,184,0.3)]"
+            style={{ willChange: 'transform' }}
+          >
             <FlowerPink />
           </div>
         </motion.div>
       </motion.div>
 
       {/* Main content */}
-      <motion.div style={{ opacity }} className="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto w-full py-20">
+      <motion.div style={{ opacity: heroOpacity }} className="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto w-full py-20">
 
         {/* Eyebrow with leading rule */}
         <motion.div
@@ -236,11 +254,11 @@ export default function Hero() {
           <span className="eyebrow text-text-secondary">Warsaw · Delivery in 2 hours</span>
         </motion.div>
 
-        {/* Main headline — Cormorant Garamond, mega size */}
+        {/* Main headline */}
         <div
           ref={headlineRef}
           className="overflow-hidden"
-          style={{ perspective: '1000px' }}
+          style={isMobile ? undefined : { perspective: '1000px' }}
         >
           <div className="text-display text-text-primary leading-none">
             <div className="overflow-hidden">
@@ -325,7 +343,7 @@ export default function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator — vertical text */}
+      {/* Scroll indicator */}
       <motion.div
         className="absolute bottom-8 right-8 flex flex-col items-center gap-2 text-text-secondary/40"
         initial={{ opacity: 0 }}

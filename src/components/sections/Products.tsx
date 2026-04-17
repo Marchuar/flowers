@@ -1,28 +1,74 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, Check } from 'lucide-react'
+import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react'
 import { products, type Product } from '../../constants/products'
 import { useCart } from '../../context/CartContext'
+import { useLikes } from '../../context/LikesContext'
 import { useToast } from '../ui/Toast'
 
 export function ProductCard({ product, index }: { product: Product; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
-  const { addItem } = useCart()
+  const { addItem, items, updateQty, removeItem } = useCart()
+  const { toggleLike, isLiked } = useLikes()
   const { showToast } = useToast()
-  const [added, setAdded] = useState(false)
+
+  const cartItem = items.find(i => i.product.id === product.id)
+  const qty = cartItem?.quantity ?? 0
+  const liked = isLiked(product.id)
+
+  const allImages = [product.image, ...(product.images ?? [])]
+  const hasMultiple = allImages.length > 1
+  const [imgIndex, setImgIndex] = useState(0)
+  const touchStartX = useRef(0)
 
   const bgColor = product.color + '38'
   const btnColor = product.color + '65'
   const btnHoverColor = product.color + 'CC'
 
   function handleAddToCart() {
-    if (added) return
     addItem(product)
     showToast(`${product.name} added to bag`)
-    setAdded(true)
-    setTimeout(() => setAdded(false), 1800)
+  }
+
+  function handleDecrement(e: React.MouseEvent) {
+    e.stopPropagation()
+    if (qty === 1) removeItem(product.id)
+    else updateQty(product.id, qty - 1)
+  }
+
+  function handleIncrement(e: React.MouseEvent) {
+    e.stopPropagation()
+    updateQty(product.id, qty + 1)
+  }
+
+  function handleLike(e: React.MouseEvent) {
+    e.stopPropagation()
+    toggleLike(product.id)
+  }
+
+  function nextImg(e?: React.MouseEvent) {
+    e?.stopPropagation()
+    setImgIndex(i => (i + 1) % allImages.length)
+  }
+
+  function prevImg(e?: React.MouseEvent) {
+    e?.stopPropagation()
+    setImgIndex(i => (i - 1 + allImages.length) % allImages.length)
+  }
+
+  function onTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0].clientX
+  }
+
+  function onTouchEnd(e: React.TouchEvent) {
+    if (!hasMultiple) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 35) {
+      if (dx < 0) nextImg()
+      else prevImg()
+    }
   }
 
   return (
@@ -39,23 +85,85 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
         transition={{ duration: 0.38, ease: [0.25, 0.8, 0.25, 1] }}
       >
         {/* Image */}
-        <div className="relative overflow-hidden rounded-2xl aspect-[3/4] mb-3.5">
-          <motion.img
-            src={product.image}
-            alt={product.name}
-            className="w-full h-full object-cover"
-            whileHover={{ scale: 1.08 }}
-            transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-            loading="lazy"
-          />
+        <div
+          className="relative overflow-hidden rounded-2xl aspect-[3/4] mb-3.5"
+          onTouchStart={hasMultiple ? onTouchStart : undefined}
+          onTouchEnd={hasMultiple ? onTouchEnd : undefined}
+        >
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.img
+              key={imgIndex}
+              src={allImages[imgIndex]}
+              alt={product.name}
+              className="w-full h-full object-cover"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              loading="lazy"
+            />
+          </AnimatePresence>
+
           {/* Color tint overlay */}
           <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
             style={{ backgroundColor: product.color }}
           />
+
+          {/* Tag */}
           {product.tag && (
-            <div className="absolute top-3 left-3 bg-surface/85 backdrop-blur-sm font-sans text-[9.5px] font-[500] tracking-[0.12em] uppercase text-text-secondary px-2.5 py-1 rounded-full">
+            <div className="absolute top-3 left-3 bg-surface/85 backdrop-blur-sm font-sans text-[9.5px] font-[500] tracking-[0.12em] uppercase text-text-secondary px-2.5 py-1 rounded-full z-10">
               {product.tag}
+            </div>
+          )}
+
+          {/* Like button */}
+          <motion.button
+            onClick={handleLike}
+            whileTap={{ scale: 0.85 }}
+            className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-surface/75 backdrop-blur-sm flex items-center justify-center transition-colors hover:bg-surface/95"
+            aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
+          >
+            <Heart
+              size={13}
+              strokeWidth={2}
+              fill={liked ? product.color : 'none'}
+              stroke={liked ? product.color : 'currentColor'}
+              className={liked ? '' : 'text-text-secondary'}
+            />
+          </motion.button>
+
+          {/* Desktop gallery arrows */}
+          {hasMultiple && (
+            <>
+              <button
+                onClick={prevImg}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-sm hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-text-secondary hover:text-text-primary"
+                aria-label="Previous image"
+              >
+                <ChevronLeft size={13} strokeWidth={2} />
+              </button>
+              <button
+                onClick={nextImg}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-sm hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-text-secondary hover:text-text-primary"
+                aria-label="Next image"
+              >
+                <ChevronRight size={13} strokeWidth={2} />
+              </button>
+            </>
+          )}
+
+          {/* Image dots */}
+          {hasMultiple && (
+            <div className="absolute bottom-2.5 left-0 right-0 flex justify-center gap-1 z-10">
+              {allImages.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={e => { e.stopPropagation(); setImgIndex(i) }}
+                  className={`h-1 rounded-full transition-all duration-300 bg-surface ${i === imgIndex ? 'w-4 opacity-100' : 'w-1 opacity-50'}`}
+                  aria-label={`Image ${i + 1}`}
+                />
+              ))}
             </div>
           )}
         </div>
@@ -70,44 +178,52 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
           </div>
         </div>
 
-        {/* CTA button */}
-        <motion.button
-          onClick={handleAddToCart}
-          className="mt-3 mx-1 mb-1 w-[calc(100%-0.5rem)] font-sans text-[11px] font-[500] tracking-[0.08em] uppercase py-3 rounded-xl overflow-hidden text-text-primary flex items-center justify-center gap-1.5 relative"
-          style={{ backgroundColor: added ? product.color + 'AA' : btnColor }}
-          animate={{ backgroundColor: added ? product.color + 'AA' : btnColor }}
-          whileHover={!added ? { backgroundColor: btnHoverColor } : {}}
-          whileTap={!added ? { scale: 0.97 } : {}}
-          transition={{ duration: 0.25 }}
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {added ? (
-              <motion.span
-                key="check"
-                className="flex items-center gap-1.5"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2 }}
+        {/* CTA — Add to bag or quantity controls */}
+        <AnimatePresence mode="wait" initial={false}>
+          {qty === 0 ? (
+            <motion.button
+              key="add"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              onClick={handleAddToCart}
+              className="mt-3 mx-1 mb-1 w-[calc(100%-0.5rem)] font-sans text-[11px] font-[500] tracking-[0.08em] uppercase py-3 rounded-xl overflow-hidden text-text-primary flex items-center justify-center gap-1.5"
+              style={{ backgroundColor: btnColor }}
+              whileHover={{ backgroundColor: btnHoverColor }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <ShoppingBag size={11} strokeWidth={2} />
+              Add to bag
+            </motion.button>
+          ) : (
+            <motion.div
+              key="qty"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.18 }}
+              className="mt-3 mx-1 mb-1 flex items-center justify-between rounded-xl px-3 py-2.5"
+              style={{ backgroundColor: btnColor }}
+            >
+              <button
+                onClick={handleDecrement}
+                className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/10 active:bg-black/20 transition-colors text-text-primary"
+                aria-label="Decrease quantity"
               >
-                <Check size={11} strokeWidth={2.5} />
-                Added
-              </motion.span>
-            ) : (
-              <motion.span
-                key="add"
-                className="flex items-center gap-1.5"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.2 }}
+                <Minus size={12} strokeWidth={2.5} />
+              </button>
+              <span className="font-sans text-[14px] font-[600] text-text-primary tabular-nums">{qty}</span>
+              <button
+                onClick={handleIncrement}
+                className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/10 active:bg-black/20 transition-colors text-text-primary"
+                aria-label="Increase quantity"
               >
-                <ShoppingBag size={11} strokeWidth={2} />
-                Add to bag
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </motion.button>
+                <Plus size={12} strokeWidth={2.5} />
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.div>
     </motion.div>
   )

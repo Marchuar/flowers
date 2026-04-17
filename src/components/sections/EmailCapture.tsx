@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { useIsMobile } from '../../hooks/useIsMobile'
 
 function FlowerSVG() {
   return (
@@ -21,19 +22,22 @@ function FlowerSVG() {
   )
 }
 
-const METEORS = Array.from({ length: 10 }, (_, i) => ({
-  id: i,
-  top: `${Math.random() * 50}%`,
-  left: `${5 + Math.random() * 90}%`,
-  delay: `${Math.random() * 5}s`,
-  duration: `${3 + Math.random() * 5}s`,
-  size: `${0.8 + Math.random() * 1.2}px`,
-}))
+function makeMeteors(count: number) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: i,
+    top: `${Math.random() * 50}%`,
+    left: `${5 + Math.random() * 90}%`,
+    delay: `${Math.random() * 5}s`,
+    duration: `${3 + Math.random() * 5}s`,
+    size: `${0.8 + Math.random() * 1.2}px`,
+  }))
+}
 
-function MeteorEffect() {
+function MeteorEffect({ count }: { count: number }) {
+  const meteors = useRef(makeMeteors(count))
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {METEORS.map(m => (
+      {meteors.current.map(m => (
         <span
           key={m.id}
           className="absolute rounded-full bg-surface/25 shadow-[0_0_0_1px_rgba(253,250,245,0.08)]"
@@ -48,6 +52,7 @@ function MeteorEffect() {
             animationTimingFunction: 'linear',
             animationIterationCount: 'infinite',
             transform: 'rotate(215deg)',
+            willChange: 'transform',
           }}
         />
       ))}
@@ -60,6 +65,7 @@ export default function EmailCapture() {
   const [status, setStatus] = useState<'idle' | 'success'>('idle')
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+  const isMobile = useIsMobile()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -72,7 +78,7 @@ export default function EmailCapture() {
 
   return (
     <section ref={ref} className="relative py-24 md:py-36 px-6 md:px-10 bg-bark overflow-hidden">
-      <MeteorEffect />
+      <MeteorEffect count={isMobile ? 4 : 10} />
 
       {/* Decorative thin rings */}
       <div
