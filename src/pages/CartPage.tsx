@@ -62,15 +62,15 @@ export default function CartPage() {
             {/* Items list */}
             <div className="flex-1">
               <div className="flex flex-col gap-3">
-                <AnimatePresence>
+                <AnimatePresence mode="popLayout">
                   {items.map((item, i) => (
                     <motion.div
                       key={item.product.id}
                       layout
                       initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, x: 40, height: 0, marginBottom: 0 }}
-                      transition={{ duration: 0.3, delay: i * 0.06 }}
+                      exit={{ opacity: 0, x: 40 }}
+                      transition={{ duration: 0.3, delay: i * 0.06, ease: 'easeInOut' }}
                       className="flex gap-5 bg-surface rounded-2xl p-4 border border-border/40"
                     >
                       {/* Image */}

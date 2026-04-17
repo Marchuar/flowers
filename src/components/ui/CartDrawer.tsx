@@ -82,15 +82,15 @@ export default function CartDrawer() {
                 </div>
               ) : (
                 <div className="flex flex-col gap-4">
-                  <AnimatePresence>
+                  <AnimatePresence mode="popLayout">
                     {items.map(item => (
                       <motion.div
                         key={item.product.id}
                         layout
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, x: 40, height: 0, marginBottom: 0 }}
-                        transition={{ duration: 0.25 }}
+                        exit={{ opacity: 0, x: 40 }}
+                        transition={{ duration: 0.25, ease: 'easeInOut' }}
                         className="flex gap-3.5 bg-bg rounded-2xl p-3"
                       >
                         {/* Image */}
