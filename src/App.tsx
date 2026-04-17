@@ -24,7 +24,7 @@ function App() {
             <div className="bg-bg min-h-screen">
               <Navigation />
               <CartDrawer />
-              <main>
+              <main className="pt-16">
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/shop" element={<ShopPage />} />

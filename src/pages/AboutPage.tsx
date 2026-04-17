@@ -15,7 +15,7 @@ export default function AboutPage() {
   const statsInView = useInView(statsRef, { once: true, margin: '-60px' })
 
   return (
-    <section ref={ref} className="pt-32 pb-24 bg-bg">
+    <section ref={ref} className="pt-16 pb-24 bg-bg">
 
       {/* Main content */}
       <div className="px-6 md:px-10 max-w-4xl mx-auto mb-20">

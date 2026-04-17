@@ -13,7 +13,7 @@ export default function WishlistPage() {
   const likedProducts = products.filter(p => likedIds.has(p.id))
 
   return (
-    <div ref={ref} className="pt-24 pb-24 px-6 md:px-10 min-h-screen bg-bg">
+    <div ref={ref} className="pt-8 pb-24 px-6 md:px-10 min-h-screen bg-bg">
       <div className="max-w-7xl mx-auto">
         <motion.div
           className="mb-10"
