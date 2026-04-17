@@ -116,8 +116,8 @@ export default function Hero() {
     typeof window !== 'undefined' ? window.innerHeight - 64 : 0
   )
 
-  const flowersY = useTransform(scrollY, [0, 500], isMobile ? [0, 0] : [0, -90])
-  const heroOpacity = useTransform(scrollY, [0, 400], isMobile ? [1, 1] : [1, 0.25])
+  const flowersY = useTransform(scrollY, [0, 500], isMobile ? [0, -50] : [0, -90])
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, isMobile ? 1 : 0.25])
 
   useEffect(() => {
     if (!headlineRef.current) return
