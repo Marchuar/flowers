@@ -111,9 +111,8 @@ export default function Hero() {
   const isMobile = useIsMobile()
   const { scrollY } = useScroll()
 
-  // On mobile: disable parallax (scroll listener overhead + no visual benefit on small screen)
-  const flowersY = useTransform(scrollY, [0, 500], isMobile ? [0, 0] : [0, -90])
-  const heroOpacity = useTransform(scrollY, [0, 400], isMobile ? [1, 1] : [1, 0.25])
+  const flowersY = useTransform(scrollY, [0, 500], isMobile ? [0, -50] : [0, -90])
+  const heroOpacity = useTransform(scrollY, [0, 400], [1, isMobile ? 1 : 0.25])
 
   useEffect(() => {
     if (!headlineRef.current) return
@@ -155,7 +154,7 @@ export default function Hero() {
       />
 
       {/* Floating flowers */}
-      <motion.div style={isMobile ? undefined : { y: flowersY }} className="absolute inset-0 pointer-events-none">
+      <motion.div style={{ y: flowersY }} className="absolute inset-0 pointer-events-none">
 
         {/* Blue flower — large, upper right */}
         <motion.div
