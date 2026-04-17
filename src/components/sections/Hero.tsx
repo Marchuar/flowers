@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
@@ -111,6 +111,11 @@ export default function Hero() {
   const isMobile = useIsMobile()
   const { scrollY } = useScroll()
 
+  // Capture viewport height once — before browser UI can hide on scroll.
+  const [lockedHeight] = useState<number>(() =>
+    typeof window !== 'undefined' ? window.innerHeight - 64 : 0
+  )
+
   const flowersY = useTransform(scrollY, [0, 500], isMobile ? [0, -50] : [0, -90])
   const heroOpacity = useTransform(scrollY, [0, 400], [1, isMobile ? 1 : 0.25])
 
@@ -131,7 +136,11 @@ export default function Hero() {
   }, [isMobile])
 
   return (
-    <section ref={sectionRef} className="relative min-h-[calc(100svh-4rem)] flex flex-col justify-start md:justify-center overflow-hidden bg-bg">
+    <section
+      ref={sectionRef}
+      className="relative flex flex-col justify-start md:justify-center overflow-hidden bg-bg md:min-h-[calc(100svh-4rem)]"
+      style={isMobile ? { height: `${lockedHeight}px` } : undefined}
+    >
 
       {/* Base background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-subtle pointer-events-none" />
