@@ -47,7 +47,7 @@ export default function CheckoutPage() {
 
   if (orderPlaced) {
     return (
-      <div className="pt-28 pb-24 px-6 md:px-10 min-h-dvh bg-bg flex items-center justify-center">
+      <div className="pt-28 pb-24 px-6 md:px-10 min-h-screen bg-bg flex items-center justify-center">
         <motion.div
           className="max-w-md mx-auto text-center"
           initial={{ opacity: 0, scale: 0.95 }}
@@ -91,7 +91,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div ref={ref} className="pt-28 pb-24 px-6 md:px-10 min-h-dvh bg-bg">
+    <div ref={ref} className="pt-28 pb-24 px-6 md:px-10 min-h-screen bg-bg">
       <div className="max-w-6xl mx-auto">
 
         {/* Header */}

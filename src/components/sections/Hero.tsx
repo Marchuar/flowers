@@ -132,7 +132,7 @@ export default function Hero() {
   }, [isMobile])
 
   return (
-    <section ref={sectionRef} className="relative min-h-dvh flex flex-col justify-center overflow-hidden bg-bg pt-16">
+    <section ref={sectionRef} className="relative min-h-screen flex flex-col justify-center overflow-hidden bg-bg pt-16">
 
       {/* Base background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-subtle pointer-events-none" />
@@ -155,7 +155,7 @@ export default function Hero() {
       />
 
       {/* Floating flowers */}
-      <motion.div style={{ y: flowersY }} className="absolute inset-0 pointer-events-none">
+      <motion.div style={isMobile ? undefined : { y: flowersY }} className="absolute inset-0 pointer-events-none">
 
         {/* Blue flower — large, upper right */}
         <motion.div
@@ -235,7 +235,7 @@ export default function Hero() {
       </motion.div>
 
       {/* Main content */}
-      <motion.div style={{ opacity: heroOpacity }} className="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto w-full py-20">
+      <motion.div style={isMobile ? undefined : { opacity: heroOpacity }} className="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto w-full py-20">
 
         {/* Eyebrow with leading rule */}
         <motion.div

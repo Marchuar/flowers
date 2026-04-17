@@ -21,7 +21,7 @@ function App() {
         <LikesProvider>
           <BrowserRouter>
             <ScrollToTop />
-            <div className="bg-bg min-h-dvh overflow-x-hidden">
+            <div className="bg-bg min-h-screen">
               <Navigation />
               <CartDrawer />
               <main>
