@@ -1,13 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { motion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useIsMobile } from '../../hooks/useIsMobile'
+import { ArrowRight } from 'lucide-react'
 
-gsap.registerPlugin(ScrollTrigger)
-
-// SVG flower components
 function FlowerBlue() {
   return (
     <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
@@ -105,74 +100,51 @@ function FlowerPink() {
   )
 }
 
+const stats = [
+  { value: '2h', label: 'Delivery' },
+  { value: '500+', label: 'Customers' },
+  { value: '100%', label: 'Wholesale' },
+]
+
 export default function Hero() {
-  const sectionRef = useRef<HTMLElement>(null)
-  const headlineRef = useRef<HTMLDivElement>(null)
-  const isMobile = useIsMobile()
-  const { scrollY } = useScroll()
-
-  // Capture viewport height once — before browser UI can hide on scroll.
-  const [lockedHeight] = useState<number>(() =>
-    typeof window !== 'undefined' ? window.innerHeight - 64 : 0
-  )
-
-  const flowersY = useTransform(scrollY, [0, 500], isMobile ? [0, -50] : [0, -90])
-  const heroOpacity = useTransform(scrollY, [0, 400], [1, isMobile ? 1 : 0.25])
-
-  useEffect(() => {
-    if (!headlineRef.current) return
-    const words = headlineRef.current.querySelectorAll('.word')
-    const ctx = gsap.context(() => {
-      // On mobile: skip rotateX (avoids 3D perspective compositing cost)
-      gsap.fromTo(
-        words,
-        isMobile ? { y: 40, opacity: 0 } : { y: 90, opacity: 0, rotateX: -40 },
-        isMobile
-          ? { y: 0, opacity: 1, duration: 0.7, stagger: 0.08, ease: 'power3.out', delay: 0.2 }
-          : { y: 0, opacity: 1, rotateX: 0, duration: 0.9, stagger: 0.08, ease: 'power3.out', delay: 0.2 }
-      )
-    })
-    return () => ctx.revert()
-  }, [isMobile])
+  const ref = useRef<HTMLElement>(null)
 
   return (
     <section
-      ref={sectionRef}
-      className="relative flex flex-col justify-start md:justify-center overflow-hidden bg-bg md:min-h-[calc(100svh-4rem)]"
-      style={isMobile ? { height: `${lockedHeight}px` } : undefined}
+      ref={ref}
+      className="relative overflow-hidden md:min-h-[calc(100svh-4rem)] bg-[#FAFAF7]"
     >
-
-      {/* Base background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-bg via-bg to-bg-subtle pointer-events-none" />
-
-      {/* Warm spotlight from upper-right */}
-      <div
-        className="absolute top-0 right-0 w-[65%] h-[80%] pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at top right, rgba(194,113,79,0.07) 0%, rgba(234,196,188,0.05) 40%, transparent 70%)' }}
-      />
-
-      {/* Subtle dot grid */}
-      <div
+      {/* Gradient glow — fades in slowly */}
+      <motion.div
         className="absolute inset-0 pointer-events-none"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 2.8, ease: 'easeOut', delay: 0.2 }}
         style={{
-          backgroundImage: 'radial-gradient(circle, rgba(107,100,86,0.13) 1px, transparent 1px)',
-          backgroundSize: '28px 28px',
-          maskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 45%, transparent 65%)',
-          WebkitMaskImage: 'linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.2) 45%, transparent 65%)',
+          background: `
+            radial-gradient(ellipse 90% 80% at 105% 0%, rgba(180,127,212,0.22) 0%, transparent 65%),
+            radial-gradient(ellipse 85% 75% at -5% 105%, rgba(200,98,42,0.24) 0%, transparent 65%),
+            radial-gradient(ellipse 40% 45% at 15% 30%, rgba(180,127,212,0.06) 0%, transparent 65%)
+          `,
         }}
       />
 
-      {/* Floating flowers */}
-      <motion.div style={{ y: flowersY }} className="absolute inset-0 pointer-events-none">
+      {/* Top border rule */}
+      <motion.div
+        className="absolute top-0 left-0 right-0 h-px bg-border z-10"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+      />
 
-        {/* Blue flower — large, upper right */}
+      {/* Floating flowers */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
           className="absolute w-52 md:w-72 lg:w-80 top-[10%] right-[6%] md:right-[10%]"
           initial={{ scale: 0.7, opacity: 0, rotate: -15 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
-          {/* will-change: transform promotes element+filter to GPU layer — blur computed once, not per frame */}
           <div
             className="animate-float-mobile md:animate-float drop-shadow-[0_24px_48px_rgba(107,140,255,0.3)]"
             style={{ willChange: 'transform' }}
@@ -181,7 +153,6 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Coral flower — mid right */}
         <motion.div
           className="absolute w-40 md:w-52 lg:w-60 top-[48%] right-[1%] md:right-[3%]"
           initial={{ scale: 0.7, opacity: 0, rotate: 15 }}
@@ -196,7 +167,6 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Green flower — lower left */}
         <motion.div
           className="absolute w-28 md:w-36 bottom-[12%] left-[4%] md:left-[6%]"
           initial={{ scale: 0.7, opacity: 0, rotate: -10 }}
@@ -211,7 +181,6 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Purple flower — hidden on mobile (2 fewer compositor layers) */}
         <motion.div
           className="absolute w-20 md:w-28 top-[18%] left-[2%] md:left-[4%] hidden md:block"
           initial={{ scale: 0.7, opacity: 0, rotate: 10 }}
@@ -226,12 +195,11 @@ export default function Hero() {
           </div>
         </motion.div>
 
-        {/* Pink flower — hidden on mobile */}
         <motion.div
           className="absolute w-16 md:w-24 bottom-[28%] right-[18%] md:right-[22%] hidden md:block"
-          initial={{ scale: 0.5, opacity: 0, rotate: -8 }}
-          animate={{ scale: 1, opacity: 0.7, rotate: 0 }}
-          transition={{ duration: 1.1, delay: 1.4, ease: [0.22, 1, 0.36, 1] }}
+          initial={{ scale: 0.7, opacity: 0, rotate: -8 }}
+          animate={{ scale: 1, opacity: 1, rotate: 0 }}
+          transition={{ duration: 1.1, delay: 1.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
             className="animate-float drop-shadow-[0_16px_32px_rgba(242,160,184,0.3)]"
@@ -240,128 +208,119 @@ export default function Hero() {
             <FlowerPink />
           </div>
         </motion.div>
-      </motion.div>
+      </div>
 
-      {/* Main content */}
-      <motion.div style={isMobile ? undefined : { opacity: heroOpacity }} className="relative z-10 px-6 md:px-10 lg:px-16 max-w-7xl mx-auto w-full pt-12 pb-12 md:py-20">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 h-full">
+        <div className="flex flex-col md:flex-row md:items-stretch md:min-h-[calc(100svh-4rem)]">
 
-        {/* Eyebrow with leading rule */}
-        <motion.div
-          className="flex items-center gap-3 mb-7"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-        >
-          <motion.div
-            className="h-px bg-text-secondary/30 origin-left"
-            style={{ width: '28px' }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          />
-          <span className="eyebrow text-text-secondary">Warsaw · Delivery in 2 hours</span>
-        </motion.div>
+          {/* ── LEFT COLUMN ─────────────────────────── */}
+          <div className="flex flex-col pt-10 pb-12 md:py-14 md:mr-12 md:w-[63%] lg:w-[52%] md:justify-between gap-7 md:gap-0">
 
-        {/* Main headline */}
-        <div
-          ref={headlineRef}
-          className="overflow-hidden"
-          style={isMobile ? undefined : { perspective: '1000px' }}
-        >
-          <div className="text-display text-text-primary leading-none">
-            <div className="overflow-hidden">
-              <span className="word inline-block">Fresh&nbsp;</span>
-              <span className="word inline-block">flowers,</span>
+            {/* Eyebrow */}
+            <motion.div
+              className="flex items-center gap-3"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="w-6 h-px bg-accent" />
+              <span className="eyebrow text-accent">Warsaw · 2h delivery</span>
+            </motion.div>
+
+            {/* Headline */}
+            <div>
+              <div className="overflow-hidden">
+                <motion.div
+                  className="text-display text-text-primary"
+                  initial={{ y: '105%' }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  Fresh
+                </motion.div>
+              </div>
+              <div className="overflow-hidden">
+                <motion.div
+                  className="text-display italic text-accent"
+                  initial={{ y: '105%' }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.85, delay: 0.33, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  flowers,
+                </motion.div>
+              </div>
+              <div className="overflow-hidden mt-1">
+                <motion.div
+                  className="text-display text-text-primary"
+                  initial={{ y: '105%' }}
+                  animate={{ y: 0 }}
+                  transition={{ duration: 0.85, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  not&nbsp;
+                  <span className="italic text-accent-warm">bouquets.</span>
+                </motion.div>
+              </div>
             </div>
-            <div className="overflow-hidden mt-1 md:mt-2 ml-[6%] md:ml-[12%]">
-              <span className="word inline-block italic font-display text-accent-warm" style={{
-                fontSize: 'clamp(60px, 9vw, 128px)',
-                fontWeight: 300,
-                lineHeight: 0.93,
-              }}>
-                not&nbsp;
-              </span>
-              <span className="word inline-block">bouquets.</span>
-            </div>
+
+            {/* Bottom: description + CTA + stats */}
+            <motion.div
+              className="flex flex-col gap-6 md:gap-8"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.7 }}
+            >
+              <p className="font-sans text-[14px] md:text-[15px] font-[450] text-text-secondary leading-relaxed max-w-[340px]">
+                Single stems at wholesale price. No floristry markup, no pre-assembled bouquets. You choose, we deliver.
+              </p>
+
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  to="/shop"
+                  className="group inline-flex items-center gap-2.5 bg-text-primary text-bg font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.08em] uppercase px-5 md:px-6 py-3 md:py-3.5 rounded-full hover:bg-accent transition-colors duration-300"
+                >
+                  Shop now
+                  <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+                </Link>
+                <Link
+                  to="/how-it-works"
+                  className="inline-flex items-center gap-2 border border-border text-text-secondary font-sans text-[11px] md:text-[12px] font-[450] px-5 md:px-6 py-3 md:py-3.5 rounded-full hover:border-text-primary hover:text-text-primary transition-all duration-300"
+                >
+                  How it works
+                </Link>
+              </div>
+
+              {/* Stats row */}
+              <div className="flex items-center gap-6 md:gap-8 pt-2 border-t border-border">
+                {stats.map((s, i) => (
+                  <motion.div
+                    key={s.label}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.9 + i * 0.08 }}
+                  >
+                    <div className="font-display text-[20px] md:text-[22px] font-[600] text-text-primary leading-none">{s.value}</div>
+                    <div className="font-sans text-[10px] md:text-[11px] font-[500] text-text-secondary mt-0.5 uppercase tracking-[0.1em]">{s.label}</div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
           </div>
         </div>
+      </div>
 
-        {/* Thin rule below headline */}
-        <motion.div
-          className="mt-8 md:mt-10 h-px bg-border/60 origin-left"
-          style={{ maxWidth: '380px' }}
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ duration: 0.8, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
-        />
-
-        {/* Subtext */}
-        <motion.p
-          className="font-sans text-[14.5px] md:text-[16px] font-light text-text-secondary mt-6 md:mt-7 max-w-[340px] leading-relaxed"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.9 }}
-        >
-          Flowers at wholesale price. No bouquets,<br />
-          no floristry markup. Delivered in 2 hours.
-        </motion.p>
-
-        {/* CTAs */}
-        <motion.div
-          className="flex flex-wrap items-center gap-4 mt-8 md:mt-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 1.1 }}
-        >
-          <Link
-            to="/shop"
-            className="group relative overflow-hidden bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.1em] uppercase px-7 py-3.5 rounded-full transition-colors duration-300 hover:bg-accent inline-flex items-center gap-2"
-          >
-            <span>Shop flowers</span>
-            <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
-          </Link>
-          <Link
-            to="/how-it-works"
-            className="group font-sans text-[12px] font-[400] text-text-secondary hover:text-text-primary transition-colors border border-border hover:border-text-primary px-7 py-3.5 rounded-full inline-flex items-center gap-2 duration-300"
-          >
-            How it works
-          </Link>
-        </motion.div>
-
-        {/* Trust note */}
-        <motion.div
-          className="flex items-center gap-5 mt-10 md:mt-14"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4 }}
-        >
-          <div className="flex -space-x-2">
-            {['#E8A0A0','#F5C5A0','#B5CEAA','#C5B8E8'].map((c, i) => (
-              <div
-                key={i}
-                className="w-7 h-7 rounded-full border-2 border-bg"
-                style={{ backgroundColor: c }}
-              />
-            ))}
-          </div>
-          <div className="w-px h-6 bg-border/60" />
-          <p className="font-sans text-[12px] text-text-secondary">
-            <span className="text-text-primary font-[500]">500+</span> happy customers in Warsaw
-          </p>
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll indicator */}
+      {/* Scroll cue — desktop only */}
       <motion.div
-        className="absolute bottom-8 right-8 flex flex-col items-center gap-2 text-text-secondary/40"
+        className="hidden md:flex absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-1.5 z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.8 }}
+        transition={{ delay: 1.6 }}
       >
-        <div className="w-px h-14 bg-gradient-to-b from-transparent to-text-secondary/25" />
-        <span className="font-sans text-[9px] tracking-[0.2em] uppercase" style={{ writingMode: 'vertical-rl' }}>
-          Scroll
-        </span>
+        <motion.div
+          className="w-px h-10 bg-border origin-top"
+          animate={{ scaleY: [0, 1, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.4 }}
+        />
+        <span className="eyebrow text-text-secondary/40 text-[9px]">Scroll</span>
       </motion.div>
     </section>
   )

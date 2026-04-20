@@ -6,9 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>STEM — Fresh flowers, fair prices</title>
     <meta name="description" content="Fresh flowers at wholesale prices. Delivered in Warsaw within 2 hours. No bouquets, no markup, just beautiful stems." />
+    <link rel="preconnect" href="https://api.fontshare.com" />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link href="https://api.fontshare.com/v2/css?f[]=boska@300,400,500,600,700&f[]=general-sans@400,500,600&f[]=telma@700&display=swap" rel="stylesheet" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Gloock:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet" />
+    <script>
+      // Apply saved theme before first render to avoid flash
+      (function() {
+        var t = localStorage.getItem('stem-theme') || 'bleached-bone';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

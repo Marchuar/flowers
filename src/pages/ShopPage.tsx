@@ -129,25 +129,118 @@ export default function ShopPage() {
   }, [selectedTypes, sortBy])
 
   return (
-    <div ref={ref} className="pt-8 pb-24 px-6 md:px-10 min-h-screen bg-bg">
-      <div className="max-w-7xl mx-auto">
+    <div ref={ref} className="pb-24 min-h-screen bg-bg">
 
-        {/* Header */}
-        <motion.div
-          className="mb-10"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.55 }}
-        >
-          <div className="flex items-center gap-3 mb-2">
-            <div className="w-5 h-px bg-text-secondary/30" />
-            <span className="eyebrow text-text-secondary/60">Shop</span>
+      {/* Page header */}
+      <div className="relative px-6 md:px-10 pt-10 pb-10 md:pb-14 overflow-hidden">
+
+        {/* Flowers — desktop, behind stats */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block" aria-hidden>
+          <motion.div
+            className="absolute w-56 -top-8 right-16 opacity-55"
+            initial={{ scale: 0.7, opacity: 0, rotate: -12 }}
+            animate={inView ? { scale: 1, opacity: 0.55, rotate: 0 } : {}}
+            transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="animate-float-slow" style={{ willChange: 'transform' }}>
+              <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
+                <g filter="url(#sh1)">
+                  {[0,45,90,135,180,225,270,315].map((a,i) => (
+                    <ellipse key={i} cx="100" cy="100" rx="28" ry="55" fill="#6B8CFF" transform={`rotate(${a} 100 100)`} opacity="0.9" />
+                  ))}
+                  <circle cx="100" cy="100" r="28" fill="#E8A0C8" />
+                </g>
+                <defs><filter id="sh1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter></defs>
+              </svg>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="absolute w-40 top-6 right-2 opacity-45"
+            initial={{ scale: 0.7, opacity: 0, rotate: 14 }}
+            animate={inView ? { scale: 1, opacity: 0.45, rotate: 0 } : {}}
+            transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="animate-float-delay" style={{ willChange: 'transform' }}>
+              <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
+                <g filter="url(#sh2)">
+                  {[0,36,72,108,144,180,216,252,288,324].map((a,i) => (
+                    <ellipse key={i} cx="100" cy="100" rx="22" ry="48" fill="#F5A27A" transform={`rotate(${a} 100 100)`} opacity="0.88" />
+                  ))}
+                  <circle cx="100" cy="100" r="24" fill="#FFD166" />
+                </g>
+                <defs><filter id="sh2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" /></filter></defs>
+              </svg>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="absolute w-28 -top-2 right-52 opacity-35"
+            initial={{ scale: 0.7, opacity: 0, rotate: 6 }}
+            animate={inView ? { scale: 1, opacity: 0.35, rotate: 0 } : {}}
+            transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="animate-float-delay2" style={{ willChange: 'transform' }}>
+              <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
+                <g filter="url(#sh3)">
+                  {[0,45,90,135,180,225,270,315].map((a,i) => (
+                    <ellipse key={i} cx="100" cy="100" rx="25" ry="50" fill="#B47FD4" transform={`rotate(${a} 100 100)`} opacity="0.85" />
+                  ))}
+                  <circle cx="100" cy="100" r="26" fill="#E8C4E8" />
+                </g>
+                <defs><filter id="sh3" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter></defs>
+              </svg>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+
+            {/* Left: title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-5 h-px bg-text-secondary/30" />
+                <span className="eyebrow text-text-secondary/60">Shop</span>
+              </div>
+              <h1 className="section-heading text-text-primary">
+                All flowers,<br />
+                <span className="italic text-text-secondary/75">your choice.</span>
+              </h1>
+            </motion.div>
+
+            {/* Right: editorial stats */}
+            <motion.div
+              className="hidden md:flex items-center gap-6 pb-1"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="text-right">
+                <div className="font-display text-[42px] font-light text-text-primary leading-none">6</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">Varieties</div>
+              </div>
+              <div className="w-px h-12 bg-border" />
+              <div className="text-right">
+                <div className="font-display text-[42px] font-light text-text-primary leading-none">2h</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">Delivery</div>
+              </div>
+              <div className="w-px h-12 bg-border" />
+              <div className="text-right">
+                <div className="font-display text-[42px] font-light text-text-primary leading-none">2.20</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">From, zł</div>
+              </div>
+            </motion.div>
           </div>
-          <h1 className="section-heading text-text-primary">
-            All flowers,<br />
-            <span className="italic text-text-secondary/80">your choice.</span>
-          </h1>
-        </motion.div>
+        </div>
+      </div>
+
+      <div className="px-6 md:px-10">
+      <div className="max-w-7xl mx-auto">
 
         {/* Sort bar + mobile filter toggle */}
         <motion.div
@@ -227,6 +320,7 @@ export default function ShopPage() {
           </div>
         </div>
       </div>
+      </div>
 
       {/* Mobile filters overlay */}
       {mobileFiltersOpen && (
@@ -236,7 +330,7 @@ export default function ShopPage() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="absolute inset-0 bg-text-primary/40" onClick={() => setMobileFiltersOpen(false)} />
+          <div className="absolute inset-0 bg-ink/40" onClick={() => setMobileFiltersOpen(false)} />
           <motion.div
             className="absolute bottom-0 left-0 right-0 bg-surface rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto"
             initial={{ y: '100%' }}

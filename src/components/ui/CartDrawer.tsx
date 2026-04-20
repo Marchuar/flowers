@@ -25,7 +25,7 @@ export default function CartDrawer() {
         <>
           {/* Backdrop */}
           <motion.div
-            className="fixed inset-0 z-[10002] bg-text-primary/25 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[10002] bg-ink/25 backdrop-blur-[2px]"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

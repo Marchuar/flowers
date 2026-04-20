@@ -15,7 +15,7 @@ const comparison = [
   { feature: 'Care instructions',   traditional: 'Never',      stem: 'Every order' },
 ]
 
-export default function Pricing() {
+export default function   Pricing() {
   const ref = useRef<HTMLElement>(null)
   const priceRef = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
@@ -68,7 +68,7 @@ export default function Pricing() {
             <span className="italic text-accent-warm">300% more.</span>
           </motion.h2>
           <motion.p
-            className="font-sans text-[14px] font-light text-text-secondary max-w-md mx-auto mt-4 leading-relaxed"
+            className="font-sans text-[14px] font-[400] text-text-secondary max-w-md mx-auto mt-4 leading-relaxed"
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
@@ -89,16 +89,16 @@ export default function Pricing() {
           {/* ── DESKTOP header (3 cols) ── */}
           <div className="hidden md:grid grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,1fr)]">
             <div className="bg-surface px-8 py-6 border-b border-border/50">
-              <span className="eyebrow text-text-secondary/35">Category</span>
+              <span className="eyebrow text-text-secondary/60">Category</span>
             </div>
             <div className="bg-bg px-6 py-6 border-b border-l border-border/50 text-center">
-              <div className="eyebrow text-text-secondary/40 mb-1.5">Traditional</div>
-              <div className="font-editorial text-[20px] font-light text-text-secondary/60" style={{ fontVariationSettings: "'opsz' 24" }}>
+              <div className="eyebrow text-text-secondary/55 mb-1.5">Traditional</div>
+              <div className="font-playfair text-[20px] font-[400] text-text-secondary/85">
                 Florist
               </div>
             </div>
             <div className="bg-text-primary px-6 py-6 border-b border-l border-surface/[0.08] flex flex-col items-center justify-center gap-2 text-center">
-              <span className="font-sans text-[9px] tracking-[0.22em] uppercase text-surface/40">Best value</span>
+              <span className="eyebrow text-[9px] tracking-[0.22em] uppercase text-surface/60">Best value</span>
               <span className="font-brand text-[26px] tracking-[0.2em] text-surface leading-none">STEM</span>
               <span className="bg-accent/20 text-accent font-sans text-[9px] tracking-[0.1em] uppercase px-3 py-1 rounded-full">
                 Wholesale prices
@@ -109,8 +109,8 @@ export default function Pricing() {
           {/* ── MOBILE header (2 cols) ── */}
           <div className="md:hidden grid grid-cols-2">
             <div className="bg-bg px-5 py-5 border-b border-border/50 text-center">
-              <div className="eyebrow text-text-secondary/40 mb-1.5">Traditional</div>
-              <div className="font-editorial text-[18px] font-light text-text-secondary/60" style={{ fontVariationSettings: "'opsz' 24" }}>
+              <div className="eyebrow text-text-secondary/55 mb-1.5">Traditional</div>
+              <div className="font-playfair text-[18px] font-[400] text-text-secondary/85">
                 Florist
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function Pricing() {
                   transition={{ duration: 0.55, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <div className={`bg-surface px-8 py-6 ${!isLast ? 'border-b border-border/40' : ''} flex items-center`}>
-                    <span className="font-editorial text-[19px] font-light text-text-primary" style={{ fontVariationSettings: "'opsz' 24" }}>
+                    <span className="font-editorial text-[19px] font-[400] text-text-primary" style={{ fontVariationSettings: "'opsz' 24" }}>
                       {row.feature}
                     </span>
                   </div>
@@ -145,7 +145,7 @@ export default function Pricing() {
                       <div className="w-5 h-5 rounded-full bg-border/60 flex items-center justify-center flex-shrink-0">
                         <X size={9} className="text-text-secondary/50" strokeWidth={2.5} />
                       </div>
-                      <span className="font-sans text-[13px] text-text-secondary/45 text-center leading-tight">
+                      <span className="font-sans text-[13px] font-[450] text-text-secondary/65 text-center leading-tight">
                         {row.traditional}
                       </span>
                     </div>
@@ -179,7 +179,7 @@ export default function Pricing() {
                 >
                   {/* Feature name — full width */}
                   <div className="bg-surface px-5 py-3 border-b border-border/30">
-                    <span className="font-editorial text-[15px] font-light text-text-primary/75" style={{ fontVariationSettings: "'opsz' 20" }}>
+                    <span className="font-editorial text-[15px] font-[400] text-text-primary/90" style={{ fontVariationSettings: "'opsz' 20" }}>
                       {row.feature}
                     </span>
                   </div>
@@ -190,7 +190,7 @@ export default function Pricing() {
                         <div className="w-4 h-4 rounded-full bg-border/60 flex items-center justify-center flex-shrink-0">
                           <X size={8} className="text-text-secondary/50" strokeWidth={2.5} />
                         </div>
-                        <span className="font-sans text-[12.5px] text-text-secondary/50 leading-tight">
+                        <span className="font-sans text-[12.5px] font-[450] text-text-secondary/70 leading-tight">
                           {row.traditional}
                         </span>
                       </div>
@@ -224,8 +224,8 @@ export default function Pricing() {
             <span className="font-sans text-[13px] text-text-secondary/60 mb-1.5">From</span>
             <span ref={priceRef} className="font-display text-[56px] font-light leading-none text-text-primary tabular-nums">0.00</span>
             <div className="mb-1.5">
-              <div className="font-sans text-[16px] font-light text-text-primary leading-none">zł</div>
-              <div className="font-sans text-[10.5px] text-text-secondary/50 mt-0.5">per stem</div>
+              <div className="font-sans text-[16px] font-[400] text-text-primary leading-none">zł</div>
+              <div className="font-sans text-[10.5px] md:text-[12px] font-[500] text-text-secondary/60 mt-0.5">per stem</div>
             </div>
           </div>
 

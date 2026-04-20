@@ -1,8 +1,14 @@
+@import url('https://api.fontshare.com/v2/css?f[]=telma@700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Explicit keyframes so they're always included in the bundle */
+.font-telma {
+  font-family: 'Telma', serif !important;
+  font-weight: 700;
+}
+
 @keyframes marquee {
   from { transform: translateX(0); }
   to { transform: translateX(-100%); }
@@ -25,17 +31,6 @@
   to { transform: scaleX(1); transform-origin: left; }
 }
 
-:root {
-  --color-bg: #F5F0E8;
-  --color-bg-subtle: #EDE7D9;
-  --color-text-primary: #1C1A17;
-  --color-text-secondary: #6B6456;
-  --color-accent: #7D9B76;
-  --color-accent-warm: #C2714F;
-  --color-surface: #FDFAF5;
-  --color-border: #D9D0C1;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -47,15 +42,15 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
-  color: var(--color-text-primary);
-  font-family: "Instrument Sans", "DM Sans", system-ui, sans-serif;
+  background-color: #FAFAF7;
+  color: #111110;
+  font-family: "General Sans", system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Grain texture overlay — editorial premium feel */
+/* Grain overlay */
 body::after {
   content: '';
   position: fixed;
@@ -64,74 +59,63 @@ body::after {
   height: 100%;
   pointer-events: none;
   z-index: 9998;
-  opacity: 0.032;
+  opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n' x='0' y='0'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 220px 220px;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 3px;
-}
-::-webkit-scrollbar-track {
-  background: var(--color-bg);
-}
-::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 2px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-secondary);
-}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: #FAFAF7; }
+::-webkit-scrollbar-thumb { background: #DDD8CF; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #706860; }
 
-#root {
-  min-height: 100vh;
-}
+#root { min-height: 100vh; }
 
 @layer utilities {
-  .font-display {
-    font-family: "Cormorant Garamond", Georgia, serif;
-  }
+  .font-display { font-family: "Boska", Georgia, serif; }
+  .font-editorial { font-family: "Boska", Georgia, serif; }
 
-  .font-editorial {
-    font-family: "Fraunces", "Cormorant Garamond", Georgia, serif;
-  }
-
-  /* Hero mega-headline — Cormorant Garamond, ultra large */
   .text-display {
-    font-family: "Cormorant Garamond", Georgia, serif;
-    font-size: clamp(68px, 10vw, 140px);
-    font-weight: 300;
+    font-family: "Boska", Georgia, serif;
+    font-size: clamp(40px, 10.5vw, 128px);
+    font-weight: 500;
     line-height: 0.92;
+    letter-spacing: -0.03em;
+  }
+
+  .section-heading {
+    font-family: "Boska", Georgia, serif;
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 400;
+    line-height: 1.05;
     letter-spacing: -0.025em;
   }
 
-  /* Section headings — Fraunces, distinctive editorial serif */
-  .section-heading {
-    font-family: "Fraunces", "Cormorant Garamond", Georgia, serif;
-    font-size: clamp(40px, 5vw, 64px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.015em;
-    font-variation-settings: 'opsz' 72;
-  }
-
   .eyebrow {
-    font-family: "Instrument Sans", "DM Sans", sans-serif;
+    font-family: "General Sans", system-ui, sans-serif;
     font-size: 10.5px;
     font-weight: 500;
     letter-spacing: 0.16em;
     text-transform: uppercase;
   }
 
+  @media (min-width: 768px) {
+    .eyebrow {
+      font-size: 12px;
+    }
+  }
+
+  .font-playfair { font-family: "Playfair Display", Georgia, serif; }
+
+  /* Shimmer text effect */
   .shimmer-text {
     background: linear-gradient(
       90deg,
-      var(--color-text-primary) 0%,
-      var(--color-accent-warm) 40%,
-      var(--color-accent) 60%,
-      var(--color-text-primary) 100%
+      #111110 0%,
+      #C8622A 40%,
+      #2C5F3E 60%,
+      #111110 100%
     );
     background-size: 200% auto;
     -webkit-background-clip: text;
@@ -142,6 +126,21 @@ body::after {
 
   @keyframes shimmer-move {
     to { background-position: 200% center; }
+  }
+
+  /* Tag/badge pill */
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border-radius: 999px;
+    border: 1px solid #DDD8CF;
+    font-family: "General Sans", system-ui, sans-serif;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #706860;
   }
 }
 

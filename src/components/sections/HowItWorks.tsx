@@ -84,11 +84,8 @@ export default function HowItWorks() {
               {/* Step number */}
               <div className="flex-shrink-0 w-14 md:w-20">
                 <span
-                  className="font-editorial font-light text-text-secondary/20 select-none leading-none block"
-                  style={{
-                    fontSize: 'clamp(42px, 5vw, 64px)',
-                    fontVariationSettings: "'opsz' 72",
-                  }}
+                  className="font-playfair font-[400] text-text-secondary/20 select-none leading-none block"
+                  style={{ fontSize: 'clamp(42px, 5vw, 64px)' }}
                   aria-hidden="true"
                 >
                   {step.num}
@@ -103,12 +100,11 @@ export default function HowItWorks() {
               {/* Content */}
               <div className="flex-1 pt-1">
                 <h3
-                  className="font-editorial text-[24px] md:text-[28px] font-light text-text-primary mb-2.5 leading-tight"
-                  style={{ fontVariationSettings: "'opsz' 36" }}
+                  className="font-playfair text-[24px] md:text-[28px] font-[400] text-text-primary mb-2.5 leading-tight"
                 >
                   {step.title}
                 </h3>
-                <p className="font-sans text-[13.5px] font-light text-text-secondary leading-relaxed max-w-lg">
+                <p className="font-sans text-[13.5px] font-[450] text-text-secondary leading-relaxed max-w-lg">
                   {step.body}
                 </p>
               </div>
@@ -125,12 +121,12 @@ export default function HowItWorks() {
         >
           <div className="flex items-center gap-2.5">
             <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-            <span className="font-sans text-[12.5px]">Orders accepted 9:00–21:00 every day</span>
+            <span className="font-sans text-[12.5px] font-[450]">Orders accepted 9:00–21:00 every day</span>
           </div>
           <div className="hidden sm:block text-border">·</div>
           <div className="flex items-center gap-2.5">
             <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-            <span className="font-sans text-[12.5px]">Delivery within Warsaw · 2 hour window</span>
+            <span className="font-sans text-[12.5px] font-[450]">Delivery within Warsaw · 2 hour window</span>
           </div>
         </motion.div>
       </div>

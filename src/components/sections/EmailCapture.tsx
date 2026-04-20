@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useIsMobile } from '../../hooks/useIsMobile'
 
@@ -34,14 +34,14 @@ function makeMeteors(count: number) {
 }
 
 function MeteorEffect({ count }: { count: number }) {
-  const meteors = useRef(makeMeteors(count))
+  const meteors = useMemo(() => makeMeteors(count), [count])
 
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {meteors.current.map(m => (
+      {meteors.map(m => (
         <span
           key={m.id}
-          className="absolute rounded-full bg-surface/25 shadow-[0_0_0_1px_rgba(253,250,245,0.08)]"
+          className="absolute rounded-full bg-ink-text/25 shadow-[0_0_0_1px_rgba(253,250,245,0.08)]"
           style={{
             top: m.top,
             left: m.left,
@@ -119,7 +119,7 @@ export default function EmailCapture() {
 
         {/* Headline — word by word */}
         <h2
-          className="font-display font-light leading-none text-surface mb-5 tracking-tight"
+          className="font-display font-light leading-none text-ink-text mb-5 tracking-tight"
           style={{ fontSize: 'clamp(48px, 8vw, 96px)', letterSpacing: '-0.025em' }}
         >
           {words.map((word, i) => (
@@ -130,13 +130,13 @@ export default function EmailCapture() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.65, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              {i === 3 ? <span className="italic text-surface/55">{word}</span> : word}
+              {i === 3 ? <span className="italic text-ink-text/55">{word}</span> : word}
             </motion.span>
           ))}
         </h2>
 
         <motion.p
-          className="font-sans text-[13.5px] font-light text-surface/45 mb-10 leading-relaxed"
+          className="font-sans text-[13.5px] font-light text-ink-text/45 mb-10 leading-relaxed"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.65 }}
@@ -165,11 +165,11 @@ export default function EmailCapture() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="your@email.com"
                   required
-                  className="flex-1 bg-surface/[0.08] text-surface placeholder:text-surface/25 border border-surface/[0.15] rounded-full px-5 py-3.5 font-sans text-[13px] outline-none focus:border-surface/40 focus:bg-surface/12 transition-all"
+                  className="flex-1 bg-ink-text/[0.08] text-ink-text placeholder:text-ink-text/25 border border-ink-text/[0.15] rounded-full px-5 py-3.5 font-sans text-[13px] outline-none focus:border-ink-text/40 focus:bg-ink-text/12 transition-all"
                 />
                 <motion.button
                   type="submit"
-                  className="bg-surface text-bark font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase px-7 py-3.5 rounded-full whitespace-nowrap hover:bg-accent hover:text-surface transition-colors duration-300"
+                  className="bg-ink-text text-ink font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase px-7 py-3.5 rounded-full whitespace-nowrap hover:bg-accent hover:text-ink transition-colors duration-300"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
                 >
@@ -179,7 +179,7 @@ export default function EmailCapture() {
             ) : (
               <motion.div
                 key="success"
-                className="w-full flex items-center justify-center gap-3 bg-accent/15 text-surface border border-accent/25 rounded-full px-6 py-3.5"
+                className="w-full flex items-center justify-center gap-3 bg-accent/15 text-ink-text border border-accent/25 rounded-full px-6 py-3.5"
                 initial={{ opacity: 0, y: 10, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ type: 'spring', stiffness: 220, damping: 18 }}
@@ -196,7 +196,7 @@ export default function EmailCapture() {
         </motion.form>
 
         <motion.p
-          className="font-sans text-[11px] text-surface/20 mt-4"
+          className="font-sans text-[11px] text-ink-text/20 mt-4"
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.9 }}

@@ -1,22 +1,19 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import { ShoppingBag, Heart, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react'
+import { ShoppingBag, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react'
 import { products, type Product } from '../../constants/products'
 import { useCart } from '../../context/CartContext'
-import { useLikes } from '../../context/LikesContext'
 import { useToast } from '../ui/Toast'
 
 export function ProductCard({ product, index }: { product: Product; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
   const { addItem, items, updateQty, removeItem } = useCart()
-  const { toggleLike, isLiked } = useLikes()
   const { showToast } = useToast()
 
   const cartItem = items.find(i => i.product.id === product.id)
   const qty = cartItem?.quantity ?? 0
-  const liked = isLiked(product.id)
 
   const allImages = [product.image, ...(product.images ?? [])]
   const hasMultiple = allImages.length > 1
@@ -26,6 +23,7 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
   const bgColor = product.color + '38'
   const btnColor = product.color + '65'
   const btnHoverColor = product.color + 'CC'
+  const hoverShadow = '0 20px 48px rgba(17,17,16,0.09)'
 
   function handleAddToCart() {
     addItem(product)
@@ -41,11 +39,6 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
   function handleIncrement(e: React.MouseEvent) {
     e.stopPropagation()
     updateQty(product.id, qty + 1)
-  }
-
-  function handleLike(e: React.MouseEvent) {
-    e.stopPropagation()
-    toggleLike(product.id)
   }
 
   function nextImg(e?: React.MouseEvent) {
@@ -74,15 +67,16 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 50 }}
-      animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.65, delay: index * 0.08, ease: [0.22, 1, 0.36, 1] }}
+      initial={{ opacity: 0, y: 50, filter: 'blur(4px)' }}
+      animate={inView ? { opacity: 1, y: 0, filter: 'blur(0px)' } : {}}
+      transition={{ duration: 0.65, delay: index * 0.08, ease: [0.16, 1, 0.3, 1] }}
     >
       <motion.div
         className="relative flex flex-col rounded-3xl overflow-hidden cursor-pointer p-3 group"
         style={{ backgroundColor: bgColor }}
-        whileHover={{ y: -8, scale: 1.01, boxShadow: '0 20px 48px rgba(28,26,23,0.11)' }}
-        transition={{ duration: 0.38, ease: [0.25, 0.8, 0.25, 1] }}
+        whileHover={{ y: -8, scale: 1.01, boxShadow: hoverShadow }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.35, ease: [0.25, 0.8, 0.25, 1] }}
       >
         {/* Image */}
         <div
@@ -106,7 +100,7 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
 
           {/* Color tint overlay */}
           <div
-            className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none"
+            className="absolute inset-0 opacity-0 group-hover:opacity-15 transition-opacity duration-500 pointer-events-none"
             style={{ backgroundColor: product.color }}
           />
 
@@ -116,22 +110,6 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
               {product.tag}
             </div>
           )}
-
-          {/* Like button */}
-          <motion.button
-            onClick={handleLike}
-            whileTap={{ scale: 0.85 }}
-            className="absolute top-3 right-3 z-10 w-7 h-7 rounded-full bg-surface/75 backdrop-blur-sm flex items-center justify-center transition-colors hover:bg-surface/95"
-            aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
-          >
-            <Heart
-              size={13}
-              strokeWidth={2}
-              fill={liked ? product.color : 'none'}
-              stroke={liked ? product.color : 'currentColor'}
-              className={liked ? '' : 'text-text-secondary'}
-            />
-          </motion.button>
 
           {/* Desktop gallery arrows */}
           {hasMultiple && (
@@ -174,7 +152,7 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
           <h3 className="font-display text-[22px] md:text-[28px] font-light text-text-primary leading-tight">{product.name}</h3>
           <div className="font-sans text-[12.5px] font-[500] text-text-primary mt-0.5">
             {product.price}{' '}
-            <span className="font-normal text-text-secondary text-[10.5px]">/ stem</span>
+            <span className="font-normal text-text-secondary text-[10.5px] md:text-[12px]">/ stem</span>
           </div>
         </div>
 
@@ -233,6 +211,8 @@ export default function Products() {
   const titleRef = useRef<HTMLDivElement>(null)
   const titleInView = useInView(titleRef, { once: true, margin: '-80px' })
 
+  const [featured, ...rest] = products
+
   return (
     <section id="products" className="py-20 md:py-28 px-6 md:px-10 bg-bg">
       <div className="max-w-7xl mx-auto">
@@ -259,7 +239,6 @@ export default function Products() {
             </motion.h2>
           </div>
 
-          {/* View all link — desktop */}
           <motion.div
             className="hidden md:block pb-1"
             initial={{ opacity: 0 }}
@@ -276,10 +255,30 @@ export default function Products() {
           </motion.div>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 md:gap-5">
+        {/* Mobile grid */}
+        <div className="grid grid-cols-2 gap-3.5 md:hidden">
           {products.map((product, i) => (
             <ProductCard key={product.id} product={product} index={i} />
+          ))}
+        </div>
+
+        {/* Desktop bento grid */}
+        <div className="hidden md:grid grid-cols-4 gap-5">
+          {/* Featured — large, spans 2 cols × 2 rows */}
+          <div className="col-span-2 row-span-2">
+            <ProductCard product={featured} index={0} />
+          </div>
+          {/* Top-right two smaller cards */}
+          {rest.slice(0, 2).map((product, i) => (
+            <div key={product.id} className="col-span-1">
+              <ProductCard product={product} index={i + 1} />
+            </div>
+          ))}
+          {/* Bottom row — 3 cards */}
+          {rest.slice(2).map((product, i) => (
+            <div key={product.id} className={i === 2 ? 'col-span-2' : 'col-span-1'}>
+              <ProductCard product={product} index={i + 3} />
+            </div>
           ))}
         </div>
 
