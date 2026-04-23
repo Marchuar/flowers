@@ -11,7 +11,9 @@ const leftLinks = [
 
 const rightLinks = [
   { label: 'How it works', href: '/how-it-works' },
+  { label: 'Business', href: '/business' },
   { label: 'About', href: '/about' },
+  { label: 'FAQ', href: '/faq' },
 ]
 
 const allLinks = [...leftLinks, ...rightLinks]
@@ -135,7 +137,7 @@ export default function Navigation() {
                 to="/shop"
                 className="bg-text-primary text-surface font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.1em] uppercase px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300"
               >
-                Order now
+                Browse Flowers
               </Link>
             </div>
           </div>
@@ -232,7 +234,7 @@ export default function Navigation() {
             onClick={() => setMobileOpen(false)}
             className="block text-center w-full bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.1em] uppercase px-6 py-4 rounded-full hover:bg-accent hover:text-bg transition-colors"
           >
-            Order now
+            Browse Flowers
           </Link>
         </div>
       </motion.div>

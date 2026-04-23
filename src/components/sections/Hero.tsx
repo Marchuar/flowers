@@ -146,7 +146,7 @@ export default function Hero() {
           transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-mobile md:animate-float drop-shadow-[0_24px_48px_rgba(107,140,255,0.3)]"
+            className="animate-float-mobile md:animate-float md:drop-shadow-[0_24px_48px_rgba(107,140,255,0.3)]"
             style={{ willChange: 'transform' }}
           >
             <FlowerBlue />
@@ -160,7 +160,7 @@ export default function Hero() {
           transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-mobile-delay md:animate-float-delay drop-shadow-[0_20px_40px_rgba(245,162,122,0.3)]"
+            className="animate-float-mobile-delay md:animate-float-delay md:drop-shadow-[0_20px_40px_rgba(245,162,122,0.3)]"
             style={{ willChange: 'transform' }}
           >
             <FlowerCoral />
@@ -174,7 +174,7 @@ export default function Hero() {
           transition={{ duration: 1.1, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-mobile-slow md:animate-float-slow drop-shadow-[0_20px_40px_rgba(92,184,92,0.3)]"
+            className="animate-float-mobile-slow md:animate-float-slow md:drop-shadow-[0_20px_40px_rgba(92,184,92,0.3)]"
             style={{ willChange: 'transform' }}
           >
             <FlowerGreen />
@@ -210,11 +210,11 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-10 lg:px-16 h-full">
+      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 xl:px-16 h-full">
         <div className="flex flex-col md:flex-row md:items-stretch md:min-h-[calc(100svh-4rem)]">
 
           {/* ── LEFT COLUMN ─────────────────────────── */}
-          <div className="flex flex-col pt-10 pb-12 md:py-14 md:mr-12 md:w-[63%] lg:w-[52%] md:justify-between gap-7 md:gap-0">
+          <div className="flex flex-col pt-10 pb-12 md:py-14 md:mr-8 xl:mr-12 md:w-[63%] lg:w-[61%] xl:w-[52%] md:justify-between gap-7 md:gap-0">
 
             {/* Eyebrow */}
             <motion.div

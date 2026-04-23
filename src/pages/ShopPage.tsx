@@ -1,9 +1,10 @@
 import { useState, useMemo, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { SlidersHorizontal, X } from 'lucide-react'
-import { products } from '../constants/products'
+import { products, type Product } from '../constants/products'
 import { parsePrice } from '../lib/utils'
 import { ProductCard } from '../components/sections/Products'
+import ProductModal from '../components/ui/ProductModal'
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc'
 
@@ -99,6 +100,7 @@ export default function ShopPage() {
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('default')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   function toggleType(name: string) {
     setSelectedTypes(prev =>
@@ -129,6 +131,7 @@ export default function ShopPage() {
   }, [selectedTypes, sortBy])
 
   return (
+    <>
     <div ref={ref} className="pb-24 min-h-screen bg-bg">
 
       {/* Page header */}
@@ -313,7 +316,7 @@ export default function ShopPage() {
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
                 {filtered.map((product, i) => (
-                  <ProductCard key={product.id} product={product} index={i} />
+                  <ProductCard key={product.id} product={product} index={i} onOpenModal={setSelectedProduct} />
                 ))}
               </div>
             )}
@@ -355,5 +358,7 @@ export default function ShopPage() {
         </motion.div>
       )}
     </div>
+    <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+    </>
   )
 }

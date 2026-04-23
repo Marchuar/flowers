@@ -5,8 +5,9 @@ import { ShoppingBag, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-reac
 import { products, type Product } from '../../constants/products'
 import { useCart } from '../../context/CartContext'
 import { useToast } from '../ui/Toast'
+import ProductModal from '../ui/ProductModal'
 
-export function ProductCard({ product, index }: { product: Product; index: number }) {
+export function ProductCard({ product, index, onOpenModal }: { product: Product; index: number; onOpenModal?: (p: Product) => void }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
   const { addItem, items, updateQty, removeItem } = useCart()
@@ -25,7 +26,8 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
   const btnHoverColor = product.color + 'CC'
   const hoverShadow = '0 20px 48px rgba(17,17,16,0.09)'
 
-  function handleAddToCart() {
+  function handleAddToCart(e: React.MouseEvent) {
+    e.stopPropagation()
     addItem(product)
     showToast(`${product.name} added to bag`)
   }
@@ -77,6 +79,7 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
         whileHover={{ y: -8, scale: 1.01, boxShadow: hoverShadow }}
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.35, ease: [0.25, 0.8, 0.25, 1] }}
+        onClick={() => onOpenModal?.(product)}
       >
         {/* Image */}
         <div
@@ -149,7 +152,7 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
         {/* Info */}
         <div className="flex flex-col gap-0.5 px-1 pb-1 flex-1">
           <div className="eyebrow text-text-secondary/45 text-[9.5px]">{product.latinName}</div>
-          <h3 className="font-display text-[22px] md:text-[28px] font-light text-text-primary leading-tight">{product.name}</h3>
+          <h3 className="font-display text-[22px] md:text-[28px] font-[400] text-text-primary leading-tight">{product.name}</h3>
           <div className="font-sans text-[12.5px] font-[500] text-text-primary mt-0.5">
             {product.price}{' '}
             <span className="font-normal text-text-secondary text-[10.5px] md:text-[12px]">/ stem</span>
@@ -210,6 +213,7 @@ export function ProductCard({ product, index }: { product: Product; index: numbe
 export default function Products() {
   const titleRef = useRef<HTMLDivElement>(null)
   const titleInView = useInView(titleRef, { once: true, margin: '-80px' })
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
   const [featured, ...rest] = products
 
@@ -258,7 +262,7 @@ export default function Products() {
         {/* Mobile grid */}
         <div className="grid grid-cols-2 gap-3.5 md:hidden">
           {products.map((product, i) => (
-            <ProductCard key={product.id} product={product} index={i} />
+            <ProductCard key={product.id} product={product} index={i} onOpenModal={setSelectedProduct} />
           ))}
         </div>
 
@@ -266,18 +270,18 @@ export default function Products() {
         <div className="hidden md:grid grid-cols-4 gap-5">
           {/* Featured — large, spans 2 cols × 2 rows */}
           <div className="col-span-2 row-span-2">
-            <ProductCard product={featured} index={0} />
+            <ProductCard product={featured} index={0} onOpenModal={setSelectedProduct} />
           </div>
           {/* Top-right two smaller cards */}
           {rest.slice(0, 2).map((product, i) => (
             <div key={product.id} className="col-span-1">
-              <ProductCard product={product} index={i + 1} />
+              <ProductCard product={product} index={i + 1} onOpenModal={setSelectedProduct} />
             </div>
           ))}
           {/* Bottom row — 3 cards */}
           {rest.slice(2).map((product, i) => (
             <div key={product.id} className={i === 2 ? 'col-span-2' : 'col-span-1'}>
-              <ProductCard product={product} index={i + 3} />
+              <ProductCard product={product} index={i + 3} onOpenModal={setSelectedProduct} />
             </div>
           ))}
         </div>
@@ -297,6 +301,8 @@ export default function Products() {
           </Link>
         </motion.div>
       </div>
+
+      <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
     </section>
   )
 }

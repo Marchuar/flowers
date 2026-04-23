@@ -115,9 +115,9 @@ export default function   Pricing() {
               </div>
             </div>
             <div className="bg-text-primary px-5 py-5 border-b border-l border-surface/[0.08] flex flex-col items-center justify-center gap-1.5 text-center">
-              <span className="font-sans text-[8px] tracking-[0.22em] uppercase text-surface/40">Best value</span>
+              <span className="font-sans text-[10px] tracking-[0.22em] uppercase text-surface/40">Best value</span>
               <span className="font-brand text-[22px] tracking-[0.2em] text-surface leading-none">STEM</span>
-              <span className="bg-accent/20 text-accent font-sans text-[8px] tracking-[0.1em] uppercase px-2.5 py-0.5 rounded-full">
+              <span className="bg-accent/20 text-accent font-sans text-[9px] tracking-[0.1em] uppercase px-2.5 py-0.5 rounded-full">
                 Wholesale
               </span>
             </div>
@@ -136,7 +136,7 @@ export default function   Pricing() {
                   transition={{ duration: 0.55, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                 >
                   <div className={`bg-surface px-8 py-6 ${!isLast ? 'border-b border-border/40' : ''} flex items-center`}>
-                    <span className="font-editorial text-[19px] font-[400] text-text-primary" style={{ fontVariationSettings: "'opsz' 24" }}>
+                    <span className="font-editorial text-[19px] font-[450] text-text-primary" style={{ fontVariationSettings: "'opsz' 24" }}>
                       {row.feature}
                     </span>
                   </div>
@@ -178,8 +178,8 @@ export default function   Pricing() {
                   transition={{ duration: 0.45, delay: 0.35 + i * 0.07, ease: [0.22, 1, 0.36, 1] }}
                 >
                   {/* Feature name — full width */}
-                  <div className="bg-surface px-5 py-3 border-b border-border/30">
-                    <span className="font-editorial text-[15px] font-[400] text-text-primary/90" style={{ fontVariationSettings: "'opsz' 20" }}>
+                  <div className="bg-surface px-5 py-3 border-b border-border/30 text-center">
+                    <span className="font-editorial text-[15px] font-[450] text-text-primary/90" style={{ fontVariationSettings: "'opsz' 20" }}>
                       {row.feature}
                     </span>
                   </div>
@@ -190,7 +190,7 @@ export default function   Pricing() {
                         <div className="w-4 h-4 rounded-full bg-border/60 flex items-center justify-center flex-shrink-0">
                           <X size={8} className="text-text-secondary/50" strokeWidth={2.5} />
                         </div>
-                        <span className="font-sans text-[12.5px] font-[450] text-text-secondary/70 leading-tight">
+                        <span className="font-sans text-[13px] font-[450] text-text-secondary/70 leading-tight">
                           {row.traditional}
                         </span>
                       </div>
@@ -200,7 +200,7 @@ export default function   Pricing() {
                         <div className="w-4 h-4 rounded-full bg-accent/20 flex items-center justify-center flex-shrink-0">
                           <Check size={9} className="text-accent" strokeWidth={2.5} />
                         </div>
-                        <span className="font-sans text-[12.5px] font-[500] text-surface leading-tight">
+                        <span className="font-sans text-[13.5px] font-[500] text-surface leading-tight">
                           {row.stem}
                         </span>
                       </div>

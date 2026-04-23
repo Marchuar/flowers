@@ -11,6 +11,8 @@ import HowItWorksPage from './pages/HowItWorksPage'
 import AboutPage from './pages/AboutPage'
 import CartPage from './pages/CartPage'
 import CheckoutPage from './pages/CheckoutPage'
+import BusinessPage from './pages/BusinessPage'
+import FaqPage from './pages/FaqPage'
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/cart" element={<CartPage />} />
                 <Route path="/checkout" element={<CheckoutPage />} />
+                <Route path="/business" element={<BusinessPage />} />
+                <Route path="/faq" element={<FaqPage />} />
               </Routes>
             </main>
             <Footer />
