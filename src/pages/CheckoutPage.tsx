@@ -43,6 +43,7 @@ export default function CheckoutPage() {
   function handlePlaceOrder() {
     setOrderPlaced(true)
     clearCart()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   if (orderPlaced) {
