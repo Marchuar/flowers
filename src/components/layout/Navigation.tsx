@@ -7,11 +7,11 @@ import { useCart } from '../../context/CartContext'
 const leftLinks = [
   { label: 'Home', href: '/', end: true },
   { label: 'Shop', href: '/shop', primary: true },
+  { label: 'Business', href: '/business' },
+  { label: 'How it works', href: '/how-it-works' },
 ]
 
 const rightLinks = [
-  { label: 'How it works', href: '/how-it-works' },
-  { label: 'Business', href: '/business' },
   { label: 'About', href: '/about' },
   { label: 'FAQ', href: '/faq' },
 ]
@@ -60,16 +60,16 @@ export default function Navigation() {
           />
 
           {/* ── DESKTOP layout: left links · STEM · right links + actions ── */}
-          <div className="hidden md:flex h-full items-center">
+          <div className="hidden lg:grid h-full items-center" style={{ gridTemplateColumns: '1fr auto 1fr' }}>
 
             {/* Left nav */}
-            <nav className="flex items-center gap-0.5 flex-1">
+            <nav className="flex items-center gap-0.5">
               {leftLinks.map(link => (
                 <NavLink
                   key={link.label}
                   to={link.href}
                   end={link.end}
-                  className="group font-sans text-[13px] font-[500] tracking-[0.03em] px-3 py-1.5"
+                  className="group font-sans text-[15px] font-[500] tracking-[0.03em] px-3 py-1.5"
                 >
                   {({ isActive }) => (
                     <span className={`transition-colors duration-200 ${
@@ -87,18 +87,18 @@ export default function Navigation() {
             {/* Center: logo */}
             <Link
               to="/"
-              className="font-telma text-[32px] font-bold tracking-[0.22em] text-text-primary hover:text-accent transition-colors duration-300 absolute left-1/2 -translate-x-1/2"
+              className="font-telma text-[32px] font-bold tracking-[0.22em] text-text-primary hover:text-accent transition-colors duration-300"
             >
               STEM
             </Link>
 
             {/* Right nav + actions */}
-            <div className="flex items-center gap-3 flex-1 justify-end">
+            <div className="flex items-center gap-3 justify-end">
               {rightLinks.map(link => (
                 <NavLink
                   key={link.label}
                   to={link.href}
-                  className="group font-sans text-[13px] font-[500] tracking-[0.03em] px-3 py-1.5"
+                  className="group font-sans text-[15px] font-[500] tracking-[0.03em] px-3 py-1.5"
                 >
                   {({ isActive }) => (
                     <span className={`transition-colors duration-200 ${
@@ -143,7 +143,7 @@ export default function Navigation() {
           </div>
 
           {/* ── MOBILE layout ── */}
-          <div className="md:hidden flex h-full items-center justify-between">
+          <div className="lg:hidden flex h-full items-center justify-between">
             <Link
               to="/"
               className="font-telma text-[28px] font-bold tracking-[0.22em] text-text-primary"
@@ -190,7 +190,7 @@ export default function Navigation() {
 
       {/* Mobile overlay */}
       <motion.div
-        className="fixed inset-0 z-40 bg-bg flex flex-col pt-20 px-8 md:hidden"
+        className="fixed inset-0 z-40 bg-bg flex flex-col pt-20 px-8 lg:hidden"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: mobileOpen ? 1 : 0, y: mobileOpen ? 0 : -20, pointerEvents: mobileOpen ? 'auto' : 'none' }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -203,7 +203,7 @@ export default function Navigation() {
               end={('end' in link ? link.end : false) as boolean}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
-                `font-editorial transition-colors leading-none text-[52px] ${
+                `font-editorial transition-colors leading-none text-[37px] ${
                   isActive ? 'text-accent' : 'text-text-primary hover:text-accent'
                 }`
               }
