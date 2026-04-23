@@ -7,7 +7,7 @@ import { useCart } from '../../context/CartContext'
 const leftLinks = [
   { label: 'Home', href: '/', end: true },
   { label: 'Shop', href: '/shop', primary: true },
-  { label: 'Business', href: '/business' },
+  { label: 'For Businesses', href: '/business' },
   { label: 'How it works', href: '/how-it-works' },
 ]
 
