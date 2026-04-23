@@ -129,7 +129,7 @@ function AccordionItem({ q, a, index }: { q: string; a: string; index: number })
           <span className="eyebrow text-text-secondary/35 mt-0.5 w-5 shrink-0 tabular-nums">
             {String(index + 1).padStart(2, '0')}
           </span>
-          <span className="font-display text-[18px] md:text-[20px] font-[450] text-text-primary leading-snug group-hover:text-accent transition-colors duration-200">
+          <span className="font-playfair text-[16px] md:text-[18px] font-[450] text-black leading-snug group-hover:text-accent transition-colors duration-200">
             {q}
           </span>
         </span>

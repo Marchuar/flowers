@@ -203,7 +203,7 @@ export default function Navigation() {
               end={('end' in link ? link.end : false) as boolean}
               onClick={() => setMobileOpen(false)}
               className={({ isActive }) =>
-                `font-editorial transition-colors leading-none text-[52px] font-light ${
+                `font-editorial transition-colors leading-none text-[52px] ${
                   isActive ? 'text-accent' : 'text-text-primary hover:text-accent'
                 }`
               }
