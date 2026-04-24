@@ -1,71 +1,12 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Building2, Coffee, Hotel, Camera, Sparkles, Calendar } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
-const clients = [
-  {
-    icon: Building2,
-    title: 'Offices & coworking',
-    body: 'A weekly arrangement at reception changes the entire feel of a workspace. Fresh stems, delivered on your schedule.',
-    color: '#B5CEAA',
-  },
-  {
-    icon: Coffee,
-    title: 'Restaurants & cafés',
-    body: 'Table flowers that complement your menu and season. We curate what\'s best — you focus on the food.',
-    color: '#F5C5A0',
-  },
-  {
-    icon: Hotel,
-    title: 'Hotels & boutique stays',
-    body: 'From lobby statements to room details — wholesale stems, styled for your brand, delivered fresh.',
-    color: '#EFBDBD',
-  },
-  {
-    icon: Calendar,
-    title: 'Events & wedding venues',
-    body: 'Bulk stems at grower prices for any scale of event. Mix and match varieties for a look that\'s fully yours.',
-    color: '#C5B8E8',
-  },
-  {
-    icon: Camera,
-    title: 'Photo studios & showrooms',
-    body: 'A standing order of fresh flowers makes every shoot effortlessly beautiful. No last-minute scrambles.',
-    color: '#E8A0A0',
-  },
-  {
-    icon: Sparkles,
-    title: 'Spas & wellness studios',
-    body: 'Soft, seasonal stems that match your atmosphere. Changed regularly so they\'re always at their peak.',
-    color: '#F0D090',
-  },
-]
-
-const benefits = [
-  {
-    number: '01',
-    title: 'Wholesale prices',
-    body: 'No florist markup. You buy directly at the price we pay — the same stems, a fraction of the cost.',
-  },
-  {
-    number: '02',
-    title: 'Flexible delivery',
-    body: 'Daily, weekly, or on a custom schedule. We adapt to your rhythm, not the other way around.',
-  },
-  {
-    number: '03',
-    title: 'Personal curation',
-    body: 'A dedicated manager who learns your space, your palette, and your taste — and keeps things fresh.',
-  },
-]
-
-const steps = [
-  { step: '1', title: 'Tell us about your space', body: 'Share your aesthetic, budget, and how often you\'d like deliveries. A quick conversation is all it takes.' },
-  { step: '2', title: 'We curate for you', body: 'Our team selects the best seasonal stems to fit your brief — and refines it over time as we learn what you love.' },
-  { step: '3', title: 'We deliver, consistently', body: 'Fresh flowers on your schedule, no chasing required. Always peak condition, always on time.' },
-]
+const clientIcons = [Building2, Coffee, Hotel, Calendar, Camera, Sparkles]
+const clientColors = ['#B5CEAA', '#F5C5A0', '#EFBDBD', '#C5B8E8', '#E8A0A0', '#F0D090']
 
 function RevealSection({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -86,6 +27,28 @@ function RevealSection({ children, className = '', delay = 0 }: { children: Reac
 export default function BusinessPage() {
   const heroRef = useRef<HTMLDivElement>(null)
   const heroInView = useInView(heroRef, { once: true })
+  const { t } = useTranslation()
+
+  const clients = [
+    { title: t('business.client1Title'), body: t('business.client1Body'), color: clientColors[0], Icon: clientIcons[0] },
+    { title: t('business.client2Title'), body: t('business.client2Body'), color: clientColors[1], Icon: clientIcons[1] },
+    { title: t('business.client3Title'), body: t('business.client3Body'), color: clientColors[2], Icon: clientIcons[2] },
+    { title: t('business.client4Title'), body: t('business.client4Body'), color: clientColors[3], Icon: clientIcons[3] },
+    { title: t('business.client5Title'), body: t('business.client5Body'), color: clientColors[4], Icon: clientIcons[4] },
+    { title: t('business.client6Title'), body: t('business.client6Body'), color: clientColors[5], Icon: clientIcons[5] },
+  ]
+
+  const benefits = [
+    { number: '01', title: t('business.benefit1Title'), body: t('business.benefit1Body') },
+    { number: '02', title: t('business.benefit2Title'), body: t('business.benefit2Body') },
+    { number: '03', title: t('business.benefit3Title'), body: t('business.benefit3Body') },
+  ]
+
+  const steps = [
+    { step: '1', title: t('business.step1Title'), body: t('business.step1Body') },
+    { step: '2', title: t('business.step2Title'), body: t('business.step2Body') },
+    { step: '3', title: t('business.step3Title'), body: t('business.step3Body') },
+  ]
 
   return (
     <div className="bg-bg min-h-screen">
@@ -101,7 +64,7 @@ export default function BusinessPage() {
             transition={{ duration: 0.5, ease: EASE_OUT }}
           >
             <div className="w-6 h-px bg-accent" />
-            <span className="eyebrow text-accent">For Businesses</span>
+            <span className="eyebrow text-accent">{t('business.eyebrow')}</span>
           </motion.div>
 
           <div className="overflow-hidden mb-4">
@@ -111,7 +74,7 @@ export default function BusinessPage() {
               animate={heroInView ? { y: 0 } : {}}
               transition={{ duration: 0.85, delay: 0.15, ease: EASE_OUT }}
             >
-              Flowers for
+              {t('business.heading1')}
             </motion.h1>
           </div>
           <div className="overflow-hidden mb-8">
@@ -121,7 +84,7 @@ export default function BusinessPage() {
               animate={heroInView ? { y: 0 } : {}}
               transition={{ duration: 0.85, delay: 0.28, ease: EASE_OUT }}
             >
-              every space.
+              {t('business.heading2')}
             </motion.h1>
           </div>
 
@@ -131,7 +94,7 @@ export default function BusinessPage() {
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.5, ease: EASE_OUT }}
           >
-            Wholesale stems delivered on your schedule — to offices, restaurants, hotels, and every space that deserves to feel alive.
+            {t('business.heroPara')}
           </motion.p>
 
           <motion.div
@@ -144,14 +107,14 @@ export default function BusinessPage() {
               href="mailto:hello@stem.flowers"
               className="group inline-flex items-center gap-2.5 bg-text-primary text-bg font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.08em] uppercase px-6 py-3.5 rounded-full hover:bg-accent transition-colors duration-200"
             >
-              Get a free quote
+              {t('business.getFreeQuote')}
               <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
             <a
               href="#how-it-works"
               className="inline-flex items-center gap-2 border border-border text-text-secondary font-sans text-[11px] md:text-[12px] font-[450] px-6 py-3.5 rounded-full hover:border-text-primary hover:text-text-primary transition-all duration-200"
             >
-              How it works
+              {t('nav.howItWorks')}
             </a>
           </motion.div>
         </div>
@@ -163,14 +126,14 @@ export default function BusinessPage() {
           <RevealSection className="mb-12 md:mb-16">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-5 h-px bg-text-secondary/30" />
-              <span className="eyebrow text-text-secondary/60">Perfect for</span>
+              <span className="eyebrow text-text-secondary/60">{t('business.clientsSubEyebrow')}</span>
             </div>
-            <h2 className="section-heading text-text-primary">Who it's for</h2>
+            <h2 className="section-heading text-text-primary">{t('business.clientsHeading')}</h2>
           </RevealSection>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {clients.map((client, i) => {
-              const Icon = client.icon
+              const Icon = client.Icon
               return (
                 <RevealSection key={client.title} delay={i * 0.06}>
                   <div
@@ -201,9 +164,9 @@ export default function BusinessPage() {
           <RevealSection className="mb-14">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-5 h-px bg-text-secondary/30" />
-              <span className="eyebrow text-text-secondary/60">Our offer</span>
+              <span className="eyebrow text-text-secondary/60">{t('business.benefitsEyebrow')}</span>
             </div>
-            <h2 className="section-heading text-text-primary">What you get</h2>
+            <h2 className="section-heading text-text-primary">{t('business.benefitsHeading')}</h2>
           </RevealSection>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -226,9 +189,9 @@ export default function BusinessPage() {
           <RevealSection className="mb-14">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-5 h-px bg-text-secondary/30" />
-              <span className="eyebrow text-text-secondary/60">Process</span>
+              <span className="eyebrow text-text-secondary/60">{t('business.stepsEyebrow')}</span>
             </div>
-            <h2 className="section-heading text-text-primary">How it works</h2>
+            <h2 className="section-heading text-text-primary">{t('business.stepsHeading')}</h2>
           </RevealSection>
 
           {steps.map((s, i) => (
@@ -251,24 +214,24 @@ export default function BusinessPage() {
           <RevealSection>
             <div className="flex items-center justify-center gap-3 mb-5">
               <div className="w-5 h-px bg-surface/20" />
-              <span className="eyebrow text-surface/40">Let's talk</span>
+              <span className="eyebrow text-surface/40">{t('business.ctaEyebrow')}</span>
               <div className="w-5 h-px bg-surface/20" />
             </div>
             <h2
               className="font-display font-[400] text-bg mb-4"
               style={{ fontSize: 'clamp(32px, 6vw, 72px)', lineHeight: '1' }}
             >
-              Ready to make your<br />
-              <span className="italic text-accent">space bloom?</span>
+              {t('business.ctaHeading')}<br />
+              <span className="italic text-accent">{t('business.ctaHeadingItalic')}</span>
             </h2>
             <p className="font-sans text-[14px] md:text-[15px] text-surface/50 leading-relaxed max-w-[400px] mx-auto mt-5 mb-10">
-              Drop us a message and we'll put together a proposal tailored to your space within 24 hours.
+              {t('business.ctaDesc')}
             </p>
             <a
               href="mailto:hello@stem.flowers"
               className="group inline-flex items-center gap-2.5 bg-surface text-text-primary font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.1em] uppercase px-8 py-4 rounded-full hover:bg-accent hover:text-surface transition-colors duration-200"
             >
-              Start with a free consultation
+              {t('business.ctaGetStarted')}
               <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
           </RevealSection>

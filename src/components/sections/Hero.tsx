@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 
 function FlowerBlue() {
   return (
@@ -100,14 +101,15 @@ function FlowerPink() {
   )
 }
 
-const stats = [
-  { value: '2h', label: 'Delivery' },
-  { value: '500+', label: 'Customers' },
-  { value: '100%', label: 'Wholesale' },
-]
-
 export default function Hero() {
   const ref = useRef<HTMLElement>(null)
+  const { t } = useTranslation()
+
+  const stats = [
+    { value: t('hero.statDeliveryValue'), label: t('hero.statDeliveryLabel') },
+    { value: '500+',                      label: t('hero.statCustomersLabel') },
+    { value: '100%',                      label: t('hero.statWholesaleLabel') },
+  ]
 
   return (
     <section
@@ -140,7 +142,7 @@ export default function Hero() {
       {/* Floating flowers */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
-          className="absolute w-52 md:w-72 lg:w-80 top-[10%] right-[6%] md:right-[10%]"
+          className="absolute w-52 md:w-80 lg:w-96 xl:w-[28rem] top-[2%] right-[2%] md:right-[5%] lg:right-[8%]"
           initial={{ scale: 0.7, opacity: 0, rotate: -15 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
@@ -154,7 +156,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute w-40 md:w-52 lg:w-60 top-[48%] right-[1%] md:right-[3%]"
+          className="absolute w-40 md:w-60 lg:w-72 xl:w-80 top-[58%] right-[-3%] md:right-[-1%] lg:right-[1%]"
           initial={{ scale: 0.7, opacity: 0, rotate: 15 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
@@ -196,7 +198,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-          className="absolute w-16 md:w-24 bottom-[28%] right-[18%] md:right-[22%] hidden md:block"
+          className="absolute w-28 md:w-44 lg:w-52 bottom-[4%] right-[16%] md:right-[20%] lg:right-[24%] hidden md:block"
           initial={{ scale: 0.7, opacity: 0, rotate: -8 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 1.35, ease: [0.22, 1, 0.36, 1] }}
@@ -224,40 +226,40 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.1 }}
             >
               <div className="w-6 h-px bg-accent" />
-              <span className="eyebrow text-accent">Warsaw · 2h delivery</span>
+              <span className="eyebrow text-accent">{t('hero.eyebrow')}</span>
             </motion.div>
 
             {/* Headline */}
             <div>
-              <div className="overflow-hidden">
+              <div className="overflow-hidden pb-[0.12em]">
                 <motion.div
                   className="text-display text-text-primary"
                   initial={{ y: '105%' }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  Fresh
+                  {t('hero.line1')}
                 </motion.div>
               </div>
-              <div className="overflow-hidden">
+              <div className="overflow-hidden pb-[0.12em]">
                 <motion.div
                   className="text-display italic text-accent"
                   initial={{ y: '105%' }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.85, delay: 0.33, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  flowers,
+                  {t('hero.line2')}
                 </motion.div>
               </div>
-              <div className="overflow-hidden mt-1">
+              <div className="overflow-hidden mt-1 pb-[0.2em]">
                 <motion.div
                   className="text-display text-text-primary"
                   initial={{ y: '105%' }}
                   animate={{ y: 0 }}
                   transition={{ duration: 0.85, delay: 0.44, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  not&nbsp;
-                  <span className="italic text-accent-warm">bouquets.</span>
+                  {t('hero.line3pre')}
+                  <span className="italic text-accent-warm">{t('hero.line3em')}</span>
                 </motion.div>
               </div>
             </div>
@@ -270,7 +272,7 @@ export default function Hero() {
               transition={{ duration: 0.7, delay: 0.7 }}
             >
               <p className="font-sans text-[14px] md:text-[15px] font-[450] text-text-secondary leading-relaxed max-w-[340px]">
-                Single stems at wholesale price. No floristry markup, no pre-assembled bouquets. You choose, we deliver.
+                {t('hero.description')}
               </p>
 
               <div className="flex flex-wrap gap-3">
@@ -278,14 +280,14 @@ export default function Hero() {
                   to="/shop"
                   className="group inline-flex items-center gap-2.5 bg-text-primary text-bg font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.08em] uppercase px-5 md:px-6 py-3 md:py-3.5 rounded-full hover:bg-accent transition-colors duration-300"
                 >
-                  Shop now
+                  {t('hero.shopNow')}
                   <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
                 </Link>
                 <Link
                   to="/how-it-works"
                   className="inline-flex items-center gap-2 border border-border text-text-secondary font-sans text-[11px] md:text-[12px] font-[450] px-5 md:px-6 py-3 md:py-3.5 rounded-full hover:border-text-primary hover:text-text-primary transition-all duration-300"
                 >
-                  How it works
+                  {t('hero.howItWorks')}
                 </Link>
               </div>
 
@@ -320,7 +322,7 @@ export default function Hero() {
           animate={{ scaleY: [0, 1, 0] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut', repeatDelay: 0.4 }}
         />
-        <span className="eyebrow text-text-secondary/40 text-[9px]">Scroll</span>
+        <span className="eyebrow text-text-secondary/40 text-[9px]">{t('hero.scroll')}</span>
       </motion.div>
     </section>
   )

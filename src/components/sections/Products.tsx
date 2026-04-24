@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { ShoppingBag, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react'
 import { products, type Product } from '../../constants/products'
 import { useCart } from '../../context/CartContext'
@@ -12,6 +13,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
   const inView = useInView(ref, { once: true, margin: '-50px' })
   const { addItem, items, updateQty, removeItem } = useCart()
   const { showToast } = useToast()
+  const { t } = useTranslation()
 
   const cartItem = items.find(i => i.product.id === product.id)
   const qty = cartItem?.quantity ?? 0
@@ -29,7 +31,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
   function handleAddToCart(e: React.MouseEvent) {
     e.stopPropagation()
     addItem(product)
-    showToast(`${product.name} added to bag`)
+    showToast(t('products.addedToBag', { name: t(`products.${product.slug}.name`) }))
   }
 
   function handleDecrement(e: React.MouseEvent) {
@@ -110,7 +112,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
           {/* Tag */}
           {product.tag && (
             <div className="absolute top-3 left-3 bg-surface/85 backdrop-blur-sm font-sans text-[9.5px] font-[500] tracking-[0.12em] uppercase text-text-secondary px-2.5 py-1 rounded-full z-10">
-              {product.tag}
+              {t(`products.tag${product.tag}`)}
             </div>
           )}
 
@@ -120,14 +122,14 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
               <button
                 onClick={prevImg}
                 className="absolute left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-sm hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-text-secondary hover:text-text-primary"
-                aria-label="Previous image"
+                aria-label={t('modal.prevImage')}
               >
                 <ChevronLeft size={13} strokeWidth={2} />
               </button>
               <button
                 onClick={nextImg}
                 className="absolute right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-surface/80 backdrop-blur-sm hidden md:flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-text-secondary hover:text-text-primary"
-                aria-label="Next image"
+                aria-label={t('modal.nextImage')}
               >
                 <ChevronRight size={13} strokeWidth={2} />
               </button>
@@ -142,7 +144,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
                   key={i}
                   onClick={e => { e.stopPropagation(); setImgIndex(i) }}
                   className={`h-1 rounded-full transition-all duration-300 bg-surface ${i === imgIndex ? 'w-4 opacity-100' : 'w-1 opacity-50'}`}
-                  aria-label={`Image ${i + 1}`}
+                  aria-label={`${t('modal.image')} ${i + 1}`}
                 />
               ))}
             </div>
@@ -152,10 +154,10 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
         {/* Info */}
         <div className="flex flex-col gap-0.5 px-1 pb-1 flex-1">
           <div className="eyebrow text-text-secondary/45 text-[9.5px]">{product.latinName}</div>
-          <h3 className="font-display text-[22px] md:text-[28px] font-[400] text-text-primary leading-tight">{product.name}</h3>
+          <h3 className="font-display text-[22px] md:text-[28px] font-[400] text-text-primary leading-tight">{t(`products.${product.slug}.name`)}</h3>
           <div className="font-sans text-[12.5px] font-[500] text-text-primary mt-0.5">
             {product.price}{' '}
-            <span className="font-normal text-text-secondary text-[10.5px] md:text-[12px]">/ stem</span>
+            <span className="font-normal text-text-secondary text-[10.5px] md:text-[12px]">{t('modal.perStem')}</span>
           </div>
         </div>
 
@@ -175,7 +177,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
               whileTap={{ scale: 0.97 }}
             >
               <ShoppingBag size={11} strokeWidth={2} />
-              Add to bag
+              {t('modal.addToBag')}
             </motion.button>
           ) : (
             <motion.div
@@ -190,7 +192,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
               <button
                 onClick={handleDecrement}
                 className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/10 active:bg-black/20 transition-colors text-text-primary"
-                aria-label="Decrease quantity"
+                aria-label={t('cart.decrease')}
               >
                 <Minus size={12} strokeWidth={2.5} />
               </button>
@@ -198,7 +200,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
               <button
                 onClick={handleIncrement}
                 className="w-7 h-7 rounded-full flex items-center justify-center hover:bg-black/10 active:bg-black/20 transition-colors text-text-primary"
-                aria-label="Increase quantity"
+                aria-label={t('cart.increase')}
               >
                 <Plus size={12} strokeWidth={2.5} />
               </button>
@@ -214,6 +216,7 @@ export default function Products() {
   const titleRef = useRef<HTMLDivElement>(null)
   const titleInView = useInView(titleRef, { once: true, margin: '-80px' })
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  const { t } = useTranslation()
 
   const [featured, ...rest] = products
 
@@ -230,7 +233,7 @@ export default function Products() {
               transition={{ duration: 0.5 }}
             >
               <div className="w-5 h-px bg-text-secondary/30" />
-              <span className="eyebrow text-text-secondary/60">Flowers</span>
+              <span className="eyebrow text-text-secondary/60">{t('products.eyebrow')}</span>
             </motion.div>
             <motion.h2
               className="section-heading text-text-primary"
@@ -238,8 +241,8 @@ export default function Products() {
               animate={titleInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: 0.1 }}
             >
-              Single stems,<br />
-              <span className="italic text-text-secondary/80">pure beauty.</span>
+              {t('products.heading')}<br />
+              <span className="italic text-text-secondary/80">{t('products.headingItalic')}</span>
             </motion.h2>
           </div>
 
@@ -253,7 +256,7 @@ export default function Products() {
               to="/shop"
               className="group inline-flex items-center gap-2 font-sans text-[12px] text-text-secondary hover:text-text-primary transition-colors"
             >
-              View all
+              {t('products.viewAll')}
               <span className="transition-transform duration-300 group-hover:translate-x-0.5">→</span>
             </Link>
           </motion.div>
@@ -297,7 +300,7 @@ export default function Products() {
             to="/shop"
             className="inline-flex items-center gap-2 font-sans text-[12.5px] text-text-secondary hover:text-text-primary transition-colors border-b border-border hover:border-text-primary pb-0.5"
           >
-            View all flowers →
+            {t('products.viewAllFlowers')}
           </Link>
         </motion.div>
       </div>

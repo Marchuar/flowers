@@ -8,6 +8,7 @@ export interface CareInstruction {
 
 export interface Product {
   id: number
+  slug: string
   name: string
   latinName: string
   price: string
@@ -23,6 +24,7 @@ export interface Product {
 export const products: Product[] = [
   {
     id: 1,
+    slug: 'roses',
     name: 'Roses',
     latinName: 'Rosa',
     price: 'from 3.50 zł',
@@ -43,6 +45,7 @@ export const products: Product[] = [
   },
   {
     id: 2,
+    slug: 'tulips',
     name: 'Tulips',
     latinName: 'Tulipa',
     price: 'from 2.90 zł',
@@ -63,6 +66,7 @@ export const products: Product[] = [
   },
   {
     id: 3,
+    slug: 'peonies',
     name: 'Peonies',
     latinName: 'Paeonia',
     price: 'from 6.90 zł',
@@ -83,6 +87,7 @@ export const products: Product[] = [
   },
   {
     id: 4,
+    slug: 'wildflowers',
     name: 'Wildflowers',
     latinName: 'Mixed stems',
     price: 'from 2.20 zł',
@@ -102,6 +107,7 @@ export const products: Product[] = [
   },
   {
     id: 5,
+    slug: 'eustoma',
     name: 'Eustoma',
     latinName: 'Lisianthus',
     price: 'from 4.50 zł',
@@ -121,6 +127,7 @@ export const products: Product[] = [
   },
   {
     id: 6,
+    slug: 'chrysanthemum',
     name: 'Chrysanthemum',
     latinName: 'Chrysanthemum',
     price: 'from 3.20 zł',
@@ -150,7 +157,7 @@ export const testimonials = [
   },
   {
     id: 2,
-    quote: "The tulips arrived in under 2 hours. So fresh they lasted 12 days. Incredible.",
+    quote: "The tulips arrived the very next day. So fresh they lasted 12 days. Incredible.",
     name: 'Zofia W.',
     location: 'Warsaw, Żoliborz',
     stars: 5,

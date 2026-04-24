@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const flowers = [
   { name: 'Roses', href: '/shop' },
@@ -9,12 +10,14 @@ const flowers = [
   { name: 'Wildflowers', href: '/shop' },
 ]
 
-const info = [
-  { name: 'About us', href: '/about' },
-  { name: 'How it works', href: '/how-it-works' },
-]
-
 export default function Footer() {
+  const { t } = useTranslation()
+
+  const info = [
+    { name: t('footer.aboutUs'),     href: '/about' },
+    { name: t('footer.howItWorks'),  href: '/how-it-works' },
+  ]
+
   return (
     <footer className="bg-ink text-ink-text/65 pt-16 pb-8 px-6 md:px-10 overflow-hidden">
 
@@ -25,13 +28,14 @@ export default function Footer() {
           <div>
             <Link
               to="/"
-              className="font-telma text-[44px] font-bold tracking-[0.2em] text-ink-text mb-3 block hover:text-accent transition-colors duration-300 leading-none"
+              className="font-brand text-[36px] font-bold tracking-[0.22em] text-ink-text mb-3 block hover:text-accent transition-colors duration-300 leading-none"
             >
               STEM
             </Link>
             <p className="font-sans text-[13px] font-[400] max-w-xs text-ink-text/60 mt-3 leading-relaxed">
-              Fresh flowers at wholesale prices.<br />
-              No markup, no floristry, just beautiful stems.
+              {t('footer.tagline').split('\n').map((line, i) => (
+                <span key={i}>{line}{i === 0 && <br />}</span>
+              ))}
             </p>
           </div>
           <div className="flex items-center gap-4">
@@ -60,7 +64,7 @@ export default function Footer() {
             aria-hidden
           >
             <span
-              className="font-telma font-bold leading-none tracking-[0.18em] whitespace-nowrap text-ink-text"
+              className="font-brand font-bold leading-none tracking-[0.18em] whitespace-nowrap text-ink-text"
               style={{
                 fontSize: 'clamp(100px, 20vw, 260px)',
                 opacity: 0.038,
@@ -72,7 +76,7 @@ export default function Footer() {
 
           <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 gap-8 py-12">
             <div>
-              <div className="eyebrow text-ink-text/30 mb-5">Flowers</div>
+              <div className="eyebrow text-ink-text/30 mb-5">{t('footer.flowersHeading')}</div>
               <ul className="flex flex-col gap-2.5">
                 {flowers.map(f => (
                   <li key={f.name}>
@@ -87,7 +91,7 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <div className="eyebrow text-ink-text/30 mb-5">Info</div>
+              <div className="eyebrow text-ink-text/30 mb-5">{t('footer.infoHeading')}</div>
               <ul className="flex flex-col gap-2.5">
                 {info.map(i => (
                   <li key={i.name}>
@@ -102,7 +106,7 @@ export default function Footer() {
               </ul>
             </div>
             <div>
-              <div className="eyebrow text-ink-text/30 mb-5">Contact</div>
+              <div className="eyebrow text-ink-text/30 mb-5">{t('footer.contactHeading')}</div>
               <ul className="flex flex-col gap-2.5">
                 <li><span className="font-sans text-[13px] text-ink-text/55">Instagram</span></li>
                 <li><span className="font-sans text-[13px] text-ink-text/55">hello@stem.pl</span></li>
@@ -114,8 +118,8 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="pt-6 flex flex-col md:flex-row justify-between items-center gap-2">
-          <p className="font-sans text-[11.5px] font-[450] text-ink-text/40">© 2026 STEM · Warsaw, Poland · Fresh daily</p>
-          <p className="font-sans text-[11.5px] font-[450] text-ink-text/35">Orders 9:00–21:00 every day</p>
+          <p className="font-sans text-[11.5px] font-[450] text-ink-text/40">{t('footer.copyright')}</p>
+          <p className="font-sans text-[11.5px] font-[450] text-ink-text/35">{t('footer.orders')}</p>
         </div>
       </div>
     </footer>

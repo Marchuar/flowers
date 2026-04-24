@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { useIsMobile } from '../../hooks/useIsMobile'
+import { useTranslation } from 'react-i18next'
 
 function FlowerSVG() {
   return (
@@ -67,6 +68,7 @@ export default function EmailCapture() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const isMobile = useIsMobile()
+  const { t } = useTranslation()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -75,7 +77,8 @@ export default function EmailCapture() {
     }
   }
 
-  const words = ['Never', 'miss', 'a', 'fresh', 'batch.']
+  const words = t('email.headingWords', { returnObjects: true }) as string[]
+  const italicIdx = parseInt(t('email.headingItalicIdx'))
 
   return (
     <section ref={ref} className="relative py-24 md:py-36 px-6 md:px-10 bg-bark overflow-hidden">
@@ -113,7 +116,7 @@ export default function EmailCapture() {
           transition={{ duration: 0.5 }}
         >
           <div className="w-5 h-px bg-accent/50" />
-          <span className="eyebrow text-accent">Fresh stems, weekly</span>
+          <span className="eyebrow text-accent">{t('email.eyebrow')}</span>
           <div className="w-5 h-px bg-accent/50" />
         </motion.div>
 
@@ -130,7 +133,7 @@ export default function EmailCapture() {
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.65, delay: 0.2 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
             >
-              {i === 3 ? <span className="italic text-ink-text/55">{word}</span> : word}
+              {i === italicIdx ? <span className="italic text-ink-text/55">{word}</span> : word}
             </motion.span>
           ))}
         </h2>
@@ -141,7 +144,7 @@ export default function EmailCapture() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.65 }}
         >
-          Weekly stems, seasonal picks, and first access to new varieties — straight to your inbox.
+          {t('email.description')}
         </motion.p>
 
         {/* Form */}
@@ -163,7 +166,7 @@ export default function EmailCapture() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="your@email.com"
+                  placeholder={t('email.placeholder')}
                   required
                   className="flex-1 bg-ink-text/[0.08] text-ink-text placeholder:text-ink-text/25 border border-ink-text/[0.15] rounded-full px-5 py-3.5 font-sans text-[13px] outline-none focus:border-ink-text/40 focus:bg-ink-text/12 transition-all"
                 />
@@ -173,7 +176,7 @@ export default function EmailCapture() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  Subscribe
+                  {t('email.subscribe')}
                 </motion.button>
               </motion.div>
             ) : (
@@ -189,7 +192,7 @@ export default function EmailCapture() {
                     <path d="M2 5.5l2 2 4-4" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-                <span className="font-sans text-[13px]">You're on the list! We'll be in touch.</span>
+                <span className="font-sans text-[13px]">{t('email.success')}</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -201,7 +204,7 @@ export default function EmailCapture() {
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.9 }}
         >
-          Unsubscribe anytime. No spam.
+          {t('email.unsubscribe')}
         </motion.p>
       </div>
     </section>

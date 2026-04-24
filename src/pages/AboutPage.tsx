@@ -1,18 +1,26 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-
-const stats = [
-  { value: '500+', label: 'Happy customers', note: 'and growing weekly' },
-  { value: '2h', label: 'Delivery window', note: 'across all Warsaw' },
-  { value: '9–21', label: 'Every day', note: 'no days off, ever' },
-  { value: '0%', label: 'Markup added', note: 'near wholesale prices' },
-]
+import { useTranslation } from 'react-i18next'
 
 export default function AboutPage() {
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const statsRef = useRef<HTMLDivElement>(null)
   const statsInView = useInView(statsRef, { once: true, margin: '-60px' })
+  const { t } = useTranslation()
+
+  const stats = [
+    { value: '500+', label: t('about.stat1Label'), note: t('about.stat1Note') },
+    { value: '1-2d', label: t('about.stat2Label'), note: t('about.stat2Note') },
+    { value: '9–21', label: t('about.stat3Label'), note: t('about.stat3Note') },
+    { value: '0%',   label: t('about.stat4Label'), note: t('about.stat4Note') },
+  ]
+
+  const values = [
+    { label: t('about.value1Label'), desc: t('about.value1Desc') },
+    { label: t('about.value2Label'), desc: t('about.value2Desc') },
+    { label: t('about.value3Label'), desc: t('about.value3Desc') },
+  ]
 
   return (
     <section ref={ref} className="pb-24 bg-bg">
@@ -51,7 +59,7 @@ export default function AboutPage() {
                 transition={{ duration: 0.5 }}
               >
                 <div className="w-5 h-px bg-text-secondary/30" />
-                <span className="eyebrow text-text-secondary/60">Our story</span>
+                <span className="eyebrow text-text-secondary/60">{t('about.eyebrow')}</span>
               </motion.div>
 
               <motion.h1
@@ -60,8 +68,8 @@ export default function AboutPage() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.1 }}
               >
-                Flowers shouldn't be<br />
-                <span className="italic text-text-secondary">a luxury.</span>
+                {t('about.heading')}<br />
+                <span className="italic text-text-secondary">{t('about.headingItalic')}</span>
               </motion.h1>
 
               <motion.div
@@ -70,15 +78,9 @@ export default function AboutPage() {
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                <p className="font-sans text-[16px] font-[400] text-text-secondary leading-relaxed">
-                  We started STEM with one simple idea: flowers belong in everyday life, not just on birthdays and anniversaries. A vase of fresh stems on a Tuesday morning can change the energy of an entire room.
-                </p>
-                <p className="font-sans text-[16px] font-[400] text-text-secondary leading-relaxed">
-                  Traditional flower shops mark up 200–400% over wholesale. They need to cover rent, florists, wrapping, and assembly. We don't. We buy directly from wholesale markets, pack stems in kraft paper, and deliver within 2 hours. That's it.
-                </p>
-                <p className="font-sans text-[16px] font-[400] text-text-secondary leading-relaxed">
-                  No bouquet assembly means no floristry cost. No storefront means no overhead. The savings go directly to you — flowers at near wholesale price, available to everyone in Warsaw.
-                </p>
+                <p className="font-sans text-[16px] font-[400] text-text-secondary leading-relaxed">{t('about.para1')}</p>
+                <p className="font-sans text-[16px] font-[400] text-text-secondary leading-relaxed">{t('about.para2')}</p>
+                <p className="font-sans text-[16px] font-[400] text-text-secondary leading-relaxed">{t('about.para3')}</p>
               </motion.div>
             </div>
 
@@ -89,11 +91,7 @@ export default function AboutPage() {
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             >
-              {[
-                { label: 'No floristry markup', desc: 'We skip the assembly step entirely — just fresh stems, no added cost.' },
-                { label: 'Wholesale direct', desc: 'Bought from Warsaw flower markets every morning at wholesale rates.' },
-                { label: '2-hour delivery', desc: 'Order before 9 PM. Your stems arrive the same day, anywhere in Warsaw.' },
-              ].map((item, i) => (
+              {values.map((item, i) => (
                 <div key={i} className="flex gap-4 p-5 rounded-2xl bg-surface border border-border/50">
                   <div className="w-1.5 h-1.5 rounded-full bg-accent flex-shrink-0 mt-2" />
                   <div>
@@ -129,7 +127,7 @@ export default function AboutPage() {
             transition={{ duration: 0.5 }}
           >
             <div className="w-5 h-px bg-ink-text/20" />
-            <span className="eyebrow text-ink-text/40">By the numbers</span>
+            <span className="eyebrow text-ink-text/40">{t('about.byNumbers')}</span>
           </motion.div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">

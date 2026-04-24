@@ -1,6 +1,7 @@
 import { useState, useMemo, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { SlidersHorizontal, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { products, type Product } from '../constants/products'
 import { parsePrice } from '../lib/utils'
 import { ProductCard } from '../components/sections/Products'
@@ -18,11 +19,12 @@ interface FilterSidebarProps {
 }
 
 function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps) {
+  const { t } = useTranslation()
   return (
     <div className="flex flex-col gap-8">
       {/* Flower type */}
       <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">Flower type</div>
+        <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.flowerType')}</div>
         <div className="flex flex-col gap-2.5">
           {allTypes.map(name => (
             <label key={name} className="flex items-center gap-2.5 cursor-pointer group">
@@ -53,7 +55,7 @@ function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps)
 
       {/* Color swatches */}
       <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">Colour</div>
+        <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.colour')}</div>
         <div className="flex flex-wrap gap-2.5">
           {allColors.map(({ name, color }) => (
             <button
@@ -72,10 +74,10 @@ function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps)
 
       {/* Price note */}
       <div className="bg-bg-subtle rounded-xl p-4">
-        <div className="eyebrow text-text-secondary/50 mb-2">Price range</div>
+        <div className="eyebrow text-text-secondary/50 mb-2">{t('shop.priceRange')}</div>
         <p className="font-sans text-[12px] text-text-secondary leading-relaxed">
-          Stems from <span className="font-[500] text-text-primary">2.20 zł</span> to <span className="font-[500] text-text-primary">6.90 zł</span> each.
-          <br />Minimum order: <span className="font-[500] text-text-primary">10 stems</span>.
+          {t('shop.priceNote')}
+          <br />{t('shop.minOrder')}
         </p>
       </div>
 
@@ -86,7 +88,7 @@ function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps)
           className="flex items-center gap-1.5 font-sans text-[12px] text-text-secondary hover:text-accent-warm transition-colors"
         >
           <X size={13} />
-          Clear filters
+          {t('shop.clearFilters')}
         </button>
       )}
     </div>
@@ -96,6 +98,7 @@ function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps)
 export default function ShopPage() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
+  const { t } = useTranslation()
 
   const [selectedTypes, setSelectedTypes] = useState<string[]>([])
   const [sortBy, setSortBy] = useState<SortOption>('default')
@@ -104,7 +107,7 @@ export default function ShopPage() {
 
   function toggleType(name: string) {
     setSelectedTypes(prev =>
-      prev.includes(name) ? prev.filter(t => t !== name) : [...prev, name]
+      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
     )
   }
 
@@ -208,11 +211,11 @@ export default function ShopPage() {
             >
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-5 h-px bg-text-secondary/30" />
-                <span className="eyebrow text-text-secondary/60">Shop</span>
+                <span className="eyebrow text-text-secondary/60">{t('shop.eyebrow')}</span>
               </div>
               <h1 className="section-heading text-text-primary">
-                All flowers,<br />
-                <span className="italic text-text-secondary/75">your choice.</span>
+                {t('shop.heading')}<br />
+                <span className="italic text-text-secondary/75">{t('shop.headingItalic')}</span>
               </h1>
             </motion.div>
 
@@ -225,17 +228,17 @@ export default function ShopPage() {
             >
               <div className="text-right">
                 <div className="font-display text-[42px] font-light text-text-primary leading-none">6</div>
-                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">Varieties</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.varieties')}</div>
               </div>
               <div className="w-px h-12 bg-border" />
               <div className="text-right">
-                <div className="font-display text-[42px] font-light text-text-primary leading-none">2h</div>
-                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">Delivery</div>
+                <div className="font-display text-[42px] font-light text-text-primary leading-none">1-2d</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.deliveryLabel')}</div>
               </div>
               <div className="w-px h-12 bg-border" />
               <div className="text-right">
                 <div className="font-display text-[42px] font-light text-text-primary leading-none">2.20</div>
-                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">From, zł</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.fromLabel')}</div>
               </div>
             </motion.div>
           </div>
@@ -253,10 +256,10 @@ export default function ShopPage() {
           transition={{ delay: 0.2 }}
         >
           <p className="font-sans text-[13px] text-text-secondary">
-            {filtered.length} {filtered.length === 1 ? 'stem' : 'stems'}
+            {filtered.length} {filtered.length === 1 ? t('shop.stem') : t('shop.stems')}
             {selectedTypes.length > 0 && (
               <span className="ml-1.5 text-text-secondary/60">
-                · filtered
+                · {t('shop.filtered')}
               </span>
             )}
           </p>
@@ -268,7 +271,7 @@ export default function ShopPage() {
               className="md:hidden flex items-center gap-1.5 font-sans text-[12px] text-text-secondary border border-border/60 rounded-full px-3 py-1.5 hover:bg-bg-subtle transition-colors"
             >
               <SlidersHorizontal size={12} />
-              Filters {selectedTypes.length > 0 && `(${selectedTypes.length})`}
+              {t('shop.filters')} {selectedTypes.length > 0 && `(${selectedTypes.length})`}
             </button>
 
             {/* Sort select */}
@@ -277,10 +280,10 @@ export default function ShopPage() {
               onChange={e => setSortBy(e.target.value as SortOption)}
               className="bg-transparent border border-border/60 rounded-full font-sans text-[12px] text-text-secondary px-3 py-1.5 focus:outline-none focus:border-text-primary cursor-pointer hover:bg-bg-subtle transition-colors"
             >
-              <option value="default">Sort: Default</option>
-              <option value="price-asc">Price: Low to high</option>
-              <option value="price-desc">Price: High to low</option>
-              <option value="name-asc">Name: A–Z</option>
+              <option value="default">{t('shop.sortDefault')}</option>
+              <option value="price-asc">{t('shop.sortPriceAsc')}</option>
+              <option value="price-desc">{t('shop.sortPriceDesc')}</option>
+              <option value="name-asc">{t('shop.sortNameAsc')}</option>
             </select>
           </div>
         </motion.div>
@@ -303,14 +306,14 @@ export default function ShopPage() {
             {filtered.length === 0 ? (
               <div className="flex flex-col items-center py-20 gap-4 text-center">
                 <p className="font-editorial text-[24px] font-light text-text-primary" style={{ fontVariationSettings: "'opsz' 36" }}>
-                  No stems match
+                  {t('shop.noResultsTitle')}
                 </p>
-                <p className="font-sans text-[13px] text-text-secondary">Try removing some filters</p>
+                <p className="font-sans text-[13px] text-text-secondary">{t('shop.noResultsDesc')}</p>
                 <button
                   onClick={() => setSelectedTypes([])}
                   className="mt-2 font-sans text-[12px] text-text-secondary border border-border rounded-full px-4 py-2 hover:bg-bg-subtle transition-colors"
                 >
-                  Clear all filters
+                  {t('shop.clearAllFilters')}
                 </button>
               </div>
             ) : (
@@ -342,7 +345,7 @@ export default function ShopPage() {
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
           >
             <div className="flex items-center justify-between mb-6">
-              <span className="font-brand text-[16px] font-bold tracking-[0.08em] text-text-primary">Filters</span>
+              <span className="font-brand text-[16px] font-bold tracking-[0.08em] text-text-primary">{t('shop.filters')}</span>
               <button onClick={() => setMobileFiltersOpen(false)} className="text-text-secondary hover:text-text-primary">
                 <X size={18} />
               </button>
@@ -352,7 +355,7 @@ export default function ShopPage() {
               onClick={() => setMobileFiltersOpen(false)}
               className="mt-6 w-full bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.08em] uppercase py-3.5 rounded-xl"
             >
-              Show {filtered.length} results
+              {t('shop.showResults', { count: filtered.length })}
             </button>
           </motion.div>
         </motion.div>

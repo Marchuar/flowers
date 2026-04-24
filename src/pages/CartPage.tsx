@@ -2,12 +2,14 @@ import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useCart } from '../context/CartContext'
 
 export default function CartPage() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
   const { items, removeItem, updateQty, totalItems, totalPrice } = useCart()
+  const { t } = useTranslation()
 
   const deliveryCost = totalPrice >= 80 ? 0 : 9
   const orderTotal = totalPrice + deliveryCost
@@ -26,10 +28,10 @@ export default function CartPage() {
           <div className="flex items-center gap-3 mb-2">
             <div className="w-5 h-px bg-text-secondary/30" />
             <span className="eyebrow text-text-secondary/60">
-              {totalItems > 0 ? `${totalItems} item${totalItems !== 1 ? 's' : ''}` : 'Empty'}
+              {totalItems > 0 ? `${totalItems} ${totalItems === 1 ? t('shop.stem') : t('shop.stems')}` : t('cart.empty')}
             </span>
           </div>
-          <h1 className="section-heading text-text-primary">Your bag</h1>
+          <h1 className="section-heading text-text-primary">{t('cart.yourBag')}</h1>
         </motion.div>
 
         {items.length === 0 ? (
@@ -45,15 +47,15 @@ export default function CartPage() {
             </div>
             <div>
               <p className="font-editorial text-[28px] font-light text-text-primary mb-2" style={{ fontVariationSettings: "'opsz' 36" }}>
-                Your bag is empty
+                {t('cart.empty')}
               </p>
-              <p className="font-sans text-[14px] text-text-secondary">Add some stems and come back here.</p>
+              <p className="font-sans text-[14px] text-text-secondary">{t('cart.emptyBagDesc')}</p>
             </div>
             <Link
               to="/shop"
               className="mt-2 bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase px-6 py-3.5 rounded-full hover:bg-accent transition-colors duration-300"
             >
-              Browse flowers
+              {t('cart.startBrowsing')}
             </Link>
           </motion.div>
         ) : (
@@ -105,7 +107,7 @@ export default function CartPage() {
                             <button
                               onClick={() => updateQty(item.product.id, item.quantity - 1)}
                               className="w-6 h-6 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface transition-colors"
-                              aria-label="Decrease"
+                              aria-label={t('cart.decrease')}
                             >
                               <Minus size={11} />
                             </button>
@@ -115,7 +117,7 @@ export default function CartPage() {
                             <button
                               onClick={() => updateQty(item.product.id, item.quantity + 1)}
                               className="w-6 h-6 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface transition-colors"
-                              aria-label="Increase"
+                              aria-label={t('cart.increase')}
                             >
                               <Plus size={11} />
                             </button>
@@ -128,7 +130,7 @@ export default function CartPage() {
                             <button
                               onClick={() => removeItem(item.product.id)}
                               className="w-7 h-7 flex items-center justify-center rounded-full text-text-secondary/40 hover:text-accent-warm hover:bg-bg transition-colors"
-                              aria-label="Remove"
+                              aria-label={t('cart.remove')}
                             >
                               <Trash2 size={14} />
                             </button>
@@ -144,11 +146,11 @@ export default function CartPage() {
               <div className="mt-6 flex gap-2">
                 <input
                   type="text"
-                  placeholder="Promo code"
+                  placeholder={t('cart.promoCode')}
                   className="flex-1 bg-surface border border-border/60 rounded-xl px-4 py-2.5 font-sans text-[13px] text-text-primary placeholder:text-text-secondary/40 focus:outline-none focus:border-text-primary transition-colors"
                 />
                 <button className="bg-bg border border-border/60 font-sans text-[12px] font-[500] text-text-secondary hover:text-text-primary px-4 py-2.5 rounded-xl transition-colors hover:bg-bg-subtle">
-                  Apply
+                  {t('cart.apply')}
                 </button>
               </div>
             </div>
@@ -161,19 +163,19 @@ export default function CartPage() {
               transition={{ duration: 0.55, delay: 0.2 }}
             >
               <h2 className="font-brand text-[17px] font-bold tracking-[0.08em] text-text-primary mb-5">
-                Order summary
+                {t('cart.orderSummary')}
               </h2>
 
               <div className="space-y-3 mb-5">
                 <div className="flex justify-between text-text-secondary">
-                  <span className="font-sans text-[13px]">Subtotal ({totalItems} items)</span>
+                  <span className="font-sans text-[13px]">{t('cart.subtotal', { count: totalItems })}</span>
                   <span className="font-sans text-[13px]">{totalPrice.toFixed(2)} zł</span>
                 </div>
                 <div className="flex justify-between text-text-secondary">
-                  <span className="font-sans text-[13px]">Delivery</span>
+                  <span className="font-sans text-[13px]">{t('cart.delivery')}</span>
                   <span className="font-sans text-[13px]">
                     {deliveryCost === 0 ? (
-                      <span className="text-accent font-[500]">Free</span>
+                      <span className="text-accent font-[500]">{t('cart.free')}</span>
                     ) : (
                       `${deliveryCost.toFixed(2)} zł`
                     )}
@@ -181,13 +183,13 @@ export default function CartPage() {
                 </div>
                 {deliveryCost > 0 && (
                   <p className="font-sans text-[11.5px] text-text-secondary/60">
-                    Add {(80 - totalPrice).toFixed(2)} zł more for free delivery
+                    {t('cart.addForFree', { amount: (80 - totalPrice).toFixed(2) })}
                   </p>
                 )}
               </div>
 
               <div className="border-t border-border/40 pt-4 mb-5 flex justify-between items-baseline">
-                <span className="font-sans text-[13.5px] font-[500] text-text-primary">Total</span>
+                <span className="font-sans text-[13.5px] font-[500] text-text-primary">{t('cart.total')}</span>
                 <span className="font-brand text-[26px] font-bold text-text-primary">{orderTotal.toFixed(2)} zł</span>
               </div>
 
@@ -195,14 +197,14 @@ export default function CartPage() {
                 to="/checkout"
                 className="block w-full text-center bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase py-4 rounded-xl hover:bg-accent transition-colors duration-300"
               >
-                Proceed to checkout →
+                {t('cart.checkout')}
               </Link>
 
               <Link
                 to="/shop"
                 className="block w-full text-center mt-3 font-sans text-[11.5px] text-text-secondary hover:text-text-primary transition-colors py-1.5"
               >
-                ← Continue shopping
+                {t('cart.continueShopping')}
               </Link>
             </motion.div>
           </div>

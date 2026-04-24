@@ -2,18 +2,25 @@ import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Trash2, Minus, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useCart } from '../../context/CartContext'
 
 export default function CartDrawer() {
   const { items, isCartOpen, closeCart, removeItem, updateQty, totalItems, totalPrice } = useCart()
+  const { t } = useTranslation()
 
   useEffect(() => {
-    if (isCartOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = ''
+    if (!isCartOpen) return
+    const scrollY = window.scrollY
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
+    return () => {
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      window.scrollTo(0, scrollY)
     }
-    return () => { document.body.style.overflow = '' }
   }, [isCartOpen])
 
   const deliveryCost = totalPrice >= 80 ? 0 : 9
@@ -45,7 +52,7 @@ export default function CartDrawer() {
             <div className="flex items-center justify-between px-6 py-5 border-b border-border/50">
               <div className="flex items-center gap-2.5">
                 <ShoppingBag size={17} className="text-text-primary" />
-                <span className="font-brand text-[18px] font-bold tracking-[0.1em] text-text-primary">Bag</span>
+                <span className="font-brand text-[18px] font-bold tracking-[0.1em] text-text-primary">{t('cart.title')}</span>
                 {totalItems > 0 && (
                   <span className="bg-text-primary text-surface font-sans text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
                     {totalItems}
@@ -55,7 +62,7 @@ export default function CartDrawer() {
               <button
                 onClick={closeCart}
                 className="w-8 h-8 rounded-full hover:bg-bg flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors"
-                aria-label="Close cart"
+                aria-label={t('cart.closeCart')}
               >
                 <X size={16} />
               </button>
@@ -69,15 +76,15 @@ export default function CartDrawer() {
                     <ShoppingBag size={22} className="text-text-secondary/50" />
                   </div>
                   <div>
-                    <p className="font-editorial text-[22px] font-light text-text-primary mb-1" style={{ fontVariationSettings: "'opsz' 36" }}>Your bag is empty</p>
-                    <p className="font-sans text-[13px] text-text-secondary">Add some beautiful stems</p>
+                    <p className="font-editorial text-[22px] font-light text-text-primary mb-1" style={{ fontVariationSettings: "'opsz' 36" }}>{t('cart.empty')}</p>
+                    <p className="font-sans text-[13px] text-text-secondary">{t('cart.emptyDesc')}</p>
                   </div>
                   <Link
                     to="/shop"
                     onClick={closeCart}
                     className="mt-2 font-sans text-[11.5px] font-[500] tracking-[0.08em] uppercase text-surface bg-text-primary px-5 py-2.5 rounded-full hover:bg-accent transition-colors"
                   >
-                    Browse flowers
+                    {t('cart.startBrowsing')}
                   </Link>
                 </div>
               ) : (
@@ -118,7 +125,7 @@ export default function CartDrawer() {
                               <button
                                 onClick={() => updateQty(item.product.id, item.quantity - 1)}
                                 className="w-5 h-5 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg transition-colors"
-                                aria-label="Decrease quantity"
+                                aria-label={t('cart.decrease')}
                               >
                                 <Minus size={10} />
                               </button>
@@ -126,7 +133,7 @@ export default function CartDrawer() {
                               <button
                                 onClick={() => updateQty(item.product.id, item.quantity + 1)}
                                 className="w-5 h-5 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg transition-colors"
-                                aria-label="Increase quantity"
+                                aria-label={t('cart.increase')}
                               >
                                 <Plus size={10} />
                               </button>
@@ -139,7 +146,7 @@ export default function CartDrawer() {
                               <button
                                 onClick={() => removeItem(item.product.id)}
                                 className="w-6 h-6 flex items-center justify-center text-text-secondary/40 hover:text-accent-warm transition-colors"
-                                aria-label="Remove item"
+                                aria-label={t('cart.remove')}
                               >
                                 <Trash2 size={12} />
                               </button>
@@ -158,10 +165,10 @@ export default function CartDrawer() {
               <div className="px-6 py-5 border-t border-border/50 bg-surface">
                 {/* Delivery note */}
                 <div className="flex justify-between items-center mb-2 text-text-secondary">
-                  <span className="font-sans text-[12.5px]">Delivery</span>
+                  <span className="font-sans text-[12.5px]">{t('cart.delivery')}</span>
                   <span className="font-sans text-[12.5px]">
                     {deliveryCost === 0 ? (
-                      <span className="text-accent font-[500]">Free</span>
+                      <span className="text-accent font-[500]">{t('cart.free')}</span>
                     ) : (
                       `${deliveryCost.toFixed(2)} zł`
                     )}
@@ -169,13 +176,13 @@ export default function CartDrawer() {
                 </div>
                 {deliveryCost > 0 && (
                   <p className="font-sans text-[11px] text-text-secondary/60 mb-3">
-                    Free delivery on orders over 80 zł
+                    {t('cart.freeThreshold')}
                   </p>
                 )}
 
                 {/* Total */}
                 <div className="flex justify-between items-baseline mb-4">
-                  <span className="font-sans text-[13px] font-[500] text-text-primary">Total</span>
+                  <span className="font-sans text-[13px] font-[500] text-text-primary">{t('cart.total')}</span>
                   <span className="font-brand text-[22px] font-bold text-text-primary">{orderTotal.toFixed(2)} zł</span>
                 </div>
 
@@ -185,7 +192,7 @@ export default function CartDrawer() {
                   onClick={closeCart}
                   className="block w-full text-center bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.08em] uppercase py-4 rounded-2xl hover:bg-accent transition-colors duration-300"
                 >
-                  Proceed to checkout →
+                  {t('cart.checkout')}
                 </Link>
 
                 <Link
@@ -193,7 +200,7 @@ export default function CartDrawer() {
                   onClick={closeCart}
                   className="block w-full text-center mt-2 font-sans text-[11.5px] text-text-secondary hover:text-text-primary transition-colors py-2"
                 >
-                  View full cart
+                  {t('cart.viewCart')}
                 </Link>
               </div>
             )}

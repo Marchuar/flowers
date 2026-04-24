@@ -2,27 +2,31 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import { Menu, X, ShoppingBag } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { useCart } from '../../context/CartContext'
+import { setLanguage, type Lang } from '../../i18n'
 
-const leftLinks = [
-  { label: 'Home', href: '/', end: true },
-  { label: 'Shop', href: '/shop', primary: true },
-  { label: 'For Businesses', href: '/business' },
-  { label: 'How it works', href: '/how-it-works' },
+const leftLinkKeys: { key: 'nav.home' | 'nav.shop' | 'nav.forBusinesses' | 'nav.howItWorks'; href: string; end?: boolean; primary?: boolean }[] = [
+  { key: 'nav.home',          href: '/',             end: true },
+  { key: 'nav.shop',          href: '/shop',         primary: true },
+  { key: 'nav.forBusinesses', href: '/business' },
+  { key: 'nav.howItWorks',    href: '/how-it-works' },
 ]
 
-const rightLinks = [
-  { label: 'About', href: '/about' },
-  { label: 'FAQ', href: '/faq' },
+const rightLinkKeys: { key: 'nav.about' | 'nav.faq'; href: string }[] = [
+  { key: 'nav.about', href: '/about' },
+  { key: 'nav.faq',   href: '/faq' },
 ]
-
-const allLinks = [...leftLinks, ...rightLinks]
 
 export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const { scrollY } = useScroll()
   const { totalItems, openCart } = useCart()
+  const { t, i18n } = useTranslation()
+
+  const currentLang = (i18n.language === 'pl' ? 'pl' : 'en') as Lang
+  const otherLang: Lang = currentLang === 'en' ? 'pl' : 'en'
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setScrolled(latest > 60)
@@ -32,6 +36,8 @@ export default function Navigation() {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
   }, [mobileOpen])
+
+  const allLinkKeys = [...leftLinkKeys, ...rightLinkKeys]
 
   return (
     <>
@@ -59,14 +65,14 @@ export default function Navigation() {
             }}
           />
 
-          {/* ── DESKTOP layout: left links · STEM · right links + actions ── */}
+          {/* ── DESKTOP layout ── */}
           <div className="hidden lg:grid h-full items-center" style={{ gridTemplateColumns: '1fr auto 1fr' }}>
 
             {/* Left nav */}
             <nav className="flex items-center gap-0.5">
-              {leftLinks.map(link => (
+              {leftLinkKeys.map(link => (
                 <NavLink
-                  key={link.label}
+                  key={link.key}
                   to={link.href}
                   end={link.end}
                   className="group font-sans text-[15px] font-[500] tracking-[0.03em] px-3 py-1.5"
@@ -77,7 +83,7 @@ export default function Navigation() {
                         ? 'text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary/50'
                         : 'text-text-secondary group-hover:text-text-primary'
                     }`}>
-                      {link.label}
+                      {t(link.key)}
                     </span>
                   )}
                 </NavLink>
@@ -87,16 +93,16 @@ export default function Navigation() {
             {/* Center: logo */}
             <Link
               to="/"
-              className="font-telma text-[32px] font-bold tracking-[0.22em] text-text-primary hover:text-accent transition-colors duration-300"
+            className="font-brand text-[34px] font-bold tracking-[0.22em] text-text-primary hover:text-accent transition-colors duration-300"
             >
               STEM
             </Link>
 
             {/* Right nav + actions */}
             <div className="flex items-center gap-3 justify-end">
-              {rightLinks.map(link => (
+              {rightLinkKeys.map(link => (
                 <NavLink
-                  key={link.label}
+                  key={link.key}
                   to={link.href}
                   className="group font-sans text-[15px] font-[500] tracking-[0.03em] px-3 py-1.5"
                 >
@@ -106,7 +112,7 @@ export default function Navigation() {
                         ? 'text-text-primary underline underline-offset-4 decoration-1 decoration-text-primary/50'
                         : 'text-text-secondary group-hover:text-text-primary'
                     }`}>
-                      {link.label}
+                      {t(link.key)}
                     </span>
                   )}
                 </NavLink>
@@ -114,10 +120,21 @@ export default function Navigation() {
 
               <div className="w-px h-4 bg-border" />
 
+              {/* Language toggle */}
+              <button
+                onClick={() => setLanguage(otherLang)}
+                className="font-sans text-[15px] font-[500] tracking-[0.03em] uppercase text-text-secondary hover:text-text-primary transition-colors duration-200 px-1.5 py-1"
+                aria-label={`Switch to ${otherLang.toUpperCase()}`}
+              >
+                {otherLang.toUpperCase()}
+              </button>
+
+              <div className="w-px h-4 bg-border" />
+
               <button
                 onClick={openCart}
                 className="relative p-2.5 text-text-secondary hover:text-text-primary transition-colors"
-                aria-label="Open cart"
+                aria-label={t('nav.openCart')}
               >
                 <ShoppingBag size={19} />
                 {totalItems > 0 && (
@@ -137,7 +154,7 @@ export default function Navigation() {
                 to="/shop"
                 className="bg-text-primary text-surface font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.1em] uppercase px-4 py-2 rounded-full hover:bg-accent transition-colors duration-300"
               >
-                Browse Flowers
+                {t('nav.browseFlowers')}
               </Link>
             </div>
           </div>
@@ -146,12 +163,21 @@ export default function Navigation() {
           <div className="lg:hidden flex h-full items-center justify-between">
             <Link
               to="/"
-              className="font-telma text-[28px] font-bold tracking-[0.22em] text-text-primary"
+              className="font-brand text-[27px] font-bold tracking-[0.22em] text-text-primary"
             >
               STEM
             </Link>
 
             <div className="flex items-center gap-1">
+              {/* Language toggle mobile */}
+              <button
+                onClick={() => setLanguage(otherLang)}
+                className="font-sans text-[15px] font-[500] tracking-[0.03em] uppercase text-text-secondary hover:text-text-primary transition-colors px-2 py-1.5"
+                aria-label={`Switch to ${otherLang.toUpperCase()}`}
+              >
+                {otherLang.toUpperCase()}
+              </button>
+
               <AnimatePresence>
                 {totalItems > 0 && (
                   <motion.button
@@ -161,7 +187,7 @@ export default function Navigation() {
                     transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                     onClick={openCart}
                     className="relative p-2 text-text-primary"
-                    aria-label="Open cart"
+                    aria-label={t('nav.openCart')}
                   >
                     <ShoppingBag size={20} />
                     <motion.span
@@ -179,7 +205,7 @@ export default function Navigation() {
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
                 className="p-2 text-text-primary"
-                aria-label="Toggle menu"
+                aria-label={t('nav.toggleMenu')}
               >
                 {mobileOpen ? <X size={20} /> : <Menu size={20} />}
               </button>
@@ -196,9 +222,9 @@ export default function Navigation() {
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
       >
         <nav className="flex flex-col gap-6 mt-8">
-          {allLinks.map((link, i) => (
+          {allLinkKeys.map((link, i) => (
             <NavLink
-              key={link.label}
+              key={link.key}
               to={link.href}
               end={('end' in link ? link.end : false) as boolean}
               onClick={() => setMobileOpen(false)}
@@ -215,7 +241,7 @@ export default function Navigation() {
                   animate={{ opacity: mobileOpen ? 1 : 0, x: mobileOpen ? 0 : -20 }}
                   transition={{ delay: i * 0.06 + 0.1 }}
                 >
-                  {link.label}
+                  {t(link.key)}
                 </motion.span>
               )}
             </NavLink>
@@ -227,14 +253,14 @@ export default function Navigation() {
             className="flex items-center justify-center gap-2 w-full border border-border font-sans text-[12px] font-[500] tracking-[0.1em] uppercase px-6 py-4 rounded-full text-text-primary hover:bg-bg-subtle transition-colors"
           >
             <ShoppingBag size={14} />
-            Bag {totalItems > 0 && `(${totalItems})`}
+            {t('nav.bag')} {totalItems > 0 && `(${totalItems})`}
           </button>
           <Link
             to="/shop"
             onClick={() => setMobileOpen(false)}
             className="block text-center w-full bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.1em] uppercase px-6 py-4 rounded-full hover:bg-accent hover:text-bg transition-colors"
           >
-            Browse Flowers
+            {t('nav.browseFlowers')}
           </Link>
         </div>
       </motion.div>

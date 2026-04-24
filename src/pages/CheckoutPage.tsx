@@ -2,27 +2,29 @@ import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { CreditCard, Smartphone, Building2, Apple, Lock, Check } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
 import { useCart } from '../context/CartContext'
 import FloatingInput from '../components/ui/FloatingInput'
-
-const timeSlots = [
-  { id: '9-12',  label: '9:00–12:00',  note: 'Morning'   },
-  { id: '12-15', label: '12:00–15:00', note: 'Midday'    },
-  { id: '15-18', label: '15:00–18:00', note: 'Afternoon' },
-  { id: '18-21', label: '18:00–21:00', note: 'Evening'   },
-]
-
-const paymentMethods = [
-  { id: 'card',  label: 'Card',          icon: CreditCard  },
-  { id: 'blik',  label: 'BLIK',          icon: Smartphone  },
-  { id: 'bank',  label: 'Bank transfer', icon: Building2   },
-  { id: 'apple', label: 'Apple Pay',     icon: Apple       },
-]
 
 export default function CheckoutPage() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
   const { items, totalPrice, clearCart } = useCart()
+  const { t } = useTranslation()
+
+  const timeSlots = [
+    { id: '9-12',  label: '9:00–12:00',  note: t('checkout.slotMorning')   },
+    { id: '12-15', label: '12:00–15:00', note: t('checkout.slotMidday')    },
+    { id: '15-18', label: '15:00–18:00', note: t('checkout.slotAfternoon') },
+    { id: '18-21', label: '18:00–21:00', note: t('checkout.slotEvening')   },
+  ]
+
+  const paymentMethods = [
+    { id: 'card',  label: t('checkout.payCard'), icon: CreditCard  },
+    { id: 'blik',  label: 'BLIK',                icon: Smartphone  },
+    { id: 'bank',  label: t('checkout.payBank'), icon: Building2   },
+    { id: 'apple', label: 'Apple Pay',            icon: Apple       },
+  ]
 
   const [selectedSlot,    setSelectedSlot]    = useState('')
   const [selectedPayment, setSelectedPayment] = useState('card')
@@ -65,26 +67,26 @@ export default function CheckoutPage() {
           </motion.div>
 
           <h1 className="font-editorial text-[38px] font-light text-text-primary mb-3 leading-tight" style={{ fontVariationSettings: "'opsz' 48" }}>
-            Order placed!
+            {t('checkout.successTitle')}
           </h1>
           <p className="font-sans text-[14px] text-text-secondary mb-2 leading-relaxed">
-            Your stems are on their way. We'll send a confirmation to your email.
+            {t('checkout.successDesc')}
           </p>
           <p className="font-sans text-[12px] text-text-secondary/60 mb-8">
-            Order #{orderNumber}
+            {t('checkout.orderPrefix')} #{orderNumber}
           </p>
 
           <Link
             to="/shop"
             className="inline-flex items-center gap-2 bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase px-7 py-3.5 rounded-full hover:bg-accent transition-colors duration-300"
           >
-            Continue shopping
+            {t('checkout.continueShopping')}
           </Link>
           <Link
             to="/"
             className="block mt-3 font-sans text-[12px] text-text-secondary hover:text-text-primary transition-colors"
           >
-            ← Back to home
+            {t('checkout.backToHome')}
           </Link>
         </motion.div>
       </div>
@@ -104,9 +106,9 @@ export default function CheckoutPage() {
         >
           <div className="flex items-center gap-3 mb-2">
             <div className="w-5 h-px bg-text-secondary/30" />
-            <span className="eyebrow text-text-secondary/60">Final step</span>
+            <span className="eyebrow text-text-secondary/60">{t('checkout.eyebrow')}</span>
           </div>
-          <h1 className="section-heading text-text-primary">Checkout</h1>
+          <h1 className="section-heading text-text-primary">{t('checkout.heading')}</h1>
         </motion.div>
 
         <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-start">
@@ -122,19 +124,19 @@ export default function CheckoutPage() {
             >
               <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold">1</span>
-                Delivery details
+                {t('checkout.step1')}
               </h2>
 
               <div className="space-y-3">
                 <div className="flex gap-3">
-                  <FloatingInput label="First name" autoComplete="given-name"  value={firstName} onChange={setFirstName} required half />
-                  <FloatingInput label="Last name"  autoComplete="family-name" value={lastName}  onChange={setLastName}  required half />
+                  <FloatingInput label={t('checkout.firstName')} autoComplete="given-name"  value={firstName} onChange={setFirstName} required half />
+                  <FloatingInput label={t('checkout.lastName')}  autoComplete="family-name" value={lastName}  onChange={setLastName}  required half />
                 </div>
-                <FloatingInput label="Email"                      type="email" autoComplete="email"         value={email}     onChange={setEmail}     required />
-                <FloatingInput label="Phone"                      type="tel"   autoComplete="tel"           value={phone}     onChange={setPhone}     required />
-                <FloatingInput label="Street address"                          autoComplete="address-line1" value={street}    onChange={setStreet}    required />
-                <FloatingInput label="Apartment / flat (optional)"             autoComplete="address-line2" value={apartment} onChange={setApartment}          />
-                <FloatingInput label="Delivery notes (optional)"                                            value={notes}     onChange={setNotes}              />
+                <FloatingInput label={t('checkout.email')} type="email" autoComplete="email"         value={email}     onChange={setEmail}     required />
+                <FloatingInput label={t('checkout.phone')} type="tel"   autoComplete="tel"           value={phone}     onChange={setPhone}     required />
+                <FloatingInput label={t('checkout.street')}                                autoComplete="address-line1" value={street}    onChange={setStreet}    required />
+                <FloatingInput label={t('checkout.apartment')}                             autoComplete="address-line2" value={apartment} onChange={setApartment}          />
+                <FloatingInput label={t('checkout.notes')}                                                              value={notes}     onChange={setNotes}              />
               </div>
             </motion.div>
 
@@ -146,7 +148,7 @@ export default function CheckoutPage() {
             >
               <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold">2</span>
-                Delivery time
+                {t('checkout.step2')}
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
@@ -189,7 +191,7 @@ export default function CheckoutPage() {
             >
               <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
                 <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold">3</span>
-                Payment method
+                {t('checkout.paymentMethod')}
               </h2>
 
               <div className="grid grid-cols-2 gap-2.5">
@@ -232,7 +234,7 @@ export default function CheckoutPage() {
           >
             <div className="bg-surface rounded-2xl border border-border/40 p-6">
               <h2 className="font-brand text-[17px] font-bold tracking-[0.08em] text-text-primary mb-5">
-                Order summary
+                {t('cart.orderSummary')}
               </h2>
 
               <div className="space-y-3 mb-5">
@@ -259,14 +261,14 @@ export default function CheckoutPage() {
 
               <div className="border-t border-border/40 pt-4 space-y-2.5 mb-5">
                 <div className="flex justify-between text-text-secondary">
-                  <span className="font-sans text-[12.5px]">Subtotal</span>
+                  <span className="font-sans text-[12.5px]">{t('checkout.subtotal')}</span>
                   <span className="font-sans text-[12.5px]">{totalPrice.toFixed(2)} zł</span>
                 </div>
                 <div className="flex justify-between text-text-secondary">
-                  <span className="font-sans text-[12.5px]">Delivery</span>
+                  <span className="font-sans text-[12.5px]">{t('checkout.delivery')}</span>
                   <span className="font-sans text-[12.5px]">
                     {deliveryCost === 0
-                      ? <span className="text-accent font-[500]">Free</span>
+                      ? <span className="text-accent font-[500]">{t('checkout.free')}</span>
                       : `${deliveryCost.toFixed(2)} zł`
                     }
                   </span>
@@ -274,7 +276,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="border-t border-border/40 pt-4 mb-5 flex justify-between items-baseline">
-                <span className="font-sans text-[13.5px] font-[500] text-text-primary">Total</span>
+                <span className="font-sans text-[13.5px] font-[500] text-text-primary">{t('checkout.total')}</span>
                 <span className="font-brand text-[26px] font-bold text-text-primary">{orderTotal.toFixed(2)} zł</span>
               </div>
 
@@ -282,7 +284,7 @@ export default function CheckoutPage() {
                 onClick={handlePlaceOrder}
                 className="w-full bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase py-4 rounded-xl hover:bg-accent transition-colors duration-300"
               >
-                Place order
+                {t('checkout.placeOrder')}
               </button>
 
               <div className="flex items-center justify-center gap-1.5 mt-3">

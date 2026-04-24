@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Droplets, Scissors, Sun, Leaf, Snowflake, AlertTriangle, ShoppingBag, Minus, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { createPortal } from 'react-dom'
+import { useTranslation } from 'react-i18next'
 import { type Product, type CareIcon } from '../../constants/products'
 import { useCart } from '../../context/CartContext'
 import { useToast } from './Toast'
@@ -29,6 +30,7 @@ interface Props {
 export default function ProductModal({ product, onClose }: Props) {
   const { addItem, items, updateQty, removeItem } = useCart()
   const { showToast } = useToast()
+  const { t } = useTranslation()
   const [imgIndex, setImgIndex] = useState(0)
   const [direction, setDirection] = useState(0)
   const [prevProductId, setPrevProductId] = useState(product?.id)
@@ -59,7 +61,11 @@ export default function ProductModal({ product, onClose }: Props) {
 
   useEffect(() => {
     if (!product) return
-    document.body.style.overflow = 'hidden'
+    // iOS Safari ignores overflow:hidden on body — use position:fixed trick instead
+    const scrollY = window.scrollY
+    document.body.style.position = 'fixed'
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = '100%'
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
       if (e.key === 'ArrowRight' && hasMultiple) goNext()
@@ -67,7 +73,10 @@ export default function ProductModal({ product, onClose }: Props) {
     }
     window.addEventListener('keydown', handler)
     return () => {
-      document.body.style.overflow = ''
+      document.body.style.position = ''
+      document.body.style.top = ''
+      document.body.style.width = ''
+      window.scrollTo(0, scrollY)
       window.removeEventListener('keydown', handler)
     }
   }, [product, onClose, hasMultiple, goNext, goPrev])
@@ -94,7 +103,7 @@ export default function ProductModal({ product, onClose }: Props) {
     e.stopPropagation()
     if (!product) return
     addItem(product)
-    showToast(`${product.name} added to bag`)
+    showToast(t('products.addedToBag', { name: t(`products.${product.slug}.name`) }))
   }
 
   function handleDecrement() {
@@ -113,7 +122,7 @@ export default function ProductModal({ product, onClose }: Props) {
       {product && (
         <motion.div
           key="modal-root"
-          className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8 overscroll-none"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -138,7 +147,7 @@ export default function ProductModal({ product, onClose }: Props) {
             <button
               onClick={onClose}
               className="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-surface/70 backdrop-blur-sm flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface transition-colors duration-200"
-              aria-label="Close"
+              aria-label={t('modal.close')}
             >
               <X size={14} strokeWidth={2} />
             </button>
@@ -155,7 +164,7 @@ export default function ProductModal({ product, onClose }: Props) {
                   <motion.img
                     key={imgIndex}
                     src={allImages[imgIndex]}
-                    alt={`${product.name} — image ${imgIndex + 1}`}
+                    alt={`${t(`products.${product.slug}.name`)} — ${t('modal.image')} ${imgIndex + 1}`}
                     className="absolute inset-0 w-full h-full object-cover object-center"
                     custom={direction}
                     variants={imageVariants}
@@ -176,7 +185,7 @@ export default function ProductModal({ product, onClose }: Props) {
                 {/* Tag */}
                 {product.tag && (
                   <div className="absolute top-4 left-4 z-10 bg-surface/85 backdrop-blur-sm font-sans text-[9.5px] font-[500] tracking-[0.12em] uppercase text-text-secondary px-2.5 py-1 rounded-full">
-                    {product.tag}
+                    {t(`products.tag${product.tag}`)}
                   </div>
                 )}
 
@@ -186,14 +195,14 @@ export default function ProductModal({ product, onClose }: Props) {
                     <button
                       onClick={goPrev}
                       className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-surface/80 backdrop-blur-sm hidden md:flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface transition-colors duration-200"
-                      aria-label="Previous image"
+                      aria-label={t('modal.prevImage')}
                     >
                       <ChevronLeft size={14} strokeWidth={2} />
                     </button>
                     <button
                       onClick={goNext}
                       className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 rounded-full bg-surface/80 backdrop-blur-sm hidden md:flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-surface transition-colors duration-200"
-                      aria-label="Next image"
+                      aria-label={t('modal.nextImage')}
                     >
                       <ChevronRight size={14} strokeWidth={2} />
                     </button>
@@ -212,7 +221,7 @@ export default function ProductModal({ product, onClose }: Props) {
                             ? 'w-5 bg-surface'
                             : 'w-1.5 bg-surface/50 hover:bg-surface/75'
                         }`}
-                        aria-label={`Image ${i + 1}`}
+                        aria-label={`${t('modal.image')} ${i + 1}`}
                       />
                     ))}
                   </div>
@@ -224,14 +233,14 @@ export default function ProductModal({ product, onClose }: Props) {
                 {/* Product header */}
                 <div>
                   <div className="eyebrow text-text-secondary/50 text-[9.5px] mb-0.5">{product.latinName}</div>
-                  <h2 className="font-display text-[38px] md:text-[44px] font-light text-text-primary leading-[0.95]">{product.name}</h2>
+                  <h2 className="font-display text-[38px] md:text-[44px] font-light text-text-primary leading-[0.95]">{t(`products.${product.slug}.name`)}</h2>
                   <div className="font-sans text-[13px] font-[500] text-text-primary mt-2">
                     {product.price}{' '}
-                    <span className="font-normal text-text-secondary text-[11px]">/ stem</span>
+                    <span className="font-normal text-text-secondary text-[11px]">{t('modal.perStem')}</span>
                   </div>
                   {product.description && (
                     <p className="font-sans text-[12.5px] text-text-secondary leading-relaxed mt-3 max-w-[320px]">
-                      {product.description}
+                      {t(`products.${product.slug}.description`)}
                     </p>
                   )}
                 </div>
@@ -241,10 +250,10 @@ export default function ProductModal({ product, onClose }: Props) {
                   <div>
                     <div className="w-full h-px bg-border mb-5" />
                     <h3 className="font-display text-[22px] md:text-[26px] leading-tight mb-1 text-accent" style={{ fontWeight: 500 }}>
-                      How to keep 'em happy
+                      {t('modal.careTitle')}
                     </h3>
                     <p className="font-sans text-[12px] text-text-secondary mb-4 leading-relaxed">
-                      A few simple rituals for a longer, happier life.
+                      {t('modal.careSubtitle')}
                     </p>
                     <div className="flex flex-col gap-4">
                       {product.careInstructions.map((tip, i) => {
@@ -258,8 +267,8 @@ export default function ProductModal({ product, onClose }: Props) {
                               <Icon size={15} strokeWidth={1.8} className="text-text-primary" />
                             </div>
                             <div>
-                              <div className="font-sans text-[13px] font-[600] text-text-primary leading-tight">{tip.title}</div>
-                              <div className="font-sans text-[12px] text-text-secondary leading-relaxed mt-0.5">{tip.body}</div>
+                              <div className="font-sans text-[13px] font-[600] text-text-primary leading-tight">{t(`products.${product.slug}.care${i + 1}Title`)}</div>
+                              <div className="font-sans text-[12px] text-text-secondary leading-relaxed mt-0.5">{t(`products.${product.slug}.care${i + 1}Body`)}</div>
                             </div>
                           </div>
                         )
@@ -282,7 +291,7 @@ export default function ProductModal({ product, onClose }: Props) {
                         className="w-full flex items-center justify-center gap-2 bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.08em] uppercase py-3.5 rounded-xl hover:bg-accent transition-colors duration-200"
                       >
                         <ShoppingBag size={13} strokeWidth={2} />
-                        Add to bag
+                        {t('modal.addToBag')}
                       </motion.button>
                     ) : (
                       <motion.div
@@ -297,15 +306,15 @@ export default function ProductModal({ product, onClose }: Props) {
                         <button
                           onClick={handleDecrement}
                           className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10 transition-colors text-text-primary"
-                          aria-label="Decrease quantity"
+                          aria-label={t('cart.decrease')}
                         >
                           <Minus size={13} strokeWidth={2.5} />
                         </button>
-                        <span className="font-sans text-[14px] font-[600] text-text-primary tabular-nums">{qty} in bag</span>
+                        <span className="font-sans text-[14px] font-[600] text-text-primary tabular-nums">{t('modal.inBag', { qty })}</span>
                         <button
                           onClick={handleIncrement}
                           className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10 transition-colors text-text-primary"
-                          aria-label="Increase quantity"
+                          aria-label={t('cart.increase')}
                         >
                           <Plus size={13} strokeWidth={2.5} />
                         </button>

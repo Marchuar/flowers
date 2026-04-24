@@ -1,13 +1,4 @@
-const items = [
-  'NO MIDDLEMAN',
-  'WHOLESALE PRICE',
-  '2H DELIVERY',
-  'ECO PACKAGING',
-  'FRESH DAILY',
-  'WARSAW',
-  'ORDER BY 9PM',
-  'FREE CARE CARD',
-]
+import { useTranslation } from 'react-i18next'
 
 function TickerItem({ text }: { text: string }) {
   return (
@@ -21,6 +12,8 @@ function TickerItem({ text }: { text: string }) {
 }
 
 export default function Ticker() {
+  const { t } = useTranslation()
+  const items = t('ticker.items', { returnObjects: true }) as string[]
   const allItems = [...items, ...items, ...items, ...items]
 
   return (

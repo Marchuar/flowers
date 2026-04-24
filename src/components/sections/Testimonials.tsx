@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 import { testimonials } from '../../constants/products'
 
 function StarRating({ stars }: { stars: number }) {
@@ -39,6 +40,7 @@ function TestimonialCard({ t, index }: { t: typeof testimonials[0]; index: numbe
 }
 
 export default function Testimonials() {
+  const { t } = useTranslation()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
@@ -55,11 +57,11 @@ export default function Testimonials() {
           >
             <div className="flex items-center gap-3 mb-3">
               <div className="w-5 h-px bg-text-secondary/30" />
-              <span className="eyebrow text-text-secondary/60">Reviews</span>
+              <span className="eyebrow text-text-secondary/60">{t('testimonials.eyebrow')}</span>
             </div>
             <h2 className="section-heading text-text-primary">
-              Warsaw loves<br />
-              <span className="italic text-text-secondary/75">fresh stems.</span>
+              {t('testimonials.heading')}<br />
+              <span className="italic text-text-secondary/75">{t('testimonials.headingItalic')}</span>
             </h2>
           </motion.div>
 
@@ -71,12 +73,12 @@ export default function Testimonials() {
           >
             <div className="text-right">
               <div className="font-display text-[42px] font-light text-text-primary leading-none">5.0</div>
-              <div className="font-sans text-[11px] md:text-[12px] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">Average rating</div>
+              <div className="font-sans text-[11px] md:text-[12px] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('testimonials.ratingLabel')}</div>
             </div>
             <div className="w-px h-12 bg-border" />
             <div className="text-right">
-              <div className="font-display text-[42px] font-light text-text-primary leading-none">500+</div>
-              <div className="font-sans text-[11px] md:text-[12px] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">Happy customers</div>
+              <div className="font-display text-[42px] font-light text-text-primary leading-none">{t('testimonials.reviews')}</div>
+              <div className="font-sans text-[11px] md:text-[12px] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('testimonials.reviewsLabel')}</div>
             </div>
           </motion.div>
         </div>
