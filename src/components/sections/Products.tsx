@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { ShoppingBag, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react'
 import { products, type Product } from '../../constants/products'
-import { useCart } from '../../context/CartContext'
+import { useCart } from '../../hooks/useCart'
 import { useToast } from '../ui/Toast'
 import ProductModal from '../ui/ProductModal'
 

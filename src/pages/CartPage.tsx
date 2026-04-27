@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Minus, Plus, Trash2, ShoppingBag } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useCart } from '../context/CartContext'
+import { useCart } from '../hooks/useCart'
 
 export default function CartPage() {
   const ref = useRef<HTMLDivElement>(null)
