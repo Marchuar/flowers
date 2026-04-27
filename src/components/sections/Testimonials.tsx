@@ -1,7 +1,13 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { useTranslation } from 'react-i18next'
-import { testimonials } from '../../constants/products'
+
+interface TestimonialItem {
+  quote: string
+  name: string
+  location: string
+  stars: number
+}
 
 function StarRating({ stars }: { stars: number }) {
   return (
@@ -15,7 +21,7 @@ function StarRating({ stars }: { stars: number }) {
   )
 }
 
-function TestimonialCard({ t, index }: { t: typeof testimonials[0]; index: number }) {
+function TestimonialCard({ item, index }: { item: TestimonialItem; index: number }) {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-50px' })
 
@@ -27,13 +33,13 @@ function TestimonialCard({ t, index }: { t: typeof testimonials[0]; index: numbe
       transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col gap-4 bg-surface rounded-2xl p-6 border border-border/50 hover:border-border transition-colors duration-300"
     >
-      <StarRating stars={t.stars} />
+      <StarRating stars={item.stars} />
       <p className="font-playfair text-[17px] md:text-[19px] font-[400] italic text-text-primary leading-relaxed flex-1">
-        "{t.quote}"
+        "{item.quote}"
       </p>
       <div className="pt-3 border-t border-border/40">
-        <div className="font-sans text-[13px] font-[500] text-text-primary">{t.name}</div>
-        <div className="font-sans text-[11px] font-[500] text-text-secondary/65 mt-0.5">{t.location}</div>
+        <div className="font-sans text-[13px] font-[500] text-text-primary">{item.name}</div>
+        <div className="font-sans text-[11px] font-[500] text-text-secondary/65 mt-0.5">{item.location}</div>
       </div>
     </motion.div>
   )
@@ -43,6 +49,8 @@ export default function Testimonials() {
   const { t } = useTranslation()
   const ref = useRef<HTMLElement>(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const items = t('testimonials.items', { returnObjects: true }) as TestimonialItem[]
 
   return (
     <section ref={ref} className="py-20 md:py-28 px-6 md:px-10 bg-bg-subtle">
@@ -72,7 +80,7 @@ export default function Testimonials() {
             transition={{ delay: 0.3 }}
           >
             <div className="text-right">
-              <div className="font-display text-[42px] font-light text-text-primary leading-none">5.0</div>
+              <div className="font-display text-[42px] font-light text-text-primary leading-none tabular-nums">5.0</div>
               <div className="font-sans text-[11px] md:text-[12px] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('testimonials.ratingLabel')}</div>
             </div>
             <div className="w-px h-12 bg-border" />
@@ -87,8 +95,8 @@ export default function Testimonials() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
           {/* Left column — 2 short cards */}
           <div className="flex flex-col gap-4 md:gap-5">
-            <TestimonialCard t={testimonials[0]} index={0} />
-            <TestimonialCard t={testimonials[3]} index={3} />
+            <TestimonialCard item={items[0]} index={0} />
+            <TestimonialCard item={items[3]} index={3} />
           </div>
           {/* Center column — 1 tall card (featured) */}
           <div>
@@ -106,18 +114,18 @@ export default function Testimonials() {
                 ))}
               </div>
               <p className="font-playfair text-[22px] md:text-[26px] font-[400] italic text-surface leading-relaxed flex-1">
-                "{testimonials[2].quote}"
+                "{items[2]?.quote}"
               </p>
               <div className="pt-3 border-t border-surface/10">
-                <div className="font-sans text-[13px] font-[500] text-surface/80">{testimonials[2].name}</div>
-                <div className="font-sans text-[11px] font-[500] text-surface/35 mt-0.5">{testimonials[2].location}</div>
+                <div className="font-sans text-[13px] font-[500] text-surface/80">{items[2]?.name}</div>
+                <div className="font-sans text-[11px] font-[500] text-surface/35 mt-0.5">{items[2]?.location}</div>
               </div>
             </motion.div>
           </div>
           {/* Right column — 2 short cards */}
           <div className="flex flex-col gap-4 md:gap-5">
-            <TestimonialCard t={testimonials[1]} index={1} />
-            <TestimonialCard t={testimonials[4]} index={4} />
+            <TestimonialCard item={items[1]} index={1} />
+            <TestimonialCard item={items[4]} index={4} />
           </div>
         </div>
 

@@ -1,12 +1,7 @@
-import { createContext, useContext, useReducer, useMemo, useState, type ReactNode } from 'react'
+import { useReducer, useMemo, useState, useCallback, useEffect, type ReactNode } from 'react'
 import { type Product } from '../constants/products'
 import { parsePrice } from '../lib/utils'
-
-export interface CartItem {
-  product: Product
-  quantity: number
-  numericPrice: number
-}
+import { CartContext, type CartItem, type CartContextValue } from './cartContextDef'
 
 interface CartState {
   items: CartItem[]
@@ -60,24 +55,22 @@ function cartReducer(state: CartState, action: CartAction): CartState {
   }
 }
 
-interface CartContextValue {
-  items: CartItem[]
-  addItem: (product: Product, qty?: number) => void
-  removeItem: (productId: number) => void
-  updateQty: (productId: number, qty: number) => void
-  clearCart: () => void
-  totalItems: number
-  totalPrice: number
-  isCartOpen: boolean
-  openCart: () => void
-  closeCart: () => void
+function loadCart(): CartState {
+  try {
+    const stored = localStorage.getItem('stem-cart')
+    return stored ? JSON.parse(stored) : { items: [] }
+  } catch {
+    return { items: [] }
+  }
 }
 
-const CartContext = createContext<CartContextValue | null>(null)
-
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(cartReducer, { items: [] })
+  const [state, dispatch] = useReducer(cartReducer, undefined, loadCart)
   const [isCartOpen, setIsCartOpen] = useState(false)
+
+  useEffect(() => {
+    localStorage.setItem('stem-cart', JSON.stringify(state))
+  }, [state])
 
   const totalItems = useMemo(() => state.items.reduce((s, i) => s + i.quantity, 0), [state.items])
   const totalPrice = useMemo(
@@ -85,24 +78,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [state.items]
   )
 
-  const value: CartContextValue = {
+  const addItem    = useCallback((product: Product, qty?: number) => dispatch({ type: 'ADD_ITEM', product, qty }), [])
+  const removeItem = useCallback((productId: number) => dispatch({ type: 'REMOVE_ITEM', productId }), [])
+  const updateQty  = useCallback((productId: number, qty: number) => dispatch({ type: 'UPDATE_QTY', productId, qty }), [])
+  const clearCart  = useCallback(() => dispatch({ type: 'CLEAR_CART' }), [])
+  const openCart   = useCallback(() => setIsCartOpen(true), [])
+  const closeCart  = useCallback(() => setIsCartOpen(false), [])
+
+  const value = useMemo<CartContextValue>(() => ({
     items: state.items,
-    addItem: (product, qty) => dispatch({ type: 'ADD_ITEM', product, qty }),
-    removeItem: (productId) => dispatch({ type: 'REMOVE_ITEM', productId }),
-    updateQty: (productId, qty) => dispatch({ type: 'UPDATE_QTY', productId, qty }),
-    clearCart: () => dispatch({ type: 'CLEAR_CART' }),
+    addItem,
+    removeItem,
+    updateQty,
+    clearCart,
     totalItems,
     totalPrice,
     isCartOpen,
-    openCart: () => setIsCartOpen(true),
-    closeCart: () => setIsCartOpen(false),
-  }
+    openCart,
+    closeCart,
+  }), [state.items, totalItems, totalPrice, isCartOpen, addItem, removeItem, updateQty, clearCart, openCart, closeCart])
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>
-}
-
-export function useCart() {
-  const ctx = useContext(CartContext)
-  if (!ctx) throw new Error('useCart must be used within CartProvider')
-  return ctx
 }

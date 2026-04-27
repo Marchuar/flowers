@@ -27,9 +27,6 @@ export default {
         editorial: ['"Boska"', 'Georgia', 'serif'],
         sans: ['"General Sans"', 'system-ui', 'sans-serif'],
         brand: ['"Boska"', 'Telma', 'serif'],
-        zina: ['"Zina"', 'serif'],
-        mono: ['"JetBrains Mono"', 'monospace'],
-        playfair: ['"Playfair Display"', 'Georgia', 'serif'],
       },
       animation: {
         'float': 'float 5s ease-in-out infinite',

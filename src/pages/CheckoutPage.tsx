@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { CreditCard, Smartphone, Building2, Apple, Lock, Check } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { useCart } from '../context/CartContext'
+import { useCart } from '../hooks/useCart'
+import { formatPrice } from '../lib/utils'
 import FloatingInput from '../components/ui/FloatingInput'
 
 export default function CheckoutPage() {
@@ -42,7 +43,8 @@ export default function CheckoutPage() {
   const deliveryCost = totalPrice >= 80 ? 0 : 9
   const orderTotal   = totalPrice + deliveryCost
 
-  function handlePlaceOrder() {
+  function handlePlaceOrder(e: React.FormEvent) {
+    e.preventDefault()
     setOrderPlaced(true)
     clearCart()
     window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -78,13 +80,13 @@ export default function CheckoutPage() {
 
           <Link
             to="/shop"
-            className="inline-flex items-center gap-2 bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase px-7 py-3.5 rounded-full hover:bg-accent transition-colors duration-300"
+            className="inline-flex items-center gap-2 bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase px-7 py-3.5 rounded-full hover:bg-accent transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
           >
             {t('checkout.continueShopping')}
           </Link>
           <Link
             to="/"
-            className="block mt-3 font-sans text-[12px] text-text-secondary hover:text-text-primary transition-colors"
+            className="block mt-3 font-sans text-[12px] text-text-secondary hover:text-text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
           >
             {t('checkout.backToHome')}
           </Link>
@@ -111,189 +113,203 @@ export default function CheckoutPage() {
           <h1 className="section-heading text-text-primary">{t('checkout.heading')}</h1>
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-start">
+        <form onSubmit={handlePlaceOrder}>
+          <div className="flex flex-col lg:flex-row gap-10 lg:gap-12 items-start">
 
-          {/* Left — form */}
-          <div className="flex-1 space-y-8">
+            {/* Left — form fields */}
+            <div className="flex-1 space-y-8">
 
-            {/* 1. Delivery details */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.1 }}
-            >
-              <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold">1</span>
-                {t('checkout.step1')}
-              </h2>
+              {/* 1. Delivery details */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.1 }}
+              >
+                <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold" aria-hidden="true">1</span>
+                  {t('checkout.step1')}
+                </h2>
 
-              <div className="space-y-3">
-                <div className="flex gap-3">
-                  <FloatingInput label={t('checkout.firstName')} autoComplete="given-name"  value={firstName} onChange={setFirstName} required half />
-                  <FloatingInput label={t('checkout.lastName')}  autoComplete="family-name" value={lastName}  onChange={setLastName}  required half />
+                <div className="space-y-3">
+                  <div className="flex gap-3">
+                    <FloatingInput label={t('checkout.firstName')} name="given-name"   autoComplete="given-name"   value={firstName} onChange={setFirstName} required half />
+                    <FloatingInput label={t('checkout.lastName')}  name="family-name"  autoComplete="family-name"  value={lastName}  onChange={setLastName}  required half />
+                  </div>
+                  <FloatingInput label={t('checkout.email')} name="email"   type="email" autoComplete="email" value={email}     onChange={setEmail}     required />
+                  <FloatingInput label={t('checkout.phone')} name="tel"     type="tel"   autoComplete="tel"   value={phone}     onChange={setPhone}     required />
+                  <FloatingInput label={t('checkout.street')}    name="address-line1" autoComplete="address-line1" value={street}    onChange={setStreet}    required />
+                  <FloatingInput label={t('checkout.apartment')} name="address-line2" autoComplete="address-line2" value={apartment} onChange={setApartment}          />
+                  <FloatingInput label={t('checkout.notes')}     name="notes"                                      value={notes}     onChange={setNotes}              />
                 </div>
-                <FloatingInput label={t('checkout.email')} type="email" autoComplete="email"         value={email}     onChange={setEmail}     required />
-                <FloatingInput label={t('checkout.phone')} type="tel"   autoComplete="tel"           value={phone}     onChange={setPhone}     required />
-                <FloatingInput label={t('checkout.street')}                                autoComplete="address-line1" value={street}    onChange={setStreet}    required />
-                <FloatingInput label={t('checkout.apartment')}                             autoComplete="address-line2" value={apartment} onChange={setApartment}          />
-                <FloatingInput label={t('checkout.notes')}                                                              value={notes}     onChange={setNotes}              />
-              </div>
-            </motion.div>
+              </motion.div>
 
-            {/* 2. Delivery time */}
+              {/* 2. Delivery time */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.2 }}
+              >
+                <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold" aria-hidden="true">2</span>
+                  {t('checkout.step2')}
+                </h2>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5" role="radiogroup" aria-label={t('checkout.step2')}>
+                  {timeSlots.map(slot => (
+                    <button
+                      key={slot.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={selectedSlot === slot.id}
+                      onClick={() => setSelectedSlot(slot.id)}
+                      className={`relative flex flex-col items-center justify-center gap-0.5 py-4 px-3 rounded-xl border transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                        selectedSlot === slot.id
+                          ? 'bg-text-primary text-surface border-text-primary'
+                          : 'bg-surface border-border/60 text-text-primary hover:border-text-primary/40 hover:bg-bg'
+                      }`}
+                    >
+                      <span className={`font-sans text-[13px] font-[500] ${selectedSlot === slot.id ? 'text-surface' : 'text-text-primary'}`}>
+                        {slot.label}
+                      </span>
+                      <span className={`font-sans text-[10.5px] ${selectedSlot === slot.id ? 'text-surface/70' : 'text-text-secondary'}`}>
+                        {slot.note}
+                      </span>
+                      {selectedSlot === slot.id && (
+                        <motion.div
+                          className="absolute top-2 right-2 w-4 h-4 rounded-full bg-surface/20 flex items-center justify-center"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+                        >
+                          <Check size={9} strokeWidth={2.5} className="text-surface" />
+                        </motion.div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* 3. Payment method */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.55, delay: 0.3 }}
+              >
+                <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
+                  <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold" aria-hidden="true">3</span>
+                  {t('checkout.paymentMethod')}
+                </h2>
+
+                <div className="grid grid-cols-2 gap-2.5" role="radiogroup" aria-label={t('checkout.paymentMethod')}>
+                  {paymentMethods.map(({ id, label, icon: Icon }) => (
+                    <button
+                      key={id}
+                      type="button"
+                      role="radio"
+                      aria-checked={selectedPayment === id}
+                      onClick={() => setSelectedPayment(id)}
+                      className={`relative flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                        selectedPayment === id
+                          ? 'bg-text-primary text-surface border-text-primary'
+                          : 'bg-surface border-border/60 text-text-primary hover:border-text-primary/40 hover:bg-bg'
+                      }`}
+                    >
+                      <Icon size={17} className={selectedPayment === id ? 'text-surface/80' : 'text-text-secondary'} />
+                      <span className={`font-sans text-[13px] font-[500] ${selectedPayment === id ? 'text-surface' : 'text-text-primary'}`}>
+                        {label}
+                      </span>
+                      {selectedPayment === id && (
+                        <motion.div
+                          className="absolute top-2 right-2 w-4 h-4 rounded-full bg-surface/20 flex items-center justify-center"
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ type: 'spring', stiffness: 350, damping: 22 }}
+                        >
+                          <Check size={9} strokeWidth={2.5} className="text-surface" />
+                        </motion.div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right — order summary */}
             <motion.div
+              className="w-full lg:w-[340px] lg:sticky lg:top-24"
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.2 }}
+              transition={{ duration: 0.55, delay: 0.15 }}
             >
-              <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold">2</span>
-                {t('checkout.step2')}
-              </h2>
+              <div className="bg-surface rounded-2xl border border-border/40 p-6">
+                <h2 className="font-brand text-[17px] font-bold tracking-[0.08em] text-text-primary mb-5">
+                  {t('cart.orderSummary')}
+                </h2>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-                {timeSlots.map(slot => (
-                  <button
-                    key={slot.id}
-                    onClick={() => setSelectedSlot(slot.id)}
-                    className={`relative flex flex-col items-center justify-center gap-0.5 py-4 px-3 rounded-xl border transition-all duration-200 ${
-                      selectedSlot === slot.id
-                        ? 'bg-text-primary text-surface border-text-primary'
-                        : 'bg-surface border-border/60 text-text-primary hover:border-text-primary/40 hover:bg-bg'
-                    }`}
-                  >
-                    <span className={`font-sans text-[13px] font-[500] ${selectedSlot === slot.id ? 'text-surface' : 'text-text-primary'}`}>
-                      {slot.label}
-                    </span>
-                    <span className={`font-sans text-[10.5px] ${selectedSlot === slot.id ? 'text-surface/70' : 'text-text-secondary'}`}>
-                      {slot.note}
-                    </span>
-                    {selectedSlot === slot.id && (
-                      <motion.div
-                        className="absolute top-2 right-2 w-4 h-4 rounded-full bg-surface/20 flex items-center justify-center"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 350, damping: 22 }}
-                      >
-                        <Check size={9} strokeWidth={2.5} className="text-surface" />
-                      </motion.div>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
+                <div className="space-y-3 mb-5">
+                  <AnimatePresence>
+                    {items.map(item => (
+                      <div key={item.product.id} className="flex items-center gap-3">
+                        <div
+                          className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"
+                          style={{ backgroundColor: item.product.color + '40' }}
+                        >
+                          <img
+                            src={item.product.image}
+                            alt={item.product.name}
+                            width={40}
+                            height={40}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-sans text-[12.5px] font-[500] text-text-primary truncate">{item.product.name}</p>
+                          <p className="font-sans text-[11px] text-text-secondary tabular-nums">× {item.quantity}</p>
+                        </div>
+                        <span className="font-sans text-[12.5px] font-[500] text-text-primary flex-shrink-0 tabular-nums">
+                          {formatPrice(item.numericPrice * item.quantity)}
+                        </span>
+                      </div>
+                    ))}
+                  </AnimatePresence>
+                </div>
 
-            {/* 3. Payment method */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.55, delay: 0.3 }}
-            >
-              <h2 className="font-brand text-[15px] font-bold tracking-[0.08em] text-text-primary mb-5 flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-text-primary text-surface flex items-center justify-center font-sans text-[10px] font-bold">3</span>
-                {t('checkout.paymentMethod')}
-              </h2>
-
-              <div className="grid grid-cols-2 gap-2.5">
-                {paymentMethods.map(({ id, label, icon: Icon }) => (
-                  <button
-                    key={id}
-                    onClick={() => setSelectedPayment(id)}
-                    className={`relative flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all duration-200 ${
-                      selectedPayment === id
-                        ? 'bg-text-primary text-surface border-text-primary'
-                        : 'bg-surface border-border/60 text-text-primary hover:border-text-primary/40 hover:bg-bg'
-                    }`}
-                  >
-                    <Icon size={17} className={selectedPayment === id ? 'text-surface/80' : 'text-text-secondary'} />
-                    <span className={`font-sans text-[13px] font-[500] ${selectedPayment === id ? 'text-surface' : 'text-text-primary'}`}>
-                      {label}
+                <div className="border-t border-border/40 pt-4 space-y-2.5 mb-5">
+                  <div className="flex justify-between text-text-secondary">
+                    <span className="font-sans text-[12.5px]">{t('checkout.subtotal')}</span>
+                    <span className="font-sans text-[12.5px] tabular-nums">{formatPrice(totalPrice)}</span>
+                  </div>
+                  <div className="flex justify-between text-text-secondary">
+                    <span className="font-sans text-[12.5px]">{t('checkout.delivery')}</span>
+                    <span className="font-sans text-[12.5px] tabular-nums">
+                      {deliveryCost === 0
+                        ? <span className="text-accent font-[500]">{t('checkout.free')}</span>
+                        : formatPrice(deliveryCost)
+                      }
                     </span>
-                    {selectedPayment === id && (
-                      <motion.div
-                        className="absolute top-2 right-2 w-4 h-4 rounded-full bg-surface/20 flex items-center justify-center"
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: 'spring', stiffness: 350, damping: 22 }}
-                      >
-                        <Check size={9} strokeWidth={2.5} className="text-surface" />
-                      </motion.div>
-                    )}
-                  </button>
-                ))}
+                  </div>
+                </div>
+
+                <div className="border-t border-border/40 pt-4 mb-5 flex justify-between items-baseline">
+                  <span className="font-sans text-[13.5px] font-[500] text-text-primary">{t('checkout.total')}</span>
+                  <span className="font-brand text-[26px] font-bold text-text-primary tabular-nums">{formatPrice(orderTotal)}</span>
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase py-4 rounded-xl hover:bg-accent transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                >
+                  {t('checkout.placeOrder')}
+                </button>
+
+                <div className="flex items-center justify-center gap-1.5 mt-3">
+                  <Lock size={10} className="text-text-secondary/50" aria-hidden="true" />
+                  <p className="font-sans text-[11px] text-text-secondary/50">SSL secured · 256-bit encryption</p>
+                </div>
               </div>
             </motion.div>
           </div>
-
-          {/* Right — order summary */}
-          <motion.div
-            className="w-full lg:w-[340px] lg:sticky lg:top-24"
-            initial={{ opacity: 0, y: 20 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.55, delay: 0.15 }}
-          >
-            <div className="bg-surface rounded-2xl border border-border/40 p-6">
-              <h2 className="font-brand text-[17px] font-bold tracking-[0.08em] text-text-primary mb-5">
-                {t('cart.orderSummary')}
-              </h2>
-
-              <div className="space-y-3 mb-5">
-                <AnimatePresence>
-                  {items.map(item => (
-                    <div key={item.product.id} className="flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"
-                        style={{ backgroundColor: item.product.color + '40' }}
-                      >
-                        <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-sans text-[12.5px] font-[500] text-text-primary truncate">{item.product.name}</p>
-                        <p className="font-sans text-[11px] text-text-secondary">× {item.quantity}</p>
-                      </div>
-                      <span className="font-sans text-[12.5px] font-[500] text-text-primary flex-shrink-0">
-                        {(item.numericPrice * item.quantity).toFixed(2)} zł
-                      </span>
-                    </div>
-                  ))}
-                </AnimatePresence>
-              </div>
-
-              <div className="border-t border-border/40 pt-4 space-y-2.5 mb-5">
-                <div className="flex justify-between text-text-secondary">
-                  <span className="font-sans text-[12.5px]">{t('checkout.subtotal')}</span>
-                  <span className="font-sans text-[12.5px]">{totalPrice.toFixed(2)} zł</span>
-                </div>
-                <div className="flex justify-between text-text-secondary">
-                  <span className="font-sans text-[12.5px]">{t('checkout.delivery')}</span>
-                  <span className="font-sans text-[12.5px]">
-                    {deliveryCost === 0
-                      ? <span className="text-accent font-[500]">{t('checkout.free')}</span>
-                      : `${deliveryCost.toFixed(2)} zł`
-                    }
-                  </span>
-                </div>
-              </div>
-
-              <div className="border-t border-border/40 pt-4 mb-5 flex justify-between items-baseline">
-                <span className="font-sans text-[13.5px] font-[500] text-text-primary">{t('checkout.total')}</span>
-                <span className="font-brand text-[26px] font-bold text-text-primary">{orderTotal.toFixed(2)} zł</span>
-              </div>
-
-              <button
-                onClick={handlePlaceOrder}
-                className="w-full bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase py-4 rounded-xl hover:bg-accent transition-colors duration-300"
-              >
-                {t('checkout.placeOrder')}
-              </button>
-
-              <div className="flex items-center justify-center gap-1.5 mt-3">
-                <Lock size={10} className="text-text-secondary/50" />
-                <p className="font-sans text-[11px] text-text-secondary/50">SSL secured · 256-bit encryption</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
+        </form>
       </div>
     </div>
   )

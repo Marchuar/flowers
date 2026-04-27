@@ -1,14 +1,17 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Trash2, Minus, Plus, ShoppingBag } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { useCart } from '../../context/CartContext'
+import { useCart } from '../../hooks/useCart'
+import { formatPrice } from '../../lib/utils'
 
 export default function CartDrawer() {
   const { items, isCartOpen, closeCart, removeItem, updateQty, totalItems, totalPrice } = useCart()
   const { t } = useTranslation()
+  const drawerRef = useRef<HTMLDivElement>(null)
 
+  // Body scroll lock
   useEffect(() => {
     if (!isCartOpen) return
     const scrollY = window.scrollY
@@ -23,8 +26,42 @@ export default function CartDrawer() {
     }
   }, [isCartOpen])
 
+  // Focus trap + Escape key + restore focus on close
+  useEffect(() => {
+    if (!isCartOpen) return
+    const previouslyFocused = document.activeElement as HTMLElement
+    const drawer = drawerRef.current
+    const firstFocusable = drawer?.querySelector<HTMLElement>(
+      'button:not([disabled]), a[href], input, [tabindex]:not([tabindex="-1"])'
+    )
+    firstFocusable?.focus()
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') { closeCart(); return }
+      if (e.key !== 'Tab') return
+      const focusable = Array.from(
+        drawer?.querySelectorAll<HTMLElement>(
+          'button:not([disabled]), a[href], input, [tabindex]:not([tabindex="-1"])'
+        ) ?? []
+      )
+      const first = focusable[0]
+      const last  = focusable[focusable.length - 1]
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last?.focus() }
+      } else {
+        if (document.activeElement === last)  { e.preventDefault(); first?.focus() }
+      }
+    }
+
+    document.addEventListener('keydown', onKeyDown)
+    return () => {
+      document.removeEventListener('keydown', onKeyDown)
+      previouslyFocused?.focus?.()
+    }
+  }, [isCartOpen, closeCart])
+
   const deliveryCost = totalPrice >= 80 ? 0 : 9
-  const orderTotal = totalPrice + deliveryCost
+  const orderTotal   = totalPrice + deliveryCost
 
   return (
     <AnimatePresence>
@@ -38,10 +75,15 @@ export default function CartDrawer() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             onClick={closeCart}
+            aria-hidden="true"
           />
 
           {/* Drawer */}
           <motion.div
+            ref={drawerRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t('cart.title')}
             className="fixed top-0 right-0 bottom-0 z-[10003] w-full max-w-[420px] bg-surface flex flex-col shadow-2xl"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
@@ -51,17 +93,17 @@ export default function CartDrawer() {
             {/* Header */}
             <div className="flex items-center justify-between px-6 py-5 border-b border-border/50">
               <div className="flex items-center gap-2.5">
-                <ShoppingBag size={17} className="text-text-primary" />
+                <ShoppingBag size={17} className="text-text-primary" aria-hidden="true" />
                 <span className="font-brand text-[18px] font-bold tracking-[0.1em] text-text-primary">{t('cart.title')}</span>
                 {totalItems > 0 && (
-                  <span className="bg-text-primary text-surface font-sans text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                  <span className="bg-text-primary text-surface font-sans text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center tabular-nums">
                     {totalItems}
                   </span>
                 )}
               </div>
               <button
                 onClick={closeCart}
-                className="w-8 h-8 rounded-full hover:bg-bg flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors"
+                className="w-8 h-8 rounded-full hover:bg-bg flex items-center justify-center text-text-secondary hover:text-text-primary transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                 aria-label={t('cart.closeCart')}
               >
                 <X size={16} />
@@ -69,11 +111,11 @@ export default function CartDrawer() {
             </div>
 
             {/* Items */}
-            <div className="flex-1 overflow-y-auto px-6 py-4">
+            <div className="flex-1 overflow-y-auto px-6 py-4" style={{ overscrollBehavior: 'contain' }}>
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full gap-4 text-center">
                   <div className="w-16 h-16 rounded-full bg-bg flex items-center justify-center">
-                    <ShoppingBag size={22} className="text-text-secondary/50" />
+                    <ShoppingBag size={22} className="text-text-secondary/50" aria-hidden="true" />
                   </div>
                   <div>
                     <p className="font-editorial text-[22px] font-light text-text-primary mb-1" style={{ fontVariationSettings: "'opsz' 36" }}>{t('cart.empty')}</p>
@@ -82,7 +124,7 @@ export default function CartDrawer() {
                   <Link
                     to="/shop"
                     onClick={closeCart}
-                    className="mt-2 font-sans text-[11.5px] font-[500] tracking-[0.08em] uppercase text-surface bg-text-primary px-5 py-2.5 rounded-full hover:bg-accent transition-colors"
+                    className="mt-2 font-sans text-[11.5px] font-[500] tracking-[0.08em] uppercase text-surface bg-text-primary px-5 py-2.5 rounded-full hover:bg-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                   >
                     {t('cart.startBrowsing')}
                   </Link>
@@ -108,6 +150,8 @@ export default function CartDrawer() {
                           <img
                             src={item.product.image}
                             alt={item.product.name}
+                            width={72}
+                            height={88}
                             className="w-full h-full object-cover"
                           />
                         </div>
@@ -124,15 +168,15 @@ export default function CartDrawer() {
                             <div className="flex items-center gap-1.5 bg-surface rounded-full px-1.5 py-1 border border-border/60">
                               <button
                                 onClick={() => updateQty(item.product.id, item.quantity - 1)}
-                                className="w-5 h-5 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg transition-colors"
+                                className="w-5 h-5 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                                 aria-label={t('cart.decrease')}
                               >
                                 <Minus size={10} />
                               </button>
-                              <span className="font-sans text-[12px] font-[500] text-text-primary w-5 text-center">{item.quantity}</span>
+                              <span className="font-sans text-[12px] font-[500] text-text-primary w-5 text-center tabular-nums">{item.quantity}</span>
                               <button
                                 onClick={() => updateQty(item.product.id, item.quantity + 1)}
-                                className="w-5 h-5 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg transition-colors"
+                                className="w-5 h-5 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                                 aria-label={t('cart.increase')}
                               >
                                 <Plus size={10} />
@@ -140,12 +184,12 @@ export default function CartDrawer() {
                             </div>
 
                             <div className="flex items-center gap-2">
-                              <span className="font-sans text-[13px] font-[500] text-text-primary">
-                                {(item.numericPrice * item.quantity).toFixed(2)} zł
+                              <span className="font-sans text-[13px] font-[500] text-text-primary tabular-nums">
+                                {formatPrice(item.numericPrice * item.quantity)}
                               </span>
                               <button
                                 onClick={() => removeItem(item.product.id)}
-                                className="w-6 h-6 flex items-center justify-center text-text-secondary/40 hover:text-accent-warm transition-colors"
+                                className="w-6 h-6 flex items-center justify-center text-text-secondary/40 hover:text-accent-warm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-warm focus-visible:ring-offset-1 rounded"
                                 aria-label={t('cart.remove')}
                               >
                                 <Trash2 size={12} />
@@ -166,11 +210,11 @@ export default function CartDrawer() {
                 {/* Delivery note */}
                 <div className="flex justify-between items-center mb-2 text-text-secondary">
                   <span className="font-sans text-[12.5px]">{t('cart.delivery')}</span>
-                  <span className="font-sans text-[12.5px]">
+                  <span className="font-sans text-[12.5px] tabular-nums">
                     {deliveryCost === 0 ? (
                       <span className="text-accent font-[500]">{t('cart.free')}</span>
                     ) : (
-                      `${deliveryCost.toFixed(2)} zł`
+                      formatPrice(deliveryCost)
                     )}
                   </span>
                 </div>
@@ -183,14 +227,14 @@ export default function CartDrawer() {
                 {/* Total */}
                 <div className="flex justify-between items-baseline mb-4">
                   <span className="font-sans text-[13px] font-[500] text-text-primary">{t('cart.total')}</span>
-                  <span className="font-brand text-[22px] font-bold text-text-primary">{orderTotal.toFixed(2)} zł</span>
+                  <span className="font-brand text-[22px] font-bold text-text-primary tabular-nums">{formatPrice(orderTotal)}</span>
                 </div>
 
                 {/* CTA */}
                 <Link
                   to="/checkout"
                   onClick={closeCart}
-                  className="block w-full text-center bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.08em] uppercase py-4 rounded-2xl hover:bg-accent transition-colors duration-300"
+                  className="block w-full text-center bg-text-primary text-surface font-sans text-[11.5px] font-[500] tracking-[0.08em] uppercase py-4 rounded-2xl hover:bg-accent transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
                 >
                   {t('cart.checkout')}
                 </Link>
@@ -198,7 +242,7 @@ export default function CartDrawer() {
                 <Link
                   to="/cart"
                   onClick={closeCart}
-                  className="block w-full text-center mt-2 font-sans text-[11.5px] text-text-secondary hover:text-text-primary transition-colors py-2"
+                  className="block w-full text-center mt-2 font-sans text-[11.5px] text-text-secondary hover:text-text-primary transition-colors py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
                 >
                   {t('cart.viewCart')}
                 </Link>

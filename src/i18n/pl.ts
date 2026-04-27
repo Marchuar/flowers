@@ -73,6 +73,13 @@ const pl: Translations = {
     ratingLabel: 'Średnia ocena',
     reviews: '500+',
     reviewsLabel: 'Zadowolonych klientów',
+    items: [
+      { quote: 'Nareszcie — kwiaty, za które nie trzeba płacić fortuny. Zamawiam co tydzień, tylko na kuchenny stół.', name: 'Marta K.', location: 'Warszawa, Mokotów', stars: 5 },
+      { quote: 'Tulipany dotarły już następnego dnia. Tak świeże, że przetrwały 12 dni. Niewiarygodne.', name: 'Zofia W.', location: 'Warszawa, Żoliborz', stars: 5 },
+      { quote: 'Bez zbędnych ozdób, bez plastiku — tylko piękne łodygi zawinięte w papier kraftowy. Tak właśnie powinno się sprzedawać kwiaty.', name: 'Anna P.', location: 'Warszawa, Praga', stars: 5 },
+      { quote: 'Kiedyś wydawałam 80 zł na bukiet. Teraz kupuję lepsze kwiaty za 20 zł. To nie ma sensu, ale je kocham.', name: 'Kasia M.', location: 'Warszawa, Wola', stars: 5 },
+      { quote: 'Uwielbiam, że dołączają kartę pielęgnacji. Moje róże przetrwały dwa tygodnie zgodnie z instrukcjami.', name: 'Julia R.', location: 'Warszawa, Śródmieście', stars: 5 },
+    ],
   },
   email: {
     eyebrow: 'Świeże łodygi, co tydzień',

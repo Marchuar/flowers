@@ -71,6 +71,13 @@ const en = {
     ratingLabel: 'Average rating',
     reviews: '500+',
     reviewsLabel: 'Happy customers',
+    items: [
+      { quote: "Finally — flowers that don't cost a fortune. I order every week now, just for my kitchen table.", name: 'Marta K.', location: 'Warsaw, Mokotów', stars: 5 },
+      { quote: 'The tulips arrived the very next day. So fresh they lasted 12 days. Incredible.', name: 'Zofia W.', location: 'Warsaw, Żoliborz', stars: 5 },
+      { quote: 'No fuss, no plastic, just gorgeous stems wrapped in kraft paper. This is how flowers should be sold.', name: 'Anna P.', location: 'Warsaw, Praga', stars: 5 },
+      { quote: 'I used to spend 80 zł on a bouquet. Now I buy better flowers for 20 zł. The math makes no sense but I love it.', name: 'Kasia M.', location: 'Warsaw, Wola', stars: 5 },
+      { quote: 'Love that they include a care card. My roses lasted two weeks following the instructions.', name: 'Julia R.', location: 'Warsaw, Śródmieście', stars: 5 },
+    ],
   },
   email: {
     eyebrow: 'Fresh stems, weekly',

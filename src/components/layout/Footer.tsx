@@ -1,17 +1,15 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-const flowers = [
-  { name: 'Roses', href: '/shop' },
-  { name: 'Tulips', href: '/shop' },
-  { name: 'Peonies', href: '/shop' },
-  { name: 'Chrysanthemum', href: '/shop' },
-  { name: 'Eustoma', href: '/shop' },
-  { name: 'Wildflowers', href: '/shop' },
-]
+const flowerSlugs = ['roses', 'tulips', 'peonies', 'chrysanthemum', 'eustoma', 'wildflowers']
 
 export default function Footer() {
   const { t } = useTranslation()
+
+  const flowers = flowerSlugs.map(slug => ({
+    name: t(`products.${slug}.name`),
+    href: '/shop',
+  }))
 
   const info = [
     { name: t('footer.aboutUs'),     href: '/about' },
@@ -43,7 +41,7 @@ export default function Footer() {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="group w-10 h-10 rounded-full border border-ink-text/[0.15] flex items-center justify-center hover:bg-ink-text/10 hover:border-ink-text/30 transition-all duration-300"
+              className="group w-10 h-10 rounded-full border border-ink-text/[0.15] flex items-center justify-center hover:bg-ink-text/10 hover:border-ink-text/30 transition-colors duration-300"
               aria-label="Instagram"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-ink-text/60 group-hover:text-ink-text transition-colors duration-300">

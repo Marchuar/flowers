@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, Droplets, Scissors, Sun, Leaf, Snowflake, AlertTriangle, ShoppingBag, Minus, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { type Product, type CareIcon } from '../../constants/products'
-import { useCart } from '../../context/CartContext'
+import { useCart } from '../../hooks/useCart'
 import { useToast } from './Toast'
 
 const iconMap: Record<CareIcon, React.ElementType> = {
@@ -35,8 +35,8 @@ export default function ProductModal({ product, onClose }: Props) {
   const [direction, setDirection] = useState(0)
   const [prevProductId, setPrevProductId] = useState(product?.id)
   const touchStartX = useRef(0)
+  const panelRef = useRef<HTMLDivElement>(null)
 
-  // Reset gallery index when product changes (during render, not in effect)
   if (product?.id !== prevProductId) {
     setPrevProductId(product?.id)
     setImgIndex(0)
@@ -59,9 +59,31 @@ export default function ProductModal({ product, onClose }: Props) {
     setImgIndex(i => (i - 1 + allImages.length) % allImages.length)
   }, [allImages.length])
 
+  // Prevent overscroll on iOS Safari — useLayoutEffect so listener is attached
+  // synchronously after DOM commit, before any touch events can fire.
+  // panelRef is on a plain <div> (not motion.div) so the DOM ref is guaranteed.
+  useLayoutEffect(() => {
+    const el = panelRef.current
+    if (!el || !product) return
+    let startY = 0
+    const onStart = (e: TouchEvent) => { startY = e.touches[0].clientY }
+    const onMove = (e: TouchEvent) => {
+      const atTop = el.scrollTop <= 0
+      const atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 1
+      const goingDown = e.touches[0].clientY > startY
+      const goingUp = e.touches[0].clientY < startY
+      if ((atTop && goingDown) || (atBottom && goingUp)) e.preventDefault()
+    }
+    el.addEventListener('touchstart', onStart, { passive: true })
+    el.addEventListener('touchmove', onMove, { passive: false })
+    return () => {
+      el.removeEventListener('touchstart', onStart)
+      el.removeEventListener('touchmove', onMove)
+    }
+  }, [product])
+
   useEffect(() => {
     if (!product) return
-    // iOS Safari ignores overflow:hidden on body — use position:fixed trick instead
     const scrollY = window.scrollY
     document.body.style.position = 'fixed'
     document.body.style.top = `-${scrollY}px`
@@ -122,7 +144,7 @@ export default function ProductModal({ product, onClose }: Props) {
       {product && (
         <motion.div
           key="modal-root"
-          className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8 overscroll-none"
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 md:p-8"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -134,14 +156,22 @@ export default function ProductModal({ product, onClose }: Props) {
             onClick={onClose}
           />
 
-          {/* Modal panel */}
+          {/* Modal panel — motion.div only for animation, plain div for scroll+ref */}
           <motion.div
-            className="relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-bg rounded-3xl shadow-2xl"
+            className="relative w-full max-w-3xl"
             initial={{ scale: 0.96, y: 16 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.96, y: 16 }}
             transition={{ type: 'spring', stiffness: 320, damping: 32 }}
             onClick={e => e.stopPropagation()}
+          >
+          <div
+            ref={panelRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label={t(`products.${product.slug}.name`)}
+            className="max-h-[92vh] overflow-y-auto overscroll-none bg-bg rounded-3xl shadow-2xl"
+            style={{ overscrollBehavior: 'none' }}
           >
             {/* Close */}
             <button
@@ -153,13 +183,12 @@ export default function ProductModal({ product, onClose }: Props) {
             </button>
 
             <div className="flex flex-col md:flex-row">
-              {/* ── Image gallery ── */}
+              {/* Image gallery */}
               <div
                 className="relative h-72 md:h-auto md:w-[44%] flex-shrink-0 overflow-hidden rounded-t-3xl md:rounded-l-3xl md:rounded-tr-none select-none"
                 onTouchStart={hasMultiple ? onTouchStart : undefined}
                 onTouchEnd={hasMultiple ? onTouchEnd : undefined}
               >
-                {/* Animated image */}
                 <AnimatePresence mode="wait" custom={direction} initial={false}>
                   <motion.img
                     key={imgIndex}
@@ -176,20 +205,17 @@ export default function ProductModal({ product, onClose }: Props) {
                   />
                 </AnimatePresence>
 
-                {/* Color tint overlay */}
                 <div
                   className="absolute inset-0 opacity-15 pointer-events-none z-[1]"
                   style={{ backgroundColor: product.color }}
                 />
 
-                {/* Tag */}
                 {product.tag && (
                   <div className="absolute top-4 left-4 z-10 bg-surface/85 backdrop-blur-sm font-sans text-[9.5px] font-[500] tracking-[0.12em] uppercase text-text-secondary px-2.5 py-1 rounded-full">
                     {t(`products.tag${product.tag}`)}
                   </div>
                 )}
 
-                {/* Arrow buttons — desktop */}
                 {hasMultiple && (
                   <>
                     <button
@@ -209,17 +235,14 @@ export default function ProductModal({ product, onClose }: Props) {
                   </>
                 )}
 
-                {/* Dot indicators */}
                 {hasMultiple && (
                   <div className="absolute bottom-3 left-0 right-0 flex justify-center gap-1.5 z-10">
                     {allImages.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => goTo(i)}
-                        className={`h-1.5 rounded-full transition-all duration-300 ${
-                          i === imgIndex
-                            ? 'w-5 bg-surface'
-                            : 'w-1.5 bg-surface/50 hover:bg-surface/75'
+                        className={`h-1.5 rounded-full transition-[width,background-color] duration-300 ${
+                          i === imgIndex ? 'w-5 bg-surface' : 'w-1.5 bg-surface/50 hover:bg-surface/75'
                         }`}
                         aria-label={`${t('modal.image')} ${i + 1}`}
                       />
@@ -228,12 +251,13 @@ export default function ProductModal({ product, onClose }: Props) {
                 )}
               </div>
 
-              {/* ── Content ── */}
+              {/* Content */}
               <div className="flex flex-col flex-1 gap-5 p-7 md:p-8">
-                {/* Product header */}
                 <div>
                   <div className="eyebrow text-text-secondary/50 text-[9.5px] mb-0.5">{product.latinName}</div>
-                  <h2 className="font-display text-[38px] md:text-[44px] font-light text-text-primary leading-[0.95]">{t(`products.${product.slug}.name`)}</h2>
+                  <h2 className="font-display text-[38px] md:text-[44px] font-light text-text-primary leading-[0.95]">
+                    {t(`products.${product.slug}.name`)}
+                  </h2>
                   <div className="font-sans text-[13px] font-[500] text-text-primary mt-2">
                     {product.price}{' '}
                     <span className="font-normal text-text-secondary text-[11px]">{t('modal.perStem')}</span>
@@ -245,7 +269,6 @@ export default function ProductModal({ product, onClose }: Props) {
                   )}
                 </div>
 
-                {/* Care instructions */}
                 {product.careInstructions && product.careInstructions.length > 0 && (
                   <div>
                     <div className="w-full h-px bg-border mb-5" />
@@ -267,8 +290,12 @@ export default function ProductModal({ product, onClose }: Props) {
                               <Icon size={15} strokeWidth={1.8} className="text-text-primary" />
                             </div>
                             <div>
-                              <div className="font-sans text-[13px] font-[600] text-text-primary leading-tight">{t(`products.${product.slug}.care${i + 1}Title`)}</div>
-                              <div className="font-sans text-[12px] text-text-secondary leading-relaxed mt-0.5">{t(`products.${product.slug}.care${i + 1}Body`)}</div>
+                              <div className="font-sans text-[13px] font-[600] text-text-primary leading-tight">
+                                {t(`products.${product.slug}.care${i + 1}Title`)}
+                              </div>
+                              <div className="font-sans text-[12px] text-text-secondary leading-relaxed mt-0.5">
+                                {t(`products.${product.slug}.care${i + 1}Body`)}
+                              </div>
                             </div>
                           </div>
                         )
@@ -277,7 +304,6 @@ export default function ProductModal({ product, onClose }: Props) {
                   </div>
                 )}
 
-                {/* CTA */}
                 <div className="mt-auto pt-1">
                   <AnimatePresence mode="wait" initial={false}>
                     {qty === 0 ? (
@@ -310,7 +336,9 @@ export default function ProductModal({ product, onClose }: Props) {
                         >
                           <Minus size={13} strokeWidth={2.5} />
                         </button>
-                        <span className="font-sans text-[14px] font-[600] text-text-primary tabular-nums">{t('modal.inBag', { qty })}</span>
+                        <span className="font-sans text-[14px] font-[600] text-text-primary tabular-nums">
+                          {t('modal.inBag', { qty })}
+                        </span>
                         <button
                           onClick={handleIncrement}
                           className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-black/10 transition-colors text-text-primary"
@@ -324,6 +352,7 @@ export default function ProductModal({ product, onClose }: Props) {
                 </div>
               </div>
             </div>
+          </div>
           </motion.div>
         </motion.div>
       )}

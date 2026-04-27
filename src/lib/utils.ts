@@ -11,3 +11,8 @@ export function parsePrice(priceStr: string): number {
   if (!match) return 0
   return parseFloat(match[0].replace(',', '.'))
 }
+
+/** Formats a number as Polish currency: 22.5 → "22,50 zł" */
+export function formatPrice(value: number): string {
+  return new Intl.NumberFormat('pl-PL', { style: 'currency', currency: 'PLN' }).format(value)
+}

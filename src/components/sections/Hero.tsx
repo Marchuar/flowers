@@ -285,7 +285,7 @@ export default function Hero() {
                 </Link>
                 <Link
                   to="/how-it-works"
-                  className="inline-flex items-center gap-2 border border-border text-text-secondary font-sans text-[11px] md:text-[12px] font-[450] px-5 md:px-6 py-3 md:py-3.5 rounded-full hover:border-text-primary hover:text-text-primary transition-all duration-300"
+                  className="inline-flex items-center gap-2 border border-border text-text-secondary font-sans text-[11px] md:text-[12px] font-[450] px-5 md:px-6 py-3 md:py-3.5 rounded-full hover:border-text-primary hover:text-text-primary transition-colors duration-300"
                 >
                   {t('hero.howItWorks')}
                 </Link>

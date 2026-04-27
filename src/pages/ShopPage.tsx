@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { SlidersHorizontal, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { products, type Product } from '../constants/products'
@@ -9,8 +9,10 @@ import ProductModal from '../components/ui/ProductModal'
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc'
 
-const allTypes = [...new Set(products.map(p => p.name))]
-const allColors = [...new Set(products.map(p => ({ name: p.name, color: p.color })))]
+const allTypes = [...new Set(products.map(p => p.slug))]
+const allColors = products
+  .filter((p, i, arr) => arr.findIndex(x => x.color === p.color) === i)
+  .map(p => ({ slug: p.slug, color: p.color }))
 
 interface FilterSidebarProps {
   selectedTypes: string[]
@@ -26,27 +28,27 @@ function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps)
       <div>
         <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.flowerType')}</div>
         <div className="flex flex-col gap-2.5">
-          {allTypes.map(name => (
-            <label key={name} className="flex items-center gap-2.5 cursor-pointer group">
-              <div
-                onClick={() => onToggle(name)}
-                className={`w-4 h-4 rounded border flex items-center justify-center transition-all cursor-pointer flex-shrink-0 ${
-                  selectedTypes.includes(name)
-                    ? 'bg-text-primary border-text-primary'
-                    : 'border-border/70 group-hover:border-text-primary/50'
-                }`}
+          {allTypes.map(slug => (
+            <label key={slug} className="flex items-center gap-2.5 cursor-pointer group">
+              <input
+                type="checkbox"
+                className="sr-only peer"
+                checked={selectedTypes.includes(slug)}
+                onChange={() => onToggle(slug)}
+              />
+              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors flex-shrink-0
+                peer-checked:bg-text-primary peer-checked:border-text-primary
+                border-border/70 group-hover:border-text-primary/50
+                peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-1`}
               >
-                {selectedTypes.includes(name) && (
+                {selectedTypes.includes(slug) && (
                   <svg className="w-2.5 h-2.5 text-surface" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M2 6l3 3 5-5" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 )}
               </div>
-              <span
-                onClick={() => onToggle(name)}
-                className="font-sans text-[13px] text-text-secondary group-hover:text-text-primary transition-colors"
-              >
-                {name}
+              <span className="font-sans text-[13px] text-text-secondary group-hover:text-text-primary transition-colors">
+                {t(`products.${slug}.name`)}
               </span>
             </label>
           ))}
@@ -57,16 +59,18 @@ function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps)
       <div>
         <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.colour')}</div>
         <div className="flex flex-wrap gap-2.5">
-          {allColors.map(({ name, color }) => (
+          {allColors.map(({ slug, color }) => (
             <button
-              key={name}
-              onClick={() => onToggle(name)}
-              title={name}
-              className={`w-7 h-7 rounded-full border-2 transition-all ${
-                selectedTypes.includes(name) ? 'border-text-primary scale-110' : 'border-transparent hover:border-text-primary/40'
+              key={slug}
+              type="button"
+              onClick={() => onToggle(slug)}
+              title={t(`products.${slug}.name`)}
+              className={`w-7 h-7 rounded-full border-2 transition-[border-color,transform] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                selectedTypes.includes(slug) ? 'border-text-primary scale-110' : 'border-transparent hover:border-text-primary/40'
               }`}
               style={{ backgroundColor: color }}
-              aria-label={name}
+              aria-label={t(`products.${slug}.name`)}
+              aria-pressed={selectedTypes.includes(slug)}
             />
           ))}
         </div>
@@ -84,8 +88,9 @@ function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps)
       {/* Clear filters */}
       {selectedTypes.length > 0 && (
         <button
+          type="button"
           onClick={onClear}
-          className="flex items-center gap-1.5 font-sans text-[12px] text-text-secondary hover:text-accent-warm transition-colors"
+          className="flex items-center gap-1.5 font-sans text-[12px] text-text-secondary hover:text-accent-warm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
         >
           <X size={13} />
           {t('shop.clearFilters')}
@@ -115,7 +120,7 @@ export default function ShopPage() {
     let result = [...products]
 
     if (selectedTypes.length > 0) {
-      result = result.filter(p => selectedTypes.includes(p.name))
+      result = result.filter(p => selectedTypes.includes(p.slug))
     }
 
     switch (sortBy) {
@@ -126,12 +131,14 @@ export default function ShopPage() {
         result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price))
         break
       case 'name-asc':
-        result.sort((a, b) => a.name.localeCompare(b.name))
+        result.sort((a, b) =>
+          t(`products.${a.slug}.name`).localeCompare(t(`products.${b.slug}.name`))
+        )
         break
     }
 
     return result
-  }, [selectedTypes, sortBy])
+  }, [selectedTypes, sortBy, t])
 
   return (
     <>
@@ -141,7 +148,7 @@ export default function ShopPage() {
       <div className="relative px-6 md:px-10 pt-10 pb-10 md:pb-14 overflow-hidden">
 
         {/* Flowers — desktop, behind stats */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block" aria-hidden>
+        <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block" aria-hidden="true">
           <motion.div
             className="absolute w-56 -top-8 right-16 opacity-55"
             initial={{ scale: 0.7, opacity: 0, rotate: -12 }}
@@ -227,7 +234,7 @@ export default function ShopPage() {
               transition={{ delay: 0.3 }}
             >
               <div className="text-right">
-                <div className="font-display text-[42px] font-light text-text-primary leading-none">6</div>
+                <div className="font-display text-[42px] font-light text-text-primary leading-none tabular-nums">6</div>
                 <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.varieties')}</div>
               </div>
               <div className="w-px h-12 bg-border" />
@@ -237,7 +244,7 @@ export default function ShopPage() {
               </div>
               <div className="w-px h-12 bg-border" />
               <div className="text-right">
-                <div className="font-display text-[42px] font-light text-text-primary leading-none">2.20</div>
+                <div className="font-display text-[42px] font-light text-text-primary leading-none tabular-nums">2.20</div>
                 <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.fromLabel')}</div>
               </div>
             </motion.div>
@@ -267,8 +274,9 @@ export default function ShopPage() {
           <div className="flex items-center gap-3">
             {/* Mobile filter button */}
             <button
+              type="button"
               onClick={() => setMobileFiltersOpen(true)}
-              className="md:hidden flex items-center gap-1.5 font-sans text-[12px] text-text-secondary border border-border/60 rounded-full px-3 py-1.5 hover:bg-bg-subtle transition-colors"
+              className="md:hidden flex items-center gap-1.5 font-sans text-[12px] text-text-secondary border border-border/60 rounded-full px-3 py-1.5 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
             >
               <SlidersHorizontal size={12} />
               {t('shop.filters')} {selectedTypes.length > 0 && `(${selectedTypes.length})`}
@@ -278,7 +286,7 @@ export default function ShopPage() {
             <select
               value={sortBy}
               onChange={e => setSortBy(e.target.value as SortOption)}
-              className="bg-transparent border border-border/60 rounded-full font-sans text-[12px] text-text-secondary px-3 py-1.5 focus:outline-none focus:border-text-primary cursor-pointer hover:bg-bg-subtle transition-colors"
+              className="bg-transparent border border-border/60 rounded-full font-sans text-[12px] text-text-secondary px-3 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 cursor-pointer hover:bg-bg-subtle transition-colors"
             >
               <option value="default">{t('shop.sortDefault')}</option>
               <option value="price-asc">{t('shop.sortPriceAsc')}</option>
@@ -310,8 +318,9 @@ export default function ShopPage() {
                 </p>
                 <p className="font-sans text-[13px] text-text-secondary">{t('shop.noResultsDesc')}</p>
                 <button
+                  type="button"
                   onClick={() => setSelectedTypes([])}
-                  className="mt-2 font-sans text-[12px] text-text-secondary border border-border rounded-full px-4 py-2 hover:bg-bg-subtle transition-colors"
+                  className="mt-2 font-sans text-[12px] text-text-secondary border border-border rounded-full px-4 py-2 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                 >
                   {t('shop.clearAllFilters')}
                 </button>
@@ -329,37 +338,53 @@ export default function ShopPage() {
       </div>
 
       {/* Mobile filters overlay */}
-      {mobileFiltersOpen && (
-        <motion.div
-          className="fixed inset-0 z-50 md:hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <div className="absolute inset-0 bg-ink/40" onClick={() => setMobileFiltersOpen(false)} />
+      <AnimatePresence>
+        {mobileFiltersOpen && (
           <motion.div
-            className="absolute bottom-0 left-0 right-0 bg-surface rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto"
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed inset-0 z-50 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div className="flex items-center justify-between mb-6">
-              <span className="font-brand text-[16px] font-bold tracking-[0.08em] text-text-primary">{t('shop.filters')}</span>
-              <button onClick={() => setMobileFiltersOpen(false)} className="text-text-secondary hover:text-text-primary">
-                <X size={18} />
-              </button>
-            </div>
-            <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
-            <button
+            <div
+              className="absolute inset-0 bg-ink/40"
               onClick={() => setMobileFiltersOpen(false)}
-              className="mt-6 w-full bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.08em] uppercase py-3.5 rounded-xl"
+              aria-hidden="true"
+            />
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label={t('shop.filters')}
+              className="absolute bottom-0 left-0 right-0 bg-surface rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto"
+              style={{ overscrollBehavior: 'contain' }}
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
-              {t('shop.showResults', { count: filtered.length })}
-            </button>
+              <div className="flex items-center justify-between mb-6">
+                <span className="font-brand text-[16px] font-bold tracking-[0.08em] text-text-primary">{t('shop.filters')}</span>
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(false)}
+                  className="text-text-secondary hover:text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
+                  aria-label="Close filters"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="mt-6 w-full bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.08em] uppercase py-3.5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
+                {t('shop.showResults', { count: filtered.length })}
+              </button>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
     <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
     </>
