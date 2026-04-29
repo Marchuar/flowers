@@ -1,0 +1,36 @@
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
+    },
+    "@magicuidesign/mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@magicuidesign/mcp@latest"
+      ]
+    },
+    "graphify-semantic": {
+      "command": "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+      "args": [
+        "-m",
+        "graphify.serve",
+        "/Users/arseniy/WebstormProjects/Flowers/graphify-out/graph.json"
+      ],
+      "type": "stdio"
+    },
+    "graphify-code": {
+      "command": "/Library/Frameworks/Python.framework/Versions/3.14/bin/python3.14",
+      "args": [
+        "-m",
+        "graphify.serve",
+        "/Users/arseniy/WebstormProjects/Flowers/src/graphify-out/graph.json"
+      ],
+      "type": "stdio"
+    }
+  }
+}

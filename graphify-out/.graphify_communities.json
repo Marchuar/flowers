@@ -1,0 +1,200 @@
+{
+  "0": [
+    "app_tsx",
+    "cart_drawer",
+    "emailcapture_section",
+    "framer_motion_lib",
+    "gsap_lib",
+    "hero_section",
+    "homepage_component",
+    "howitworks_section",
+    "howitworkspage_component",
+    "lucide_react_lib",
+    "main_tsx",
+    "postcss_config",
+    "pricing_section",
+    "products_data",
+    "products_section",
+    "react_router_lib",
+    "tailwind_animations",
+    "tailwind_color_palette",
+    "tailwind_config",
+    "tailwind_fonts",
+    "ticker_section",
+    "toast_ui",
+    "use_cart_hook",
+    "use_toast_hook",
+    "vite_config"
+  ],
+  "1": [
+    "cart_badge_animation",
+    "cartcontext_hook",
+    "cartpage_component",
+    "checkoutpage_component",
+    "delivery_cost_9",
+    "delivery_free_threshold",
+    "delivery_timeslots",
+    "floatinginput_component",
+    "footer_component",
+    "footer_watermark",
+    "lucide_react_dep",
+    "mobile_menu_lock",
+    "nav_links",
+    "navigation_component",
+    "order_number_format",
+    "payment_methods",
+    "react_router_dep",
+    "scroll_behavior_nav"
+  ],
+  "2": [
+    "about_stats",
+    "arch_clamp_responsive",
+    "arch_pure_frontend",
+    "arch_reduced_motion",
+    "arch_tailwind_only",
+    "arch_three_animation_layers",
+    "arch_useinview_once",
+    "claude_md_doc",
+    "color_palette_semantic",
+    "favicon_lightning_bolt",
+    "favicon_svg",
+    "font_pairing",
+    "framer_motion_dep",
+    "readme_doc",
+    "stem_brand",
+    "whatsapp_external",
+    "whatsappbutton_component"
+  ],
+  "3": [
+    "clsx_dep",
+    "cn_function",
+    "parseprice_function",
+    "productcard_component",
+    "products_constants",
+    "shop_filter_sort",
+    "shoppage_component",
+    "tailwind_merge_dep",
+    "testimonials_data",
+    "testimonials_section",
+    "utils_lib"
+  ],
+  "4": [
+    "cartcontext_cartprovider",
+    "cartcontext_cartreducer",
+    "src_context_cartcontext_tsx",
+    "src_lib_utils_ts",
+    "utils_cn",
+    "utils_parseprice"
+  ],
+  "5": [
+    "cart_context",
+    "cart_item_interface",
+    "cart_reducer",
+    "parse_price_util",
+    "product_interface"
+  ],
+  "6": [
+    "src_components_sections_ticker_tsx",
+    "ticker_ticker",
+    "ticker_tickeritem"
+  ],
+  "7": [
+    "src_app_tsx",
+    "src_main_tsx"
+  ],
+  "8": [
+    "src_components_ui_toast_tsx",
+    "toast_dismiss"
+  ],
+  "9": [
+    "products_handleaddtocart",
+    "src_components_sections_products_tsx"
+  ],
+  "10": [
+    "src_components_layout_whatsappbutton_tsx",
+    "whatsappbutton_whatsappbutton"
+  ],
+  "11": [
+    "footer_footer",
+    "src_components_layout_footer_tsx"
+  ],
+  "12": [
+    "checkoutpage_handleplaceorder",
+    "src_pages_checkoutpage_tsx"
+  ],
+  "13": [
+    "shoppage_toggletype",
+    "src_pages_shoppage_tsx"
+  ],
+  "14": [
+    "aboutpage_aboutpage",
+    "src_pages_aboutpage_tsx"
+  ],
+  "15": [
+    "howitworkspage_howitworkspage",
+    "src_pages_howitworkspage_tsx"
+  ],
+  "16": [
+    "homepage_homepage",
+    "src_pages_homepage_tsx"
+  ],
+  "17": [
+    "icons_svg",
+    "icons_svg_symbols"
+  ],
+  "18": [
+    "hero_png",
+    "hero_png_isometric"
+  ],
+  "19": [
+    "tailwind_config_js"
+  ],
+  "20": [
+    "eslint_config_js"
+  ],
+  "21": [
+    "vite_config_ts"
+  ],
+  "22": [
+    "postcss_config_js"
+  ],
+  "23": [
+    "src_constants_products_ts"
+  ],
+  "24": [
+    "src_components_ui_cartdrawer_tsx"
+  ],
+  "25": [
+    "src_components_ui_floatinginput_tsx"
+  ],
+  "26": [
+    "src_components_sections_hero_tsx"
+  ],
+  "27": [
+    "src_components_sections_pricing_tsx"
+  ],
+  "28": [
+    "src_components_sections_howitworks_tsx"
+  ],
+  "29": [
+    "src_components_sections_emailcapture_tsx"
+  ],
+  "30": [
+    "src_components_sections_testimonials_tsx"
+  ],
+  "31": [
+    "src_components_layout_navigation_tsx"
+  ],
+  "32": [
+    "src_pages_cartpage_tsx"
+  ],
+  "33": [
+    "eslint_config"
+  ],
+  "34": [
+    "floating_input"
+  ],
+  "35": [
+    "aboutpage_component"
+  ]
+}

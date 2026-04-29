@@ -1,0 +1,396 @@
+{
+  "communities": {
+    "0": [
+      "app_tsx",
+      "cart_drawer",
+      "emailcapture_section",
+      "framer_motion_lib",
+      "gsap_lib",
+      "hero_section",
+      "homepage_component",
+      "howitworks_section",
+      "howitworkspage_component",
+      "lucide_react_lib",
+      "main_tsx",
+      "postcss_config",
+      "pricing_section",
+      "products_constants",
+      "products_data",
+      "products_section",
+      "react_router_lib",
+      "tailwind_animations",
+      "tailwind_color_palette",
+      "tailwind_config",
+      "tailwind_fonts",
+      "testimonials_data",
+      "testimonials_section",
+      "ticker_section",
+      "toast_ui",
+      "use_cart_hook",
+      "use_toast_hook",
+      "vite_config"
+    ],
+    "1": [
+      "cart_badge_animation",
+      "cartcontext_hook",
+      "cartpage_component",
+      "checkoutpage_component",
+      "delivery_cost_9",
+      "delivery_free_threshold",
+      "delivery_timeslots",
+      "floatinginput_component",
+      "footer_component",
+      "footer_watermark",
+      "lucide_react_dep",
+      "mobile_menu_lock",
+      "nav_links",
+      "navigation_component",
+      "order_number_format",
+      "payment_methods",
+      "react_router_dep",
+      "scroll_behavior_nav"
+    ],
+    "2": [
+      "about_stats",
+      "arch_clamp_responsive",
+      "arch_pure_frontend",
+      "arch_reduced_motion",
+      "arch_tailwind_only",
+      "arch_three_animation_layers",
+      "arch_useinview_once",
+      "claude_md_doc",
+      "color_palette_semantic",
+      "favicon_lightning_bolt",
+      "favicon_svg",
+      "font_pairing",
+      "framer_motion_dep",
+      "readme_doc",
+      "stem_brand",
+      "whatsapp_external",
+      "whatsappbutton_component"
+    ],
+    "3": [
+      "business_plan_stem_concept",
+      "design_removed_whatsapp",
+      "future_subscription",
+      "operations_delivery",
+      "product_assortment_match",
+      "product_peonies_tag_mismatch",
+      "product_range_stems",
+      "seo_polish_keywords",
+      "site_routes",
+      "stem_utp",
+      "target_segment_b2b",
+      "target_segment_daily_women",
+      "target_segment_gift_buyers",
+      "website_goals",
+      "website_only_sales_channel"
+    ],
+    "4": [
+      "clsx_dep",
+      "cn_function",
+      "parseprice_function",
+      "productcard_component",
+      "shop_filter_sort",
+      "shoppage_component",
+      "tailwind_merge_dep",
+      "utils_lib"
+    ],
+    "5": [
+      "cartcontext_cartprovider",
+      "cartcontext_cartreducer",
+      "src_context_cartcontext_tsx",
+      "src_lib_utils_ts",
+      "utils_cn",
+      "utils_parseprice"
+    ],
+    "6": [
+      "cart_context",
+      "cart_item_interface",
+      "cart_reducer",
+      "parse_price_util",
+      "product_interface"
+    ],
+    "7": [
+      "design_keep_hero_animations",
+      "mobile_keep_blur",
+      "mobile_no_transition_all",
+      "mobile_will_change_transform"
+    ],
+    "8": [
+      "src_components_sections_ticker_tsx",
+      "ticker_ticker",
+      "ticker_tickeritem"
+    ],
+    "9": [
+      "src_app_tsx",
+      "src_main_tsx"
+    ],
+    "10": [
+      "src_components_ui_toast_tsx",
+      "toast_dismiss"
+    ],
+    "11": [
+      "products_handleaddtocart",
+      "src_components_sections_products_tsx"
+    ],
+    "12": [
+      "src_components_layout_whatsappbutton_tsx",
+      "whatsappbutton_whatsappbutton"
+    ],
+    "13": [
+      "footer_footer",
+      "src_components_layout_footer_tsx"
+    ],
+    "14": [
+      "checkoutpage_handleplaceorder",
+      "src_pages_checkoutpage_tsx"
+    ],
+    "15": [
+      "shoppage_toggletype",
+      "src_pages_shoppage_tsx"
+    ],
+    "16": [
+      "aboutpage_aboutpage",
+      "src_pages_aboutpage_tsx"
+    ],
+    "17": [
+      "howitworkspage_howitworkspage",
+      "src_pages_howitworkspage_tsx"
+    ],
+    "18": [
+      "homepage_homepage",
+      "src_pages_homepage_tsx"
+    ],
+    "19": [
+      "icons_svg",
+      "icons_svg_symbols"
+    ],
+    "20": [
+      "hero_png",
+      "hero_png_isometric"
+    ],
+    "21": [
+      "design_system_colors",
+      "design_system_light_only"
+    ],
+    "22": [
+      "design_font_weight_rule",
+      "design_system_fonts"
+    ],
+    "23": [
+      "tailwind_config_js"
+    ],
+    "24": [
+      "eslint_config_js"
+    ],
+    "25": [
+      "vite_config_ts"
+    ],
+    "26": [
+      "postcss_config_js"
+    ],
+    "27": [
+      "src_constants_products_ts"
+    ],
+    "28": [
+      "src_components_ui_cartdrawer_tsx"
+    ],
+    "29": [
+      "src_components_ui_floatinginput_tsx"
+    ],
+    "30": [
+      "src_components_sections_hero_tsx"
+    ],
+    "31": [
+      "src_components_sections_pricing_tsx"
+    ],
+    "32": [
+      "src_components_sections_howitworks_tsx"
+    ],
+    "33": [
+      "src_components_sections_emailcapture_tsx"
+    ],
+    "34": [
+      "src_components_sections_testimonials_tsx"
+    ],
+    "35": [
+      "src_components_layout_navigation_tsx"
+    ],
+    "36": [
+      "src_pages_cartpage_tsx"
+    ],
+    "37": [
+      "eslint_config"
+    ],
+    "38": [
+      "floating_input"
+    ],
+    "39": [
+      "aboutpage_component"
+    ],
+    "40": [
+      "design_removed_ticker"
+    ],
+    "41": [
+      "design_no_botanical_svg"
+    ],
+    "42": [
+      "design_testimonials_masonry"
+    ]
+  },
+  "cohesion": {
+    "0": 0.12,
+    "1": 0.15,
+    "2": 0.14,
+    "3": 0.15,
+    "4": 0.32,
+    "5": 0.33,
+    "6": 0.7,
+    "7": 0.5,
+    "8": 0.67,
+    "9": 1.0,
+    "10": 1.0,
+    "11": 1.0,
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0,
+    "29": 1.0,
+    "30": 1.0,
+    "31": 1.0,
+    "32": 1.0,
+    "33": 1.0,
+    "34": 1.0,
+    "35": 1.0,
+    "36": 1.0,
+    "37": 1.0,
+    "38": 1.0,
+    "39": 1.0,
+    "40": 1.0,
+    "41": 1.0,
+    "42": 1.0
+  },
+  "gods": [
+    {
+      "id": "checkoutpage_component",
+      "label": "CheckoutPage",
+      "degree": 9
+    },
+    {
+      "id": "products_section",
+      "label": "Products section + ProductCard",
+      "degree": 8
+    },
+    {
+      "id": "navigation_component",
+      "label": "Navigation",
+      "degree": 8
+    },
+    {
+      "id": "business_plan_stem_concept",
+      "label": "STEM Business Plan",
+      "degree": 8
+    },
+    {
+      "id": "hero_section",
+      "label": "Hero section",
+      "degree": 7
+    },
+    {
+      "id": "cartpage_component",
+      "label": "CartPage",
+      "degree": 7
+    },
+    {
+      "id": "claude_md_doc",
+      "label": "CLAUDE.md (project architecture guide)",
+      "degree": 7
+    },
+    {
+      "id": "framer_motion_dep",
+      "label": "Framer Motion animation library",
+      "degree": 7
+    },
+    {
+      "id": "app_tsx",
+      "label": "App (root component)",
+      "degree": 6
+    },
+    {
+      "id": "cart_context",
+      "label": "CartContext (global cart state)",
+      "degree": 6
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Footer",
+      "target": "STEM brand (Warsaw flower delivery)",
+      "source_files": [
+        "src/components/layout/Footer.tsx",
+        "CLAUDE.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "displays_brand",
+      "why": "crosses file types (code \u2194 doc); connects across different repos/directories; bridges separate communities"
+    },
+    {
+      "source": "Architecture decision: purely frontend, no backend/API calls",
+      "target": "WhatsApp external link (wa.me/48000000000)",
+      "source_files": [
+        "CLAUDE.md",
+        "src/components/layout/WhatsAppButton.tsx"
+      ],
+      "confidence": "INFERRED",
+      "relation": "explains_choice_of",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (code \u2194 doc); connects across different repos/directories"
+    },
+    {
+      "source": "STEM brand (Warsaw flower delivery)",
+      "target": "Favicon: purple lightning bolt / energy bolt shape (brand identity)",
+      "source_files": [
+        "CLAUDE.md",
+        "public/favicon.svg"
+      ],
+      "confidence": "INFERRED",
+      "relation": "represented_by",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (doc \u2194 image); connects across different repos/directories"
+    },
+    {
+      "source": "Architecture decision: Three animation layers (Framer Motion, GSAP, Tailwind keyframes)",
+      "target": "Framer Motion animation library",
+      "source_files": [
+        "CLAUDE.md",
+        "src/components/layout/WhatsAppButton.tsx"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "designates_role_for",
+      "why": "crosses file types (code \u2194 doc); connects across different repos/directories; peripheral node `Architecture decision: Three animation layers (Framer Motion, GSAP, Tailwind keyframes)` unexpectedly reaches hub `Framer Motion animation library`"
+    },
+    {
+      "source": "Architecture decision: useInView once:true for scroll animations",
+      "target": "Framer Motion animation library",
+      "source_files": [
+        "CLAUDE.md",
+        "src/components/layout/WhatsAppButton.tsx"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "constrains_usage_of",
+      "why": "crosses file types (code \u2194 doc); connects across different repos/directories; peripheral node `Architecture decision: useInView once:true for scroll animations` unexpectedly reaches hub `Framer Motion animation library`"
+    }
+  ]
+}
