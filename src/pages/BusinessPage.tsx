@@ -2,11 +2,21 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Building2, Coffee, Hotel, Camera, Sparkles, Calendar } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
+import { BeforeAfterSlider } from '../components/ui/BeforeAfterSlider'
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
 const clientIcons = [Building2, Coffee, Hotel, Calendar, Camera, Sparkles]
 const clientColors = ['#B5CEAA', '#F5C5A0', '#EFBDBD', '#C5B8E8', '#E8A0A0', '#F0D090']
+const clientImages = [
+  { before: '/images/before-after/office-before.png',     after: '/images/before-after/office-after.png' },
+  { before: '/images/before-after/restaurant-before.png', after: '/images/before-after/restaurant-after.png' },
+  { before: '/images/before-after/hotel-before.png',      after: '/images/before-after/hotel-after.png' },
+  { before: '/images/before-after/events-before.png',     after: '/images/before-after/events-after.png' },
+  { before: '/images/before-after/studio-before.png',     after: '/images/before-after/studio-after.png' },
+  { before: '/images/before-after/spa-before.png',        after: '/images/before-after/spa-after.png' },
+]
+const sectionBg = ['bg-bg', 'bg-bg-subtle', 'bg-bg', 'bg-bg-subtle', 'bg-bg', 'bg-bg-subtle']
 
 function RevealSection({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -30,12 +40,12 @@ export default function BusinessPage() {
   const { t } = useTranslation()
 
   const clients = [
-    { title: t('business.client1Title'), body: t('business.client1Body'), color: clientColors[0], Icon: clientIcons[0] },
-    { title: t('business.client2Title'), body: t('business.client2Body'), color: clientColors[1], Icon: clientIcons[1] },
-    { title: t('business.client3Title'), body: t('business.client3Body'), color: clientColors[2], Icon: clientIcons[2] },
-    { title: t('business.client4Title'), body: t('business.client4Body'), color: clientColors[3], Icon: clientIcons[3] },
-    { title: t('business.client5Title'), body: t('business.client5Body'), color: clientColors[4], Icon: clientIcons[4] },
-    { title: t('business.client6Title'), body: t('business.client6Body'), color: clientColors[5], Icon: clientIcons[5] },
+    { title: t('business.client1Title'), body: t('business.client1Body'), feats: [t('business.client1Feat1'), t('business.client1Feat2'), t('business.client1Feat3')], slogan: t('business.client1Slogan'), color: clientColors[0], Icon: clientIcons[0], ...clientImages[0] },
+    { title: t('business.client2Title'), body: t('business.client2Body'), feats: [t('business.client2Feat1'), t('business.client2Feat2'), t('business.client2Feat3')], slogan: t('business.client2Slogan'), color: clientColors[1], Icon: clientIcons[1], ...clientImages[1] },
+    { title: t('business.client3Title'), body: t('business.client3Body'), feats: [t('business.client3Feat1'), t('business.client3Feat2'), t('business.client3Feat3')], slogan: t('business.client3Slogan'), color: clientColors[2], Icon: clientIcons[2], ...clientImages[2] },
+    { title: t('business.client4Title'), body: t('business.client4Body'), feats: [t('business.client4Feat1'), t('business.client4Feat2'), t('business.client4Feat3')], slogan: t('business.client4Slogan'), color: clientColors[3], Icon: clientIcons[3], ...clientImages[3] },
+    { title: t('business.client5Title'), body: t('business.client5Body'), feats: [t('business.client5Feat1'), t('business.client5Feat2'), t('business.client5Feat3')], slogan: t('business.client5Slogan'), color: clientColors[4], Icon: clientIcons[4], ...clientImages[4] },
+    { title: t('business.client6Title'), body: t('business.client6Body'), feats: [t('business.client6Feat1'), t('business.client6Feat2'), t('business.client6Feat3')], slogan: t('business.client6Slogan'), color: clientColors[5], Icon: clientIcons[5], ...clientImages[5] },
   ]
 
   const benefits = [
@@ -120,43 +130,91 @@ export default function BusinessPage() {
         </div>
       </section>
 
-      {/* ── WHO IT'S FOR ── */}
-      <section className="py-20 md:py-28 px-6 md:px-10 bg-bg-subtle">
-        <div className="max-w-5xl mx-auto">
-          <RevealSection className="mb-12 md:mb-16">
+      {/* ── WHO IT'S FOR — HEADER ── */}
+      <section className="pt-20 md:pt-28 pb-14 md:pb-16 px-6 md:px-10 bg-bg-subtle">
+        <div className="max-w-6xl mx-auto">
+          <RevealSection>
             <div className="flex items-center gap-3 mb-3">
               <div className="w-5 h-px bg-text-secondary/30" />
               <span className="eyebrow text-text-secondary/60">{t('business.clientsSubEyebrow')}</span>
             </div>
-            <h2 className="section-heading text-text-primary">{t('business.clientsHeading')}</h2>
+            <h2 className="section-heading text-text-primary mb-3">{t('business.clientsHeading')}</h2>
+            <p className="font-sans text-[13px] text-text-secondary/60 mt-1 flex items-center gap-2">
+              <span className="inline-block w-4 h-px bg-text-secondary/30" />
+              {t('business.clientsDesc')}
+            </p>
           </RevealSection>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {clients.map((client, i) => {
-              const Icon = client.Icon
-              return (
-                <RevealSection key={client.title} delay={i * 0.06}>
-                  <div
-                    className="flex flex-col gap-4 p-6 rounded-3xl bg-bg h-full transition-transform duration-300 ease-out hover:-translate-y-1"
-                    style={{ willChange: 'transform' }}
-                  >
-                    <div
-                      className="w-11 h-11 rounded-2xl flex items-center justify-center"
-                      style={{ backgroundColor: client.color + '80' }}
-                    >
-                      <Icon size={20} strokeWidth={1.6} className="text-text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-display text-[22px] font-[450] text-text-primary leading-tight mb-2">{client.title}</h3>
-                      <p className="font-sans text-[13px] text-text-secondary leading-relaxed">{client.body}</p>
-                    </div>
-                  </div>
-                </RevealSection>
-              )
-            })}
-          </div>
         </div>
       </section>
+
+      {/* ── WHO IT'S FOR — SECTIONS ── */}
+      {clients.map((client, i) => {
+        const Icon = client.Icon
+        const isEven = i % 2 === 0
+        return (
+          <section key={client.title} className={`py-20 md:py-24 px-6 md:px-10 ${sectionBg[i]}`}>
+            <div className="max-w-6xl mx-auto">
+              <RevealSection>
+                <div className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-10 lg:gap-20 items-center`}>
+
+                  {/* ── Slider column ── */}
+                  <div className="w-full lg:w-[58%] shrink-0">
+                    <div className="rounded-2xl overflow-hidden shadow-[0_2px_24px_rgba(0,0,0,0.07)]">
+                      <BeforeAfterSlider before={client.before} after={client.after} alt={client.title} />
+                    </div>
+                    <div className="flex items-center gap-2.5 mt-4">
+                      <div
+                        className="w-8 h-8 rounded-xl flex items-center justify-center"
+                        style={{ backgroundColor: client.color + '90' }}
+                      >
+                        <Icon size={15} strokeWidth={1.6} className="text-text-primary" />
+                      </div>
+                      <span className="eyebrow text-text-secondary/50">{client.title}</span>
+                    </div>
+                  </div>
+
+                  {/* ── Content column ── */}
+                  <div className="flex-1 min-w-0">
+
+                    {/* Slogan — headline anchor */}
+                    <p
+                      className="font-display italic text-text-primary leading-snug mb-8"
+                      style={{ fontSize: 'clamp(22px, 2.8vw, 34px)' }}
+                    >
+                      {client.slogan}
+                    </p>
+
+                    {/* Deliverables list */}
+                    <ul className="space-y-4 mb-8">
+                      {client.feats.map((feat) => (
+                        <li key={feat} className="flex items-start gap-3.5">
+                          <span
+                            className="mt-[3px] w-5 h-5 rounded-full flex items-center justify-center shrink-0"
+                            style={{ backgroundColor: client.color + '70' }}
+                          >
+                            <svg width="9" height="9" viewBox="0 0 9 9" fill="none">
+                              <path d="M1.5 4.5L3.5 6.5L7.5 2.5" stroke="#2C5F3E" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </span>
+                          <span className="font-sans text-[13.5px] text-text-secondary leading-relaxed">{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="w-10 h-px bg-border mb-7" />
+
+                    {/* Body */}
+                    <p className="font-sans text-[13.5px] text-text-secondary/70 leading-relaxed max-w-[360px]">
+                      {client.body}
+                    </p>
+
+                  </div>
+                </div>
+              </RevealSection>
+            </div>
+          </section>
+        )
+      })}
 
       {/* ── BENEFITS ── */}
       <section className="py-20 md:py-28 px-6 md:px-10 bg-bg">
