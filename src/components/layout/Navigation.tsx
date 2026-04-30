@@ -93,7 +93,7 @@ export default function Navigation() {
             {/* Center: logo */}
             <Link
               to="/"
-              className="font-brand text-[34px] font-bold tracking-[0.22em] text-text-primary hover:text-accent transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+              className="font-brand text-[42px] font-bold tracking-[0.08em] text-text-primary hover:text-accent transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
             >
               STEM
             </Link>
@@ -165,7 +165,7 @@ export default function Navigation() {
           <div className="lg:hidden flex h-full items-center justify-between">
             <Link
               to="/"
-              className="font-brand text-[27px] font-bold tracking-[0.22em] text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
+              className="font-brand text-[32px] font-bold tracking-[0.08em] text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded"
             >
               STEM
             </Link>

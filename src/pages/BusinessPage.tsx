@@ -121,7 +121,7 @@ export default function BusinessPage() {
               <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
             </a>
             <a
-              href="#how-it-works"
+            href="#how-it-works"
               className="inline-flex items-center gap-2 border border-border text-text-secondary font-sans text-[11px] md:text-[12px] font-[450] px-6 py-3.5 rounded-full hover:border-text-primary hover:text-text-primary transition-all duration-200"
             >
               {t('nav.howItWorks')}

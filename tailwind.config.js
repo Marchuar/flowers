@@ -26,7 +26,7 @@ export default {
         display: ['"Boska"', 'Georgia', 'serif'],
         editorial: ['"Boska"', 'Georgia', 'serif'],
         sans: ['"General Sans"', 'system-ui', 'sans-serif'],
-        brand: ['"Boska"', 'Telma', 'serif'],
+        brand: ['"Saint George"', 'Georgia', 'serif'],
       },
       animation: {
         'float': 'float 5s ease-in-out infinite',

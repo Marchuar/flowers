@@ -26,7 +26,7 @@ export default function Footer() {
           <div>
             <Link
               to="/"
-              className="font-brand text-[36px] font-bold tracking-[0.22em] text-ink-text mb-3 block hover:text-accent transition-colors duration-300 leading-none"
+              className="font-brand text-[48px] font-bold tracking-[0.08em] text-ink-text mb-3 block hover:text-accent transition-colors duration-300 leading-none"
             >
               STEM
             </Link>
@@ -62,7 +62,7 @@ export default function Footer() {
             aria-hidden
           >
             <span
-              className="font-brand font-bold leading-none tracking-[0.18em] whitespace-nowrap text-ink-text"
+              className="font-brand font-bold leading-none tracking-[0.08em] whitespace-nowrap text-ink-text"
               style={{
                 fontSize: 'clamp(100px, 20vw, 260px)',
                 opacity: 0.038,

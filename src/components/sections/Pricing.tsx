@@ -93,7 +93,7 @@ export default function Pricing() {
             </div>
             <div className="bg-text-primary px-6 py-6 border-b border-l border-surface/[0.08] flex flex-col items-center justify-center gap-2 text-center">
               <span className="eyebrow text-[9px] tracking-[0.22em] uppercase text-surface/60">{t('pricing.bestValue')}</span>
-              <span className="font-brand text-[26px] tracking-[0.2em] text-surface leading-none">STEM</span>
+              <span className="font-brand text-[26px] tracking-[0.08em] text-surface leading-none">STEM</span>
               <span className="bg-accent/20 text-accent font-sans text-[9px] tracking-[0.1em] uppercase px-3 py-1 rounded-full">
                 {t('pricing.wholesalePrices')}
               </span>
@@ -110,7 +110,7 @@ export default function Pricing() {
             </div>
             <div className="bg-text-primary px-5 py-5 border-b border-l border-surface/[0.08] flex flex-col items-center justify-center gap-1.5 text-center">
               <span className="font-sans text-[10px] tracking-[0.22em] uppercase text-surface/40">{t('pricing.bestValue')}</span>
-              <span className="font-brand text-[22px] tracking-[0.2em] text-surface leading-none">STEM</span>
+              <span className="font-brand text-[22px] tracking-[0.08em] text-surface leading-none">STEM</span>
               <span className="bg-accent/20 text-accent font-sans text-[9px] tracking-[0.1em] uppercase px-2.5 py-0.5 rounded-full">
                 {t('pricing.wholesalePrices')}
               </span>

@@ -40,7 +40,7 @@ export default function AboutPage() {
         {/* Large decorative watermark */}
         <div className="absolute inset-0 flex items-center justify-end pr-8 md:pr-16 pointer-events-none select-none overflow-hidden" aria-hidden>
           <span
-            className="font-brand font-bold leading-none tracking-[0.18em] text-text-primary"
+            className="font-brand font-bold leading-none tracking-[0.08em] text-text-primary"
             style={{ fontSize: 'clamp(140px, 22vw, 340px)', opacity: 0.025 }}
           >
             STEM
@@ -111,7 +111,7 @@ export default function AboutPage() {
         {/* Subtle watermark */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden" aria-hidden>
           <span
-            className="font-brand font-bold leading-none tracking-[0.15em] whitespace-nowrap text-ink-text"
+            className="font-brand font-bold leading-none tracking-[0.08em] whitespace-nowrap text-ink-text"
             style={{ fontSize: 'clamp(120px, 22vw, 320px)', opacity: 0.03 }}
           >
             STEM
