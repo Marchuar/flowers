@@ -1,41 +1,14 @@
-import { useRef, useEffect } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Check, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-
-gsap.registerPlugin(ScrollTrigger)
 
 export default function Pricing() {
   const { t } = useTranslation()
   const comparison = t('pricing.features', { returnObjects: true }) as { feature: string; traditional: string; stem: string }[]
   const ref = useRef<HTMLElement>(null)
-  const priceRef = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true, margin: '-100px' })
-
-  useEffect(() => {
-    if (!priceRef.current) return
-    const el = priceRef.current
-    const counter = { val: 0 }
-    const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: el,
-        start: 'top 80%',
-        onEnter: () => {
-          gsap.to(counter, {
-            val: 2.9,
-            duration: 1.4,
-            ease: 'power2.out',
-            onUpdate: () => { el.textContent = counter.val.toFixed(2) },
-          })
-        },
-        once: true,
-      })
-    })
-    return () => ctx.revert()
-  }, [])
 
   return (
     <section id="pricing" ref={ref} className="py-20 md:py-28 px-6 md:px-10 bg-bg-subtle overflow-hidden">
@@ -95,7 +68,7 @@ export default function Pricing() {
               <span className="eyebrow text-[9px] tracking-[0.22em] uppercase text-surface/60">{t('pricing.bestValue')}</span>
               <span className="font-brand text-[26px] tracking-[0.08em] text-surface leading-none">STEM</span>
               <span className="bg-accent/20 text-accent font-sans text-[9px] tracking-[0.1em] uppercase px-3 py-1 rounded-full">
-                {t('pricing.wholesalePrices')}
+                {t('pricing.freshDaily')}
               </span>
             </div>
           </div>
@@ -112,7 +85,7 @@ export default function Pricing() {
               <span className="font-sans text-[10px] tracking-[0.22em] uppercase text-surface/40">{t('pricing.bestValue')}</span>
               <span className="font-brand text-[22px] tracking-[0.08em] text-surface leading-none">STEM</span>
               <span className="bg-accent/20 text-accent font-sans text-[9px] tracking-[0.1em] uppercase px-2.5 py-0.5 rounded-full">
-                {t('pricing.wholesalePrices')}
+                {t('pricing.freshDaily')}
               </span>
             </div>
           </div>
@@ -207,22 +180,13 @@ export default function Pricing() {
 
         </motion.div>
 
-        {/* Bottom — price counter + CTA */}
+        {/* Bottom — CTA */}
         <motion.div
-          className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-6"
+          className="mt-10 flex justify-end"
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ delay: 0.75 }}
         >
-          <div className="flex items-end gap-2">
-            <span className="font-sans text-[13px] text-text-secondary/60 mb-1.5">{t('pricing.from')}</span>
-            <span ref={priceRef} className="font-display text-[56px] font-light leading-none text-text-primary tabular-nums">0.00</span>
-            <div className="mb-1.5">
-              <div className="font-sans text-[16px] font-[400] text-text-primary leading-none">zł</div>
-              <div className="font-sans text-[10.5px] md:text-[12px] font-[500] text-text-secondary/60 mt-0.5">{t('pricing.perStem')}</div>
-            </div>
-          </div>
-
           <Link
             to="/shop"
             className="group inline-flex items-center gap-2 font-sans text-[11.5px] font-[500] tracking-[0.1em] uppercase text-surface bg-text-primary px-7 py-3.5 rounded-full hover:bg-accent transition-colors duration-300"

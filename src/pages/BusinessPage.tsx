@@ -1,8 +1,9 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Building2, Coffee, Hotel, Camera, Sparkles, Calendar } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { BeforeAfterSlider } from '../components/ui/BeforeAfterSlider'
+import BusinessQuoteModal from '../components/sections/BusinessQuoteModal'
 
 const EASE_OUT = [0.16, 1, 0.3, 1] as const
 
@@ -38,6 +39,7 @@ export default function BusinessPage() {
   const heroRef = useRef<HTMLDivElement>(null)
   const heroInView = useInView(heroRef, { once: true })
   const { t } = useTranslation()
+  const [quoteOpen, setQuoteOpen] = useState(false)
 
   const clients = [
     { title: t('business.client1Title'), body: t('business.client1Body'), feats: [t('business.client1Feat1'), t('business.client1Feat2'), t('business.client1Feat3')], slogan: t('business.client1Slogan'), color: clientColors[0], Icon: clientIcons[0], ...clientImages[0] },
@@ -113,13 +115,13 @@ export default function BusinessPage() {
             animate={heroInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.5, delay: 0.65, ease: EASE_OUT }}
           >
-            <a
-              href="mailto:hello@stem.flowers"
+            <button
+              onClick={() => setQuoteOpen(true)}
               className="group inline-flex items-center gap-2.5 bg-text-primary text-bg font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.08em] uppercase px-6 py-3.5 rounded-full hover:bg-accent transition-colors duration-200"
             >
               {t('business.getFreeQuote')}
               <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
-            </a>
+            </button>
             <a
             href="#how-it-works"
               className="inline-flex items-center gap-2 border border-border text-text-secondary font-sans text-[11px] md:text-[12px] font-[450] px-6 py-3.5 rounded-full hover:border-text-primary hover:text-text-primary transition-all duration-200"
@@ -285,16 +287,18 @@ export default function BusinessPage() {
             <p className="font-sans text-[14px] md:text-[15px] text-surface/50 leading-relaxed max-w-[400px] mx-auto mt-5 mb-10">
               {t('business.ctaDesc')}
             </p>
-            <a
-              href="mailto:hello@stem.flowers"
+            <button
+              onClick={() => setQuoteOpen(true)}
               className="group inline-flex items-center gap-2.5 bg-surface text-text-primary font-sans text-[11px] md:text-[12px] font-[500] tracking-[0.1em] uppercase px-8 py-4 rounded-full hover:bg-accent hover:text-surface transition-colors duration-200"
             >
               {t('business.ctaGetStarted')}
               <ArrowRight size={13} className="transition-transform duration-200 group-hover:translate-x-0.5" />
-            </a>
+            </button>
           </RevealSection>
         </div>
       </section>
+
+      <BusinessQuoteModal open={quoteOpen} onClose={() => setQuoteOpen(false)} />
     </div>
   )
 }

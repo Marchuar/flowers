@@ -171,7 +171,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.18 }}
               onClick={handleAddToCart}
-              className="mt-3 mx-1 mb-1 w-[calc(100%-0.5rem)] font-sans text-[11px] font-[500] tracking-[0.08em] uppercase py-3 rounded-xl overflow-hidden text-text-primary flex items-center justify-center gap-1.5"
+              className="mt-3 mx-1 mb-1 w-[calc(100%-0.5rem)] h-10 font-sans text-[11px] font-[500] tracking-[0.08em] uppercase rounded-xl overflow-hidden text-text-primary flex items-center justify-center gap-1.5"
               style={{ backgroundColor: btnColor }}
               whileHover={{ backgroundColor: btnHoverColor }}
               whileTap={{ scale: 0.97 }}
@@ -186,7 +186,7 @@ export function ProductCard({ product, index, onOpenModal }: { product: Product;
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.18 }}
-              className="mt-3 mx-1 mb-1 flex items-center justify-between rounded-xl px-3 py-2.5"
+              className="mt-3 mx-1 mb-1 h-10 flex items-center justify-between rounded-xl px-3"
               style={{ backgroundColor: btnColor }}
             >
               <button

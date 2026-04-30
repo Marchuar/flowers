@@ -28,7 +28,6 @@ export default function Navigation() {
   const { t, i18n } = useTranslation()
 
   const currentLang = (i18n.language === 'pl' ? 'pl' : 'en') as Lang
-  const otherLang: Lang = currentLang === 'en' ? 'pl' : 'en'
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     setScrolled(latest > 60)
@@ -122,14 +121,25 @@ export default function Navigation() {
 
               <div className="w-px h-4 bg-border" />
 
-              {/* Language toggle */}
-              <button
-                onClick={() => setLanguage(otherLang)}
-                className="font-sans text-[15px] font-[500] tracking-[0.03em] uppercase text-text-secondary hover:text-text-primary transition-colors duration-200 px-1.5 py-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
-                aria-label={`Switch to ${otherLang.toUpperCase()}`}
-              >
-                {otherLang.toUpperCase()}
-              </button>
+              {/* Language switcher */}
+              <div className="flex items-center gap-0.5 font-sans text-[13px] font-[500] tracking-[0.06em] uppercase">
+                {(['en', 'pl'] as const).map((lang, i) => (
+                  <span key={lang} className="flex items-center gap-0.5">
+                    {i > 0 && <span className="text-border select-none px-0.5">/</span>}
+                    {lang === currentLang ? (
+                      <span className="text-text-primary cursor-default px-0.5">{lang}</span>
+                    ) : (
+                      <button
+                        onClick={() => setLanguage(lang)}
+                        className="text-text-secondary hover:text-text-primary transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded px-0.5"
+                        aria-label={`Switch to ${lang.toUpperCase()}`}
+                      >
+                        {lang}
+                      </button>
+                    )}
+                  </span>
+                ))}
+              </div>
 
               <div className="w-px h-4 bg-border" />
 
@@ -171,14 +181,25 @@ export default function Navigation() {
             </Link>
 
             <div className="flex items-center gap-1">
-              {/* Language toggle mobile */}
-              <button
-                onClick={() => setLanguage(otherLang)}
-                className="font-sans text-[15px] font-[500] tracking-[0.03em] uppercase text-text-secondary hover:text-text-primary transition-colors px-2 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
-                aria-label={`Switch to ${otherLang.toUpperCase()}`}
-              >
-                {otherLang.toUpperCase()}
-              </button>
+              {/* Language switcher mobile */}
+              <div className="flex items-center gap-0.5 font-sans text-[13px] font-[500] tracking-[0.06em] uppercase">
+                {(['en', 'pl'] as const).map((lang, i) => (
+                  <span key={lang} className="flex items-center gap-0.5">
+                    {i > 0 && <span className="text-border select-none px-0.5">/</span>}
+                    {lang === currentLang ? (
+                      <span className="text-text-primary cursor-default px-1">{lang}</span>
+                    ) : (
+                      <button
+                        onClick={() => setLanguage(lang)}
+                        className="text-text-secondary hover:text-text-primary transition-colors duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded px-1 py-1"
+                        aria-label={`Switch to ${lang.toUpperCase()}`}
+                      >
+                        {lang}
+                      </button>
+                    )}
+                  </span>
+                ))}
+              </div>
 
               <AnimatePresence>
                 {totalItems > 0 && (

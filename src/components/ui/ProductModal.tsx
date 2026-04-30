@@ -84,10 +84,9 @@ export default function ProductModal({ product, onClose }: Props) {
 
   useEffect(() => {
     if (!product) return
-    const scrollY = window.scrollY
-    document.body.style.position = 'fixed'
-    document.body.style.top = `-${scrollY}px`
-    document.body.style.width = '100%'
+    const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
+    document.documentElement.style.overflow = 'hidden'
+    if (scrollbarWidth > 0) document.documentElement.style.paddingRight = `${scrollbarWidth}px`
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
       if (e.key === 'ArrowRight' && hasMultiple) goNext()
@@ -95,10 +94,8 @@ export default function ProductModal({ product, onClose }: Props) {
     }
     window.addEventListener('keydown', handler)
     return () => {
-      document.body.style.position = ''
-      document.body.style.top = ''
-      document.body.style.width = ''
-      window.scrollTo(0, scrollY)
+      document.documentElement.style.overflow = ''
+      document.documentElement.style.paddingRight = ''
       window.removeEventListener('keydown', handler)
     }
   }, [product, onClose, hasMultiple, goNext, goPrev])

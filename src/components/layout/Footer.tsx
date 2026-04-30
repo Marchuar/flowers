@@ -1,15 +1,8 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-const flowerSlugs = ['roses', 'tulips', 'peonies', 'chrysanthemum', 'eustoma', 'wildflowers']
-
 export default function Footer() {
   const { t } = useTranslation()
-
-  const flowers = flowerSlugs.map(slug => ({
-    name: t(`products.${slug}.name`),
-    href: '/shop',
-  }))
 
   const info = [
     { name: t('footer.aboutUs'),     href: '/about' },
@@ -72,22 +65,7 @@ export default function Footer() {
             </span>
           </div>
 
-          <div className="relative z-10 grid grid-cols-2 md:grid-cols-3 gap-8 py-12">
-            <div>
-              <div className="eyebrow text-ink-text/30 mb-5">{t('footer.flowersHeading')}</div>
-              <ul className="flex flex-col gap-2.5">
-                {flowers.map(f => (
-                  <li key={f.name}>
-                    <Link
-                      to={f.href}
-                      className="font-sans text-[13px] text-ink-text/55 hover:text-ink-text transition-colors duration-200"
-                    >
-                      {f.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 py-12">
             <div>
               <div className="eyebrow text-ink-text/30 mb-5">{t('footer.infoHeading')}</div>
               <ul className="flex flex-col gap-2.5">

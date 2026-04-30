@@ -30,12 +30,11 @@ export function BeforeAfterSlider({ before, after, alt = '' }: Props) {
   return (
     <div
       ref={containerRef}
-      className="relative w-full overflow-hidden select-none cursor-ew-resize"
+      className="relative w-full overflow-hidden select-none cursor-ew-resize touch-none"
       style={{ aspectRatio: '16/9' }}
       onPointerDown={onDown}
       onPointerMove={onMove}
       onPointerUp={onUp}
-      onPointerLeave={onUp}
     >
       {/* After image — full background (right side) */}
       <img
