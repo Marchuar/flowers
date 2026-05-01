@@ -4,6 +4,136 @@ import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 
+function TulipIcon() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+      <line x1="16" y1="28" x2="16" y2="18" stroke="#6B7C5A" strokeWidth="1.5" strokeLinecap="round"/>
+      <path d="M16 23 Q12 21 12 17 Q14 20 16 23Z" fill="#7A9468"/>
+      <path d="M13 19 C11 15 12 10 16 8 C20 10 21 15 19 19 Q18 21 16 22 Q14 21 13 19Z" fill="#E8A0C8" opacity="0.9"/>
+      <path d="M10 18 C9 14 11 10 14 9 C13 12 12 16 13 19 Q11 19 10 18Z" fill="#D494BA" opacity="0.8"/>
+      <path d="M22 18 C23 14 21 10 18 9 C19 12 20 16 19 19 Q21 19 22 18Z" fill="#D494BA" opacity="0.8"/>
+    </svg>
+  )
+}
+
+function PeonyIcon() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+      {[0,45,90,135,180,225,270,315].map((a, i) => (
+        <ellipse key={i} cx="16" cy="16" rx="3.5" ry="7.5"
+          fill="#F5B8C8" opacity="0.65"
+          transform={`rotate(${a} 16 16)`}/>
+      ))}
+      {[22,67,112,157,202,247].map((a, i) => (
+        <ellipse key={i} cx="16" cy="16" rx="2.8" ry="5.5"
+          fill="#F9CDD8" opacity="0.85"
+          transform={`rotate(${a} 16 16)`}/>
+      ))}
+      <circle cx="16" cy="16" r="3" fill="#FFF0F3"/>
+      <circle cx="16" cy="16" r="1.2" fill="#F5A0B8"/>
+    </svg>
+  )
+}
+
+function RanunculusIcon() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-7 h-7">
+      {[0,40,80,120,160,200,240,280,320].map((a, i) => (
+        <ellipse key={i} cx="16" cy="16" rx="3" ry="7"
+          fill="#F5A07A" opacity="0.55"
+          transform={`rotate(${a} 16 16)`}/>
+      ))}
+      {[20,60,100,140,180,220,260,300,340].map((a, i) => (
+        <ellipse key={i} cx="16" cy="16" rx="2.5" ry="5.5"
+          fill="#F5B090" opacity="0.75"
+          transform={`rotate(${a} 16 16)`}/>
+      ))}
+      {[0,60,120,180,240,300].map((a, i) => (
+        <ellipse key={i} cx="16" cy="16" rx="2" ry="4"
+          fill="#F09060" opacity="0.9"
+          transform={`rotate(${a} 16 16)`}/>
+      ))}
+      <circle cx="16" cy="16" r="2.5" fill="#FFD4A0"/>
+    </svg>
+  )
+}
+
+const SEASON_STEMS = [
+  { name: 'Tulip',      colors: 'pink & purple', price: 3, bg: '#F9E4EE', Icon: TulipIcon },
+  { name: 'Peony',      colors: 'blush & white', price: 9, bg: '#FCE8EF', Icon: PeonyIcon },
+  { name: 'Ranunculus', colors: 'salmon & cream', price: 7, bg: '#FDEEE6', Icon: RanunculusIcon },
+]
+
+const DAY_MESSAGES: Record<string, string> = {
+  Monday:    'Fresh week — start it beautifully',
+  Tuesday:   'Mid-week pick-me-up for someone you love',
+  Wednesday: 'Halfway there — treat yourself',
+  Thursday:  'Almost the weekend — order ahead',
+  Friday:    'Weekend flowers, delivered today',
+  Saturday:  'Saturday market picks, just arrived',
+  Sunday:    'Sunday stems — slow morning vibes',
+}
+
+function SeasonCard() {
+  const today   = new Date()
+  const dayName = today.toLocaleDateString('en-US', { weekday: 'long' })
+  const message = DAY_MESSAGES[dayName] ?? 'Fresh flowers, delivered today'
+
+  return (
+    <div className="w-full rounded-2xl overflow-hidden border border-border bg-surface shadow-[0_8px_48px_rgba(0,0,0,0.09)]">
+      {/* Header */}
+      <div className="px-6 pt-6 pb-5 bg-bg-subtle border-b border-border">
+        <p className="font-sans text-[10px] font-[600] tracking-[0.18em] uppercase text-text-secondary/50 mb-2">Today</p>
+        <p className="font-display text-[32px] font-[650] text-text-primary leading-none mb-2">{dayName}</p>
+        <p className="font-sans text-[13px] text-text-secondary leading-snug">{message}</p>
+      </div>
+
+      {/* Stems list */}
+      <div className="px-5 pt-5 pb-2 bg-bg">
+        <div className="flex items-center justify-between mb-4 px-1">
+          <p className="font-sans text-[10px] font-[600] tracking-[0.16em] uppercase text-text-secondary/50">Stems in season</p>
+          <span className="font-sans text-[11px] font-[550] text-accent">Spring peak</span>
+        </div>
+
+        <div className="flex flex-col gap-2">
+          {SEASON_STEMS.map(({ name, colors, price, bg, Icon }) => (
+            <div
+              key={name}
+              className="flex items-center gap-4 px-3 py-3 rounded-xl bg-surface border border-border"
+            >
+              <div
+                className="rounded-full flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: bg, width: '3.25rem', height: '3.25rem' }}
+              >
+                <Icon />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="font-sans text-[15px] font-[560] text-text-primary leading-none mb-1">{name}</p>
+                <p className="font-sans text-[12px] text-text-secondary leading-none">{colors}</p>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className="font-display text-[19px] font-[650] text-text-primary leading-none">{price} zł</p>
+                <p className="font-sans text-[10px] text-text-secondary/50 mt-1">per stem</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA */}
+      <div className="px-5 pb-5 pt-4 bg-bg">
+        <Link
+          to="/shop"
+          className="group flex items-center justify-center gap-2 w-full bg-text-primary text-bg font-sans text-[12px] font-[500] tracking-[0.07em] uppercase py-4 rounded-xl hover:bg-accent transition-colors duration-300"
+        >
+          Build your order
+          <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
+        </Link>
+      </div>
+    </div>
+  )
+}
+
 function FlowerBlue() {
   return (
     <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
@@ -107,7 +237,6 @@ export default function Hero() {
 
   const stats = [
     { value: t('hero.statDeliveryValue'), label: t('hero.statDeliveryLabel') },
-    { value: '500+',                      label: t('hero.statCustomersLabel') },
     { value: '100%',                      label: t('hero.statWholesaleLabel') },
   ]
 
@@ -216,7 +345,7 @@ export default function Hero() {
         <div className="flex flex-col md:flex-row md:items-stretch md:min-h-[calc(100svh-4rem)]">
 
           {/* ── LEFT COLUMN ─────────────────────────── */}
-          <div className="flex flex-col pt-10 pb-12 md:py-14 md:mr-8 xl:mr-12 md:w-[63%] lg:w-[61%] xl:w-[52%] md:justify-between gap-7 md:gap-0">
+          <div className="flex flex-col pt-10 pb-12 md:py-14 lg:mr-8 xl:mr-12 lg:w-[50%] xl:w-[44%] md:justify-between gap-7 md:gap-0">
 
             {/* Eyebrow */}
             <motion.div
@@ -305,6 +434,28 @@ export default function Hero() {
                   </motion.div>
                 ))}
               </div>
+            </motion.div>
+
+            {/* Mobile + tablet (< lg) season card */}
+            <motion.div
+              className="lg:hidden mt-6"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 1.0 }}
+            >
+              <SeasonCard />
+            </motion.div>
+          </div>
+
+          {/* ── RIGHT COLUMN — season card (lg+ only) ── */}
+          <div className="hidden lg:flex flex-1 items-center justify-center py-14 relative z-20 pl-4">
+            <motion.div
+              className="w-full max-w-[380px] xl:max-w-[440px]"
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1.0, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <SeasonCard />
             </motion.div>
           </div>
         </div>

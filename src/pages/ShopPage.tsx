@@ -1,101 +1,250 @@
 import { useState, useMemo, useRef } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { SlidersHorizontal, X } from 'lucide-react'
+import { SlidersHorizontal, X, PawPrint } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { products, type Product } from '../constants/products'
+import { products, type Product, type ProductProperty, type StemHeight, type StemFullness } from '../constants/products'
 import { parsePrice } from '../lib/utils'
 import { ProductCard } from '../components/sections/Products'
 import ProductModal from '../components/ui/ProductModal'
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc'
 
-const allTypes = [...new Set(products.map(p => p.slug))]
-const allColors = products
-  .filter((p, i, arr) => arr.findIndex(x => x.color === p.color) === i)
-  .map(p => ({ slug: p.slug, color: p.color }))
-
-interface FilterSidebarProps {
-  selectedTypes: string[]
-  onToggle: (name: string) => void
-  onClear: () => void
+interface FilterState {
+  types: string[]
+  properties: ProductProperty[]
+  height: StemHeight | null
+  fullness: StemFullness | null
+  colors: string[]
 }
 
-function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps) {
+const EMPTY_FILTERS: FilterState = { types: [], properties: [], height: null, fullness: null, colors: [] }
+
+const PROPERTIES: { key: ProductProperty; labelKey: string }[] = [
+  { key: 'pet-safe',      labelKey: 'shop.propPetSafe' },
+  { key: 'long-lasting',  labelKey: 'shop.propLongLasting' },
+  { key: 'fragrant',      labelKey: 'shop.propFragrant' },
+  { key: 'scent-free',    labelKey: 'shop.propScentFree' },
+]
+const HEIGHTS: { key: StemHeight; labelKey: string }[] = [
+  { key: 'short',  labelKey: 'shop.heightShort' },
+  { key: 'medium', labelKey: 'shop.heightMedium' },
+  { key: 'tall',   labelKey: 'shop.heightTall' },
+]
+const FULLNESS_OPTIONS: { key: StemFullness; labelKey: string }[] = [
+  { key: 'lush',    labelKey: 'shop.fullnessLush' },
+  { key: 'minimal', labelKey: 'shop.fullnessMinimal' },
+]
+
+function FlowerChipIcon({ slug, color, active }: { slug: string; color: string; active: boolean }) {
+  const c = active ? '#FAFAF7' : color
+  const c2 = active ? 'rgba(250,250,247,0.55)' : `${color}99`
+  switch (slug) {
+    case 'roses': return (
+      <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+        {[0,60,120,180,240,300].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="3" ry="6" fill={c} opacity="0.7" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        {[30,90,150,210,270,330].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="2" ry="4.5" fill={c} opacity="0.9" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        <circle cx="10" cy="10" r="2.5" fill={c}/>
+      </svg>
+    )
+    case 'tulips': return (
+      <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+        <line x1="10" y1="18" x2="10" y2="12" stroke={c2} strokeWidth="1.5" strokeLinecap="round"/>
+        <path d="M7 12 C6 9 7 5 10 4 C13 5 14 9 13 12 Q12 13.5 10 14 Q8 13.5 7 12Z" fill={c}/>
+        <path d="M5 11 C4 8 5.5 5 8 5 C7 7 7 10 7 12 Q5.5 12 5 11Z" fill={c} opacity="0.75"/>
+        <path d="M15 11 C16 8 14.5 5 12 5 C13 7 13 10 13 12 Q14.5 12 15 11Z" fill={c} opacity="0.75"/>
+      </svg>
+    )
+    case 'peonies': return (
+      <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+        {[0,45,90,135,180,225,270,315].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="2.5" ry="6" fill={c} opacity="0.6" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        {[22,67,112,157,202,247].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="2" ry="4.5" fill={c} opacity="0.85" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        <circle cx="10" cy="10" r="2" fill={active ? '#FAFAF7' : '#fff'} opacity="0.6"/>
+      </svg>
+    )
+    case 'wildflowers': return (
+      <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+        <line x1="10" y1="18" x2="10" y2="11" stroke={c2} strokeWidth="1.5" strokeLinecap="round"/>
+        {[0,40,80,120,160,200,240,280,320].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="1.5" ry="5" fill={c} opacity="0.75" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        <circle cx="10" cy="10" r="2.2" fill={active ? '#FAFAF7' : '#F5D060'}/>
+      </svg>
+    )
+    case 'eustoma': return (
+      <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+        <line x1="10" y1="18" x2="10" y2="13" stroke={c2} strokeWidth="1.5" strokeLinecap="round"/>
+        {[0,60,120,180,240,300].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="2.5" ry="6" fill={c} opacity="0.65" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        {[30,90,150,210,270,330].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="1.8" ry="4" fill={c} opacity="0.85" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        <circle cx="10" cy="10" r="2" fill={c}/>
+      </svg>
+    )
+    case 'chrysanthemum': return (
+      <svg viewBox="0 0 20 20" fill="none" className="w-5 h-5 flex-shrink-0">
+        {[0,24,48,72,96,120,144,168,192,216,240,264,288,312,336].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="1.2" ry="5.5" fill={c} opacity="0.7" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        {[12,36,60,84,108,132,156,180,204,228,252,276,300,324,348].map((a,i)=>(
+          <ellipse key={i} cx="10" cy="10" rx="1" ry="4" fill={c} opacity="0.85" transform={`rotate(${a} 10 10)`}/>
+        ))}
+        <circle cx="10" cy="10" r="1.8" fill={c}/>
+      </svg>
+    )
+    default: return <span className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: c }}/>
+  }
+}
+
+function chipCls(active: boolean) {
+  return `font-sans text-[12.5px] font-[450] px-3 py-2 rounded-xl border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 ${
+    active
+      ? 'bg-text-primary text-surface border-text-primary'
+      : 'bg-surface text-text-primary border-border hover:border-text-primary/40'
+  }`
+}
+
+interface FilterSidebarProps {
+  filters: FilterState
+  onChange: (f: FilterState) => void
+  hasAnyFilter: boolean
+}
+
+function FilterSidebar({ filters, onChange, hasAnyFilter }: FilterSidebarProps) {
   const { t } = useTranslation()
+
+  function toggleMulti<T extends string>(field: 'types' | 'properties' | 'colors', value: T) {
+    const current = filters[field] as T[]
+    onChange({
+      ...filters,
+      [field]: current.includes(value) ? current.filter(v => v !== value) : [...current, value],
+    })
+  }
+
+  function toggleSingle<T extends string>(field: 'height' | 'fullness', value: T) {
+    onChange({ ...filters, [field]: filters[field] === value ? null : value })
+  }
+
   return (
-    <div className="flex flex-col gap-8">
-      {/* Flower type */}
+    <div className="flex flex-col gap-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <span className="font-sans text-[15px] font-[600] text-text-primary">{t('shop.filters')}</span>
+        {hasAnyFilter && (
+          <button
+            type="button"
+            onClick={() => onChange(EMPTY_FILTERS)}
+            className="font-sans text-[12px] text-text-secondary underline underline-offset-2 hover:text-accent-warm transition-colors focus:outline-none"
+          >
+            {t('shop.clearAll')}
+          </button>
+        )}
+      </div>
+      <div className="h-px bg-border/40" />
+
+      {/* Flower type — 2-col grid chips */}
       <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.flowerType')}</div>
-        <div className="flex flex-col gap-2.5">
-          {allTypes.map(slug => (
-            <label key={slug} className="flex items-center gap-2.5 cursor-pointer group">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={selectedTypes.includes(slug)}
-                onChange={() => onToggle(slug)}
-              />
-              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors flex-shrink-0
-                peer-checked:bg-text-primary peer-checked:border-text-primary
-                border-border/70 group-hover:border-text-primary/50
-                peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-1`}
-              >
-                {selectedTypes.includes(slug) && (
-                  <svg className="w-2.5 h-2.5 text-surface" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M2 6l3 3 5-5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </div>
-              <span className="font-sans text-[13px] text-text-secondary group-hover:text-text-primary transition-colors">
-                {t(`products.${slug}.name`)}
+        <div className="eyebrow text-text-secondary/50 mb-3">{t('shop.flowerType')}</div>
+        <div className="flex flex-col gap-1.5 items-start">
+          {products.map(p => (
+            <button
+              key={p.slug}
+              type="button"
+              onClick={() => toggleMulti('types', p.slug)}
+              className={chipCls(filters.types.includes(p.slug))}
+            >
+              <span className="flex items-center gap-2 min-w-0">
+                <FlowerChipIcon slug={p.slug} color={p.color} active={filters.types.includes(p.slug)} />
+                <span className="leading-tight">{t(`products.${p.slug}.name`)}</span>
               </span>
-            </label>
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Color swatches */}
+      {/* Properties */}
       <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.colour')}</div>
-        <div className="flex flex-wrap gap-2.5">
-          {allColors.map(({ slug, color }) => (
+        <div className="eyebrow text-text-secondary/50 mb-3">{t('shop.properties')}</div>
+        <div className="flex flex-wrap gap-1.5">
+          {PROPERTIES.map(({ key, labelKey }) => (
             <button
-              key={slug}
+              key={key}
               type="button"
-              onClick={() => onToggle(slug)}
-              title={t(`products.${slug}.name`)}
-              className={`w-7 h-7 rounded-full border-2 transition-[border-color,transform] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
-                selectedTypes.includes(slug) ? 'border-text-primary scale-110' : 'border-transparent hover:border-text-primary/40'
+              onClick={() => toggleMulti('properties', key)}
+              className={chipCls(filters.properties.includes(key))}
+            >
+              <span className="flex items-center gap-1.5">
+                {key === 'pet-safe' && <PawPrint size={12} className="flex-shrink-0" />}
+                {t(labelKey)}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Stem height */}
+      <div>
+        <div className="eyebrow text-text-secondary/50 mb-3">{t('shop.stemHeight')}</div>
+        <div className="flex gap-1.5">
+          {HEIGHTS.map(({ key, labelKey }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => toggleSingle('height', key)}
+              className={`flex-1 ${chipCls(filters.height === key)}`}
+            >
+              {t(labelKey)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Fullness */}
+      <div>
+        <div className="eyebrow text-text-secondary/50 mb-3">{t('shop.fullness')}</div>
+        <div className="flex gap-1.5">
+          {FULLNESS_OPTIONS.map(({ key, labelKey }) => (
+            <button
+              key={key}
+              type="button"
+              onClick={() => toggleSingle('fullness', key)}
+              className={`flex-1 ${chipCls(filters.fullness === key)}`}
+            >
+              {t(labelKey)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Colour swatches */}
+      <div>
+        <div className="eyebrow text-text-secondary/50 mb-3">{t('shop.colour')}</div>
+        <div className="flex flex-wrap gap-2">
+          {products.map(p => (
+            <button
+              key={p.slug}
+              type="button"
+              onClick={() => toggleMulti('colors', p.color)}
+              title={t(`products.${p.slug}.name`)}
+              className={`w-8 h-8 rounded-full border-2 transition-[border-color,transform] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
+                filters.colors.includes(p.color) ? 'border-text-primary scale-110' : 'border-transparent hover:border-text-primary/40'
               }`}
-              style={{ backgroundColor: color }}
-              aria-label={t(`products.${slug}.name`)}
-              aria-pressed={selectedTypes.includes(slug)}
+              style={{ backgroundColor: p.color }}
+              aria-label={t(`products.${p.slug}.name`)}
+              aria-pressed={filters.colors.includes(p.color)}
             />
           ))}
         </div>
       </div>
-
-      {/* Price note */}
-      <div className="bg-bg-subtle rounded-xl p-4">
-        <div className="eyebrow text-text-secondary/50 mb-2">{t('shop.priceRange')}</div>
-        <p className="font-sans text-[12px] text-text-secondary leading-relaxed">
-          {t('shop.priceNote')}
-          <br />{t('shop.minOrder')}
-        </p>
-      </div>
-
-      {/* Clear filters */}
-      {selectedTypes.length > 0 && (
-        <button
-          type="button"
-          onClick={onClear}
-          className="flex items-center gap-1.5 font-sans text-[12px] text-text-secondary hover:text-accent-warm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
-        >
-          <X size={13} />
-          {t('shop.clearFilters')}
-        </button>
-      )}
     </div>
   )
 }
@@ -105,40 +254,37 @@ export default function ShopPage() {
   const inView = useInView(ref, { once: true })
   const { t } = useTranslation()
 
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS)
   const [sortBy, setSortBy] = useState<SortOption>('default')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
-  function toggleType(name: string) {
-    setSelectedTypes(prev =>
-      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
-    )
-  }
+  const hasAnyFilter =
+    filters.types.length > 0 ||
+    filters.properties.length > 0 ||
+    filters.height !== null ||
+    filters.fullness !== null ||
+    filters.colors.length > 0
 
   const filtered = useMemo(() => {
     let result = [...products]
-
-    if (selectedTypes.length > 0) {
-      result = result.filter(p => selectedTypes.includes(p.slug))
-    }
-
+    if (filters.types.length > 0)
+      result = result.filter(p => filters.types.includes(p.slug))
+    if (filters.properties.length > 0)
+      result = result.filter(p => filters.properties.every(prop => p.properties?.includes(prop)))
+    if (filters.height)
+      result = result.filter(p => p.height === filters.height)
+    if (filters.fullness)
+      result = result.filter(p => p.fullness === filters.fullness)
+    if (filters.colors.length > 0)
+      result = result.filter(p => filters.colors.includes(p.color))
     switch (sortBy) {
-      case 'price-asc':
-        result.sort((a, b) => parsePrice(a.price) - parsePrice(b.price))
-        break
-      case 'price-desc':
-        result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price))
-        break
-      case 'name-asc':
-        result.sort((a, b) =>
-          t(`products.${a.slug}.name`).localeCompare(t(`products.${b.slug}.name`))
-        )
-        break
+      case 'price-asc':  result.sort((a, b) => parsePrice(a.price) - parsePrice(b.price)); break
+      case 'price-desc': result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price)); break
+      case 'name-asc':   result.sort((a, b) => t(`products.${a.slug}.name`).localeCompare(t(`products.${b.slug}.name`))); break
     }
-
     return result
-  }, [selectedTypes, sortBy, t])
+  }, [filters, sortBy, t])
 
   return (
     <>
@@ -264,7 +410,7 @@ export default function ShopPage() {
         >
           <p className="font-sans text-[13px] text-text-secondary">
             {filtered.length} {filtered.length === 1 ? t('shop.stem') : t('shop.stems')}
-            {selectedTypes.length > 0 && (
+            {hasAnyFilter && (
               <span className="ml-1.5 text-text-secondary/60">
                 · {t('shop.filtered')}
               </span>
@@ -279,7 +425,7 @@ export default function ShopPage() {
               className="md:hidden flex items-center gap-1.5 font-sans text-[12px] text-text-secondary border border-border/60 rounded-full px-3 py-1.5 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
             >
               <SlidersHorizontal size={12} />
-              {t('shop.filters')} {selectedTypes.length > 0 && `(${selectedTypes.length})`}
+              {t('shop.filters')} {hasAnyFilter && `(${[filters.types, filters.properties, filters.colors].flat().length + (filters.height ? 1 : 0) + (filters.fullness ? 1 : 0)})`}
             </button>
 
             {/* Sort select */}
@@ -301,12 +447,12 @@ export default function ShopPage() {
 
           {/* Sidebar — desktop */}
           <motion.aside
-            className="hidden md:block w-56 flex-shrink-0 sticky top-24"
+            className="hidden md:block w-64 flex-shrink-0 sticky top-24"
             initial={{ opacity: 0, x: -20 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.55, delay: 0.15 }}
           >
-            <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
+            <FilterSidebar filters={filters} onChange={setFilters} hasAnyFilter={hasAnyFilter} />
           </motion.aside>
 
           {/* Products grid */}
@@ -319,7 +465,7 @@ export default function ShopPage() {
                 <p className="font-sans text-[13px] text-text-secondary">{t('shop.noResultsDesc')}</p>
                 <button
                   type="button"
-                  onClick={() => setSelectedTypes([])}
+                  onClick={() => setFilters(EMPTY_FILTERS)}
                   className="mt-2 font-sans text-[12px] text-text-secondary border border-border rounded-full px-4 py-2 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                 >
                   {t('shop.clearAllFilters')}
@@ -373,7 +519,7 @@ export default function ShopPage() {
                   <X size={18} />
                 </button>
               </div>
-              <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
+              <FilterSidebar filters={filters} onChange={setFilters} hasAnyFilter={hasAnyFilter} />
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}
