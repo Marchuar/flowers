@@ -83,11 +83,6 @@ export default function Testimonials() {
               <div className="font-display text-[42px] font-light text-text-primary leading-none tabular-nums">5.0</div>
               <div className="font-sans text-[11px] md:text-[12px] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('testimonials.ratingLabel')}</div>
             </div>
-            <div className="w-px h-12 bg-border" />
-            <div className="text-right">
-              <div className="font-display text-[42px] font-light text-text-primary leading-none">{t('testimonials.reviews')}</div>
-              <div className="font-sans text-[11px] md:text-[12px] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('testimonials.reviewsLabel')}</div>
-            </div>
           </motion.div>
         </div>
 

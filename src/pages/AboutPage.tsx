@@ -10,7 +10,6 @@ export default function AboutPage() {
   const { t } = useTranslation()
 
   const stats = [
-    { value: '500+', label: t('about.stat1Label'), note: t('about.stat1Note') },
     { value: '1-2d', label: t('about.stat2Label'), note: t('about.stat2Note') },
     { value: '9–21', label: t('about.stat3Label'), note: t('about.stat3Note') },
     { value: '0%',   label: t('about.stat4Label'), note: t('about.stat4Note') },

@@ -6,6 +6,10 @@ export interface CareInstruction {
   body: string
 }
 
+export type ProductProperty = 'pet-safe' | 'long-lasting' | 'fragrant' | 'scent-free'
+export type StemHeight = 'short' | 'medium' | 'tall'
+export type StemFullness = 'lush' | 'minimal'
+
 export interface Product {
   id: number
   slug: string
@@ -19,6 +23,9 @@ export interface Product {
   color: string
   description?: string
   careInstructions?: CareInstruction[]
+  properties?: ProductProperty[]
+  height?: StemHeight
+  fullness?: StemFullness
 }
 
 export const products: Product[] = [
@@ -37,6 +44,9 @@ export const products: Product[] = [
     ],
     tag: 'Bestseller',
     color: '#E8A0A0',
+    properties: ['long-lasting', 'fragrant'],
+    height: 'medium',
+    fullness: 'lush',
     description: 'A classic for a reason. Roses reward a little daily attention with days of quiet elegance.',
     careInstructions: [
       { icon: 'water', title: 'Fresh H2O', body: 'Change the water every 2 days to keep bacteria at bay and roses drinking happily.' },
@@ -59,6 +69,9 @@ export const products: Product[] = [
     ],
     tag: 'Seasonal',
     color: '#F5C5A0',
+    properties: ['long-lasting', 'scent-free'],
+    height: 'medium',
+    fullness: 'minimal',
     description: 'Wonderfully independent flowers. Tulips actually continue growing after being cut — they have a mind of their own.',
     careInstructions: [
       { icon: 'water', title: 'Cool Water', body: 'Tulips prefer cool water. Change it every 2 days and keep the vase clean.' },
@@ -81,6 +94,9 @@ export const products: Product[] = [
     ],
     tag: 'Premium',
     color: '#EFBDBD',
+    properties: ['fragrant'],
+    height: 'short',
+    fullness: 'lush',
     description: 'Worth every bit of fuss. With the right care, peonies open into breathtaking, pillowy blossoms.',
     careInstructions: [
       { icon: 'water', title: 'Warm Water to Open', body: 'If buds are tight, place in slightly warm water to encourage them to open up.' },
@@ -102,6 +118,9 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1490750967868-88df5691cc52?w=600&h=800&q=85&fit=crop&crop=center',
     ],
     color: '#B5CEAA',
+    properties: ['pet-safe', 'scent-free'],
+    height: 'short',
+    fullness: 'minimal',
     description: 'A joyful seasonal mix, unique in every bunch. Just as wildflowers should be — never the same twice.',
     careInstructions: [
       { icon: 'water', title: 'Daily Water Change', body: 'Wildflower mixes drink more — changing the water daily keeps the whole bunch thriving.' },
@@ -123,6 +142,9 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1548973600-7a0d02f7c879?w=600&h=800&q=85&fit=crop&crop=center',
     ],
     color: '#C5B8E8',
+    properties: ['pet-safe', 'long-lasting'],
+    height: 'tall',
+    fullness: 'lush',
     description: 'Elegant and exceptionally long-lasting. Eustoma offers outstanding value — up to two weeks of quiet beauty.',
     careInstructions: [
       { icon: 'water', title: 'Fresh Water', body: 'Change the water every 2 days. Eustoma is sensitive to bacteria in stale water.' },
@@ -144,6 +166,9 @@ export const products: Product[] = [
       'https://images.unsplash.com/photo-1513682121497-80211f36a7d3?w=600&h=800&q=85&fit=crop&crop=center',
     ],
     color: '#F0D090',
+    properties: ['long-lasting', 'scent-free'],
+    height: 'medium',
+    fullness: 'lush',
     description: 'Hardy and cheerful. Chrysanthemums are the champions of longevity — up to 3 weeks with simple care.',
     careInstructions: [
       { icon: 'water', title: 'Regular Water', body: 'Change water every 2-3 days. A clean vase is just as important as fresh water.' },
