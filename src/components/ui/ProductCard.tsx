@@ -101,6 +101,7 @@ export function ProductCard({ product, index, onOpenModal }: {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               loading="lazy"
+              decoding="async"
             />
           </AnimatePresence>
 

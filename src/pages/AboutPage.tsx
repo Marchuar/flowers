@@ -40,7 +40,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 flex items-center justify-end pr-8 md:pr-16 pointer-events-none select-none overflow-hidden" aria-hidden>
           <span
             className="font-brand font-bold leading-none tracking-[0.08em] text-text-primary"
-            style={{ fontSize: 'clamp(140px, 22vw, 340px)', opacity: 0.025 }}
+            style={{ fontSize: 'clamp(140px, 22vw, 340px)', opacity: 0.025, transform: 'translateY(0.06em)' }}
           >
             STEM
           </span>
@@ -111,7 +111,7 @@ export default function AboutPage() {
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden" aria-hidden>
           <span
             className="font-brand font-bold leading-none tracking-[0.08em] whitespace-nowrap text-ink-text"
-            style={{ fontSize: 'clamp(120px, 22vw, 320px)', opacity: 0.03 }}
+            style={{ fontSize: 'clamp(120px, 22vw, 320px)', opacity: 0.03, transform: 'translateY(0.06em)' }}
           >
             STEM
           </span>

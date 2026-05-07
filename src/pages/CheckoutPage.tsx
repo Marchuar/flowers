@@ -260,6 +260,8 @@ export default function CheckoutPage() {
                             width={40}
                             height={40}
                             className="w-full h-full object-cover"
+                            loading="lazy"
+                            decoding="async"
                           />
                         </div>
                         <div className="flex-1 min-w-0">

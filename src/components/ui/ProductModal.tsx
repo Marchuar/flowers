@@ -86,7 +86,10 @@ export default function ProductModal({ product, onClose }: Props) {
     if (!product) return
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
     document.documentElement.style.overflow = 'hidden'
-    if (scrollbarWidth > 0) document.documentElement.style.paddingRight = `${scrollbarWidth}px`
+    if (scrollbarWidth > 0) {
+      document.documentElement.style.paddingRight = `${scrollbarWidth}px`
+      document.documentElement.style.setProperty('--scrollbar-w', `${scrollbarWidth}px`)
+    }
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
       if (e.key === 'ArrowRight' && hasMultiple) goNext()
@@ -96,6 +99,7 @@ export default function ProductModal({ product, onClose }: Props) {
     return () => {
       document.documentElement.style.overflow = ''
       document.documentElement.style.paddingRight = ''
+      document.documentElement.style.removeProperty('--scrollbar-w')
       window.removeEventListener('keydown', handler)
     }
   }, [product, onClose, hasMultiple, goNext, goPrev])
@@ -197,6 +201,8 @@ export default function ProductModal({ product, onClose }: Props) {
                     initial="enter"
                     animate="center"
                     exit="exit"
+                    loading="lazy"
+                    decoding="async"
                     transition={{ duration: 0.28, ease: [0.25, 1, 0.5, 1] }}
                     draggable={false}
                   />

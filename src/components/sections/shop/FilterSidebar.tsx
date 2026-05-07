@@ -23,8 +23,8 @@ const FULLNESS_OPTIONS: { key: StemFullness; labelKey: string }[] = [
 function chipCls(active: boolean) {
   return `font-sans text-[12.5px] font-[450] px-3 py-2 rounded-xl border transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 ${
     active
-      ? 'bg-text-primary text-surface border-text-primary'
-      : 'bg-surface text-text-primary border-border hover:border-text-primary/40'
+      ? 'bg-accent text-surface border-accent'
+      : 'bg-surface text-text-primary border-border hover:border-accent/40'
   }`
 }
 

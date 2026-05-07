@@ -59,6 +59,7 @@ export default function Footer() {
               style={{
                 fontSize: 'clamp(100px, 20vw, 260px)',
                 opacity: 0.038,
+                transform: 'translateY(0.06em)',
               }}
             >
               STEM

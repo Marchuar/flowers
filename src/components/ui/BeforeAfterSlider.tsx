@@ -42,6 +42,8 @@ export function BeforeAfterSlider({ before, after, alt = '' }: Props) {
         alt={`${alt} — after`}
         className="absolute inset-0 w-full h-full object-cover"
         draggable={false}
+        loading="lazy"
+        decoding="async"
       />
 
       {/* Before image — clipped to left of divider */}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence, useScroll, useMotionValueEvent } from 'framer-motion'
 import { Menu, X, ShoppingBag } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
@@ -33,6 +33,11 @@ export default function Navigation() {
     setScrolled(latest > 60)
   })
 
+  const navBgAnimate = useMemo(() => ({
+    backgroundColor: scrolled ? 'rgba(250, 250, 247, 0.94)' : 'rgba(250, 250, 247, 0)',
+    backdropFilter: scrolled ? 'blur(20px) saturate(1.5)' : 'blur(0px)',
+  }), [scrolled])
+
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -45,13 +50,11 @@ export default function Navigation() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        style={{ paddingRight: 'var(--scrollbar-w, 0px)' }}
       >
         <motion.div
           className="relative h-full px-6 md:px-10"
-          animate={{
-            backgroundColor: scrolled ? 'rgba(250, 250, 247, 0.94)' : 'rgba(250, 250, 247, 0)',
-            backdropFilter: scrolled ? 'blur(20px) saturate(1.5)' : 'blur(0px)',
-          }}
+          animate={navBgAnimate}
           transition={{ duration: 0.3 }}
         >
           {/* Gradient bottom border on scroll */}
