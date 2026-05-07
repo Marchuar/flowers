@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 function FlowerSVG() {
   return (
     <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <g filter="url(#eblur)">
+      <g>
         {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => (
           <ellipse key={i} cx="100" cy="100" rx="28" ry="55"
             fill={i % 2 === 0 ? '#F5A27A' : '#E8C4A0'}
@@ -14,11 +14,6 @@ function FlowerSVG() {
         ))}
         <circle cx="100" cy="100" r="26" fill="#FFD166" />
       </g>
-      <defs>
-        <filter id="eblur" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" />
-        </filter>
-      </defs>
     </svg>
   )
 }
@@ -101,6 +96,7 @@ export default function EmailCapture() {
         className="absolute -bottom-8 -right-8 md:bottom-0 md:right-0 w-44 md:w-64 opacity-[0.18]"
         animate={{ y: [0, -14, 0] }}
         transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut' }}
+        style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 20px 40px rgba(245,162,122,0.25))' }}
       >
         <FlowerSVG />
       </motion.div>

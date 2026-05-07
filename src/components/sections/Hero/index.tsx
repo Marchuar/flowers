@@ -52,8 +52,8 @@ export default function Hero() {
           transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-mobile-delay md:animate-float-delay md:drop-shadow-[0_20px_40px_rgba(245,162,122,0.3)]"
-            style={{ willChange: 'transform' }}
+            className="animate-float-mobile-delay md:animate-float-delay"
+            style={{ willChange: 'transform', filter: 'blur(2.5px) drop-shadow(0 20px 40px rgba(245,162,122,0.3))' }}
           >
             <FlowerCoral />
           </div>
@@ -66,8 +66,8 @@ export default function Hero() {
             transition={{ duration: 1.1, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-              className="animate-float-mobile-slow md:animate-float-slow md:drop-shadow-[0_20px_40px_rgba(92,184,92,0.3)]"
-              style={{ willChange: 'transform' }}
+              className="animate-float-mobile-slow md:animate-float-slow"
+              style={{ willChange: 'transform', filter: 'blur(2px) drop-shadow(0 20px 40px rgba(92,184,92,0.3))' }}
           >
             <FlowerGreen />
           </div>

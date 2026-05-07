@@ -63,15 +63,14 @@ export default function ShopPage() {
             animate={inView ? { scale: 1, opacity: 0.55, rotate: 0 } : {}}
             transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="animate-float-slow" style={{ willChange: 'transform' }}>
+            <div className="animate-float-slow" style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 20px 40px rgba(107,140,255,0.25))' }}>
               <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
-                <g filter="url(#sh1)">
+                <g>
                   {[0,45,90,135,180,225,270,315].map((a,i) => (
                     <ellipse key={i} cx="100" cy="100" rx="28" ry="55" fill="#6B8CFF" transform={`rotate(${a} 100 100)`} opacity="0.9" />
                   ))}
                   <circle cx="100" cy="100" r="28" fill="#E8A0C8" />
                 </g>
-                <defs><filter id="sh1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter></defs>
               </svg>
             </div>
           </motion.div>
@@ -82,15 +81,14 @@ export default function ShopPage() {
             animate={inView ? { scale: 1, opacity: 0.45, rotate: 0 } : {}}
             transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="animate-float-delay" style={{ willChange: 'transform' }}>
+            <div className="animate-float-delay" style={{ willChange: 'transform', filter: 'blur(2.5px) drop-shadow(0 16px 32px rgba(245,162,122,0.25))' }}>
               <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
-                <g filter="url(#sh2)">
+                <g>
                   {[0,36,72,108,144,180,216,252,288,324].map((a,i) => (
                     <ellipse key={i} cx="100" cy="100" rx="22" ry="48" fill="#F5A27A" transform={`rotate(${a} 100 100)`} opacity="0.88" />
                   ))}
                   <circle cx="100" cy="100" r="24" fill="#FFD166" />
                 </g>
-                <defs><filter id="sh2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" /></filter></defs>
               </svg>
             </div>
           </motion.div>
@@ -101,15 +99,14 @@ export default function ShopPage() {
             animate={inView ? { scale: 1, opacity: 0.35, rotate: 0 } : {}}
             transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="animate-float-delay2" style={{ willChange: 'transform' }}>
+            <div className="animate-float-delay2" style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 16px 32px rgba(180,127,212,0.25))' }}>
               <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
-                <g filter="url(#sh3)">
+                <g>
                   {[0,45,90,135,180,225,270,315].map((a,i) => (
                     <ellipse key={i} cx="100" cy="100" rx="25" ry="50" fill="#B47FD4" transform={`rotate(${a} 100 100)`} opacity="0.85" />
                   ))}
                   <circle cx="100" cy="100" r="26" fill="#E8C4E8" />
                 </g>
-                <defs><filter id="sh3" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter></defs>
               </svg>
             </div>
           </motion.div>

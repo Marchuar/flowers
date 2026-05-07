@@ -1,4 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from 'react'
+import { products } from './constants/products'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 import { CartProvider } from './context/CartContext'
@@ -19,11 +20,7 @@ const BusinessPage   = lazy(() => import('./pages/BusinessPage'))
 const FaqPage        = lazy(() => import('./pages/FaqPage'))
 
 function PageLoader() {
-  return (
-    <div className="min-h-screen bg-bg flex items-center justify-center">
-      <div className="w-px h-10 bg-border animate-pulse" />
-    </div>
-  )
+  return <div className="min-h-screen bg-bg" />
 }
 
 function App() {
@@ -52,6 +49,11 @@ function App() {
     // First visit — mark session and keep preloader for full animation
     sessionStorage.setItem('stem_v', '1')
     const shownAt = Date.now()
+
+    // Kick off page chunk + image downloads during preloader so they're ready on dismiss
+    import('./pages/ShopPage').catch(() => {})
+    import('./pages/HomePage').catch(() => {})
+    products.forEach(({ image }) => { const img = new window.Image(); img.src = image })
 
     fontsReady.then(() => {
       const remaining = Math.max(0, 1600 - (Date.now() - shownAt))
