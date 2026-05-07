@@ -25,7 +25,7 @@ export default function Hero() {
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 2.8, ease: 'easeOut', delay: 0.2 }}
+        transition={{ duration: 1.6, ease: 'easeOut', delay: 0.2 }}
         style={{
           background: `
             radial-gradient(ellipse 90% 80% at 105% 0%, rgba(180,127,212,0.22) 0%, transparent 65%),
@@ -60,7 +60,7 @@ export default function Hero() {
         </motion.div>
 
         <motion.div
-            className="absolute w-20 bottom-[55%] left-[2%] lg:bottom-[4%] md:hidden lg:block"
+            className="absolute w-20 bottom-[55%] left-[2%] lg:bottom-[4%] hidden lg:block"
             initial={{ scale: 0.7, opacity: 0, rotate: -10 }}
             animate={{ scale: 1, opacity: 1, rotate: 0 }}
             transition={{ duration: 1.1, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
@@ -83,8 +83,8 @@ export default function Hero() {
           transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-mobile md:animate-float md:drop-shadow-[0_24px_48px_rgba(107,140,255,0.3)]"
-            style={{ willChange: 'transform' }}
+            className="animate-float-mobile md:animate-float"
+            style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 24px 48px rgba(107,140,255,0.28))' }}
           >
             <FlowerBlue />
           </div>
@@ -97,8 +97,8 @@ export default function Hero() {
           transition={{ duration: 1.1, delay: 1.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float drop-shadow-[0_16px_32px_rgba(242,160,184,0.3)]"
-            style={{ willChange: 'transform' }}
+            className="animate-float"
+            style={{ willChange: 'transform', filter: 'blur(2.5px) drop-shadow(0 16px 32px rgba(242,160,184,0.28))' }}
           >
             <FlowerPink />
           </div>

@@ -23,6 +23,7 @@ export function ProductCard({ product, index, onOpenModal }: {
   const allImages = [product.image, ...(product.images ?? [])]
   const hasMultiple = allImages.length > 1
   const [imgIndex, setImgIndex] = useState(0)
+  const [loadedSrcs, setLoadedSrcs] = useState<Set<string>>(new Set())
   const touchStartX = useRef(0)
 
   const bgColor = product.color + '38'
@@ -87,6 +88,7 @@ export function ProductCard({ product, index, onOpenModal }: {
       >
         <div
           className="relative overflow-hidden rounded-2xl aspect-[3/4] mb-3.5"
+          style={{ backgroundColor: bgColor }}
           onTouchStart={hasMultiple ? onTouchStart : undefined}
           onTouchEnd={hasMultiple ? onTouchEnd : undefined}
         >
@@ -97,11 +99,11 @@ export function ProductCard({ product, index, onOpenModal }: {
               alt={product.name}
               className="w-full h-full object-cover"
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
+              animate={{ opacity: loadedSrcs.has(allImages[imgIndex]) ? 1 : 0 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
-              loading="lazy"
               decoding="async"
+              onLoad={() => setLoadedSrcs(prev => new Set([...prev, allImages[imgIndex]]))}
             />
           </AnimatePresence>
 

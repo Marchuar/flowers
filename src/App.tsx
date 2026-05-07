@@ -27,42 +27,34 @@ function PageLoader() {
 }
 
 function App() {
-  // 'pending'    — checking load state (< 350ms, no visual)
+  // 'pending'    — waiting to see if load is slow (< 350ms, no visual)
   // 'preloading' — slow load detected, showing flower animation
-  // 'done'       — ready, app mounts and entrance animations play
-  const [phase, setPhase] = useState<'pending' | 'preloading' | 'done'>(() =>
-    document.readyState === 'complete' && document.fonts.status === 'loaded'
-      ? 'done'
-      : 'pending'
-  )
+  // 'done'       — fonts ready, app mounts and entrance animations play
+  const [phase, setPhase] = useState<'pending' | 'preloading' | 'done'>('pending')
 
   useEffect(() => {
-    // Fast path already handled by lazy initializer above
-    if (document.readyState === 'complete' && document.fonts.status === 'loaded') return
-
-    const loading = Promise.all([
-      document.fonts.ready,
-      new Promise<void>(r => {
-        if (document.readyState === 'complete') r()
-        else window.addEventListener('load', () => r(), { once: true })
-      }),
+    // Explicitly request key fonts — in SPA, fonts.status is vacuously 'loaded'
+    // before React renders any text, so we must trigger loading manually.
+    const fontsReady = Promise.all([
+      document.fonts.load('300 16px Boska').catch(() => {}),
+      document.fonts.load('700 16px Boska').catch(() => {}),
+      document.fonts.load('500 16px "General Sans"').catch(() => {}),
     ])
 
     let shownAt: number | null = null
 
-    // Only show preloader if loading takes longer than 350ms
     const threshold = setTimeout(() => {
       shownAt = Date.now()
       setPhase('preloading')
-    }, 350)
+    }, 150)
 
-    loading.then(() => {
+    fontsReady.then(() => {
       clearTimeout(threshold)
       if (shownAt === null) {
-        // Fast load — skip preloader, go straight to app
+        // Fonts were cached — fast path, no preloader needed
         setPhase('done')
       } else {
-        // Preloader was shown — keep it until animation completes (1600ms from appearance)
+        // Preloader was shown — keep until animation completes (1600ms from appearance)
         const remaining = Math.max(0, 1600 - (Date.now() - shownAt))
         setTimeout(() => setPhase('done'), remaining)
       }

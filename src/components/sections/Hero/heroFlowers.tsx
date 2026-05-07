@@ -1,18 +1,13 @@
 export function FlowerBlue() {
   return (
     <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <g filter="url(#blur1)">
+      <g>
         {[0,45,90,135,180,225,270,315].map((angle, i) => (
           <ellipse key={i} cx="100" cy="100" rx="28" ry="55"
             fill="#6B8CFF" transform={`rotate(${angle} 100 100)`} opacity="0.9" />
         ))}
         <circle cx="100" cy="100" r="28" fill="#E8A0C8" />
       </g>
-      <defs>
-        <filter id="blur1" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" />
-        </filter>
-      </defs>
     </svg>
   )
 }
@@ -60,18 +55,13 @@ export function FlowerGreen() {
 export function FlowerPink() {
   return (
     <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <g filter="url(#blur5)">
+      <g>
         {[0,60,120,180,240,300].map((angle, i) => (
           <ellipse key={i} cx="100" cy="100" rx="18" ry="42"
             fill="#F2A0B8" transform={`rotate(${angle} 100 100)`} opacity="0.9" />
         ))}
         <circle cx="100" cy="100" r="20" fill="#FFE4EA" />
       </g>
-      <defs>
-        <filter id="blur5" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="2.5" />
-        </filter>
-      </defs>
     </svg>
   )
 }
