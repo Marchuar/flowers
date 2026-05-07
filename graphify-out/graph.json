@@ -376,8 +376,17 @@
       "source_file": "src/components/sections/Hero.tsx",
       "source_location": "L1",
       "id": "src_components_sections_hero_tsx",
-      "community": 34,
+      "community": 12,
       "norm_label": "hero.tsx"
+    },
+    {
+      "label": "TulipIcon()",
+      "file_type": "code",
+      "source_file": "src/components/sections/Hero.tsx",
+      "source_location": "L7",
+      "id": "hero_tulipicon",
+      "community": 12,
+      "norm_label": "tulipicon()"
     },
     {
       "label": "Pricing.tsx",
@@ -385,7 +394,7 @@
       "source_file": "src/components/sections/Pricing.tsx",
       "source_location": "L1",
       "id": "src_components_sections_pricing_tsx",
-      "community": 35,
+      "community": 34,
       "norm_label": "pricing.tsx"
     },
     {
@@ -394,7 +403,7 @@
       "source_file": "src/components/sections/HowItWorks.tsx",
       "source_location": "L1",
       "id": "src_components_sections_howitworks_tsx",
-      "community": 36,
+      "community": 35,
       "norm_label": "howitworks.tsx"
     },
     {
@@ -403,7 +412,7 @@
       "source_file": "src/components/sections/Ticker.tsx",
       "source_location": "L1",
       "id": "src_components_sections_ticker_tsx",
-      "community": 12,
+      "community": 13,
       "norm_label": "ticker.tsx"
     },
     {
@@ -412,7 +421,7 @@
       "source_file": "src/components/sections/Ticker.tsx",
       "source_location": "L3",
       "id": "ticker_tickeritem",
-      "community": 12,
+      "community": 13,
       "norm_label": "tickeritem()"
     },
     {
@@ -421,7 +430,7 @@
       "source_file": "src/components/sections/EmailCapture.tsx",
       "source_location": "L1",
       "id": "src_components_sections_emailcapture_tsx",
-      "community": 37,
+      "community": 36,
       "norm_label": "emailcapture.tsx"
     },
     {
@@ -430,7 +439,7 @@
       "source_file": "src/components/sections/Testimonials.tsx",
       "source_location": "L1",
       "id": "src_components_sections_testimonials_tsx",
-      "community": 38,
+      "community": 37,
       "norm_label": "testimonials.tsx"
     },
     {
@@ -538,7 +547,7 @@
       "source_file": "src/components/layout/Footer.tsx",
       "source_location": "L1",
       "id": "src_components_layout_footer_tsx",
-      "community": 39,
+      "community": 38,
       "norm_label": "footer.tsx"
     },
     {
@@ -547,7 +556,7 @@
       "source_file": "src/components/layout/Navigation.tsx",
       "source_location": "L1",
       "id": "src_components_layout_navigation_tsx",
-      "community": 40,
+      "community": 39,
       "norm_label": "navigation.tsx"
     },
     {
@@ -556,7 +565,7 @@
       "source_file": "src/hooks/useCart.ts",
       "source_location": "L1",
       "id": "src_hooks_usecart_ts",
-      "community": 13,
+      "community": 14,
       "norm_label": "usecart.ts"
     },
     {
@@ -565,7 +574,7 @@
       "source_file": "src/hooks/useCart.ts",
       "source_location": "L4",
       "id": "usecart_usecart",
-      "community": 13,
+      "community": 14,
       "norm_label": "usecart()"
     },
     {
@@ -574,7 +583,7 @@
       "source_file": "src/hooks/useIsMobile.ts",
       "source_location": "L1",
       "id": "src_hooks_useismobile_ts",
-      "community": 14,
+      "community": 15,
       "norm_label": "useismobile.ts"
     },
     {
@@ -583,7 +592,7 @@
       "source_file": "src/hooks/useIsMobile.ts",
       "source_location": "L3",
       "id": "useismobile_useismobile",
-      "community": 14,
+      "community": 15,
       "norm_label": "useismobile()"
     },
     {
@@ -628,7 +637,7 @@
       "source_file": "src/i18n/en.ts",
       "source_location": "L1",
       "id": "src_i18n_en_ts",
-      "community": 41,
+      "community": 40,
       "norm_label": "en.ts"
     },
     {
@@ -637,7 +646,7 @@
       "source_file": "src/i18n/pl.ts",
       "source_location": "L1",
       "id": "src_i18n_pl_ts",
-      "community": 42,
+      "community": 41,
       "norm_label": "pl.ts"
     },
     {
@@ -646,7 +655,7 @@
       "source_file": "src/i18n/index.ts",
       "source_location": "L1",
       "id": "src_i18n_index_ts",
-      "community": 15,
+      "community": 16,
       "norm_label": "index.ts"
     },
     {
@@ -655,7 +664,7 @@
       "source_file": "src/i18n/index.ts",
       "source_location": "L25",
       "id": "index_setlanguage",
-      "community": 15,
+      "community": 16,
       "norm_label": "setlanguage()"
     },
     {
@@ -664,7 +673,7 @@
       "source_file": "src/pages/CheckoutPage.tsx",
       "source_location": "L1",
       "id": "src_pages_checkoutpage_tsx",
-      "community": 16,
+      "community": 17,
       "norm_label": "checkoutpage.tsx"
     },
     {
@@ -673,7 +682,7 @@
       "source_file": "src/pages/CheckoutPage.tsx",
       "source_location": "L46",
       "id": "checkoutpage_handleplaceorder",
-      "community": 16,
+      "community": 17,
       "norm_label": "handleplaceorder()"
     },
     {
@@ -682,7 +691,7 @@
       "source_file": "src/pages/CartPage.tsx",
       "source_location": "L1",
       "id": "src_pages_cartpage_tsx",
-      "community": 43,
+      "community": 42,
       "norm_label": "cartpage.tsx"
     },
     {
@@ -691,17 +700,8 @@
       "source_file": "src/pages/ShopPage.tsx",
       "source_location": "L1",
       "id": "src_pages_shoppage_tsx",
-      "community": 17,
+      "community": 43,
       "norm_label": "shoppage.tsx"
-    },
-    {
-      "label": "toggleType()",
-      "file_type": "code",
-      "source_file": "src/pages/ShopPage.tsx",
-      "source_location": "L113",
-      "id": "shoppage_toggletype",
-      "community": 17,
-      "norm_label": "toggletype()"
     },
     {
       "label": "AboutPage.tsx",
@@ -1578,6 +1578,18 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
+      "source_file": "src/components/sections/Hero.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "_src": "src_components_sections_hero_tsx",
+      "_tgt": "hero_tulipicon",
+      "source": "src_components_sections_hero_tsx",
+      "target": "hero_tulipicon",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
       "source_file": "src/components/sections/Ticker.tsx",
       "source_location": "L3",
       "weight": 1.0,
@@ -1801,18 +1813,6 @@
       "_tgt": "checkoutpage_handleplaceorder",
       "source": "src_pages_checkoutpage_tsx",
       "target": "checkoutpage_handleplaceorder",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/ShopPage.tsx",
-      "source_location": "L113",
-      "weight": 1.0,
-      "_src": "src_pages_shoppage_tsx",
-      "_tgt": "shoppage_toggletype",
-      "source": "src_pages_shoppage_tsx",
-      "target": "shoppage_toggletype",
       "confidence_score": 1.0
     },
     {

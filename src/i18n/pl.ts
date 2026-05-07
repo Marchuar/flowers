@@ -26,6 +26,27 @@ const pl: Translations = {
     statDeliveryLabel: 'Dostawa',
     statWholesaleLabel: 'Bez narzutu',
     scroll: 'Przewiń',
+    card: {
+      today: 'Dziś',
+      stemsInSeason: 'Łodygi w sezonie',
+      springPeak: 'Szczyt wiosny',
+      buildOrder: 'Skompletuj zamówienie',
+      perStem: 'za łodygę',
+      days: {
+        Monday:    'Świeży tydzień — zacznij go pięknie',
+        Tuesday:   'Środek tygodnia — coś miłego dla kogoś bliskiego',
+        Wednesday: 'W połowie drogi — zrób coś dla siebie',
+        Thursday:  'Prawie weekend — zamów z wyprzedzeniem',
+        Friday:    'Weekendowe kwiaty, dostawa dziś',
+        Saturday:  'Sobotnie wybory, właśnie dotarły',
+        Sunday:    'Niedzielne łodygi — spokojny poranek',
+      },
+      stems: {
+        tulip:      { name: 'Tulipan',   colors: 'różowy i fioletowy' },
+        peony:      { name: 'Piwonia',   colors: 'blush i biel'       },
+        ranunculus: { name: 'Jaskier',   colors: 'łososiowy i kremowy' },
+      },
+    },
   },
   howItWorks: {
     eyebrow: 'Proces',

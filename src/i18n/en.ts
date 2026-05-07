@@ -24,6 +24,27 @@ const en = {
     statDeliveryLabel: 'Delivery',
     statWholesaleLabel: 'No markup',
     scroll: 'Scroll',
+    card: {
+      today: 'Today',
+      stemsInSeason: 'Stems in season',
+      springPeak: 'Spring peak',
+      buildOrder: 'Build your order',
+      perStem: 'per stem',
+      days: {
+        Monday:    'Fresh week — start it beautifully',
+        Tuesday:   'Mid-week pick-me-up for someone you love',
+        Wednesday: 'Halfway there — treat yourself',
+        Thursday:  'Almost the weekend — order ahead',
+        Friday:    'Weekend flowers, delivered today',
+        Saturday:  'Saturday market picks, just arrived',
+        Sunday:    'Sunday stems — slow morning vibes',
+      },
+      stems: {
+        tulip:      { name: 'Tulip',       colors: 'pink & purple'  },
+        peony:      { name: 'Peony',       colors: 'blush & white'  },
+        ranunculus: { name: 'Ranunculus',  colors: 'salmon & cream' },
+      },
+    },
   },
   howItWorks: {
     eyebrow: 'Process',

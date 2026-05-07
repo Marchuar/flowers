@@ -1,7 +1,7 @@
-# Graph Report - .  (2026-04-30)
+# Graph Report - .  (2026-05-05)
 
 ## Corpus Check
-- 39 files · ~3,746,734 words
+- 39 files · ~3,747,266 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -293,17 +293,17 @@ Nodes (1): Testimonials: masonry 3-col grid, NOT marquee or crossfade
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 11`** (2 nodes): `onKeyDown()`, `CartDrawer.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 12`** (2 nodes): `Ticker.tsx`, `TickerItem()`
+- **Thin community `Community 12`** (2 nodes): `TulipIcon()`, `Hero.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 13`** (2 nodes): `useCart.ts`, `useCart()`
+- **Thin community `Community 13`** (2 nodes): `Ticker.tsx`, `TickerItem()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 14`** (2 nodes): `useIsMobile.ts`, `useIsMobile()`
+- **Thin community `Community 14`** (2 nodes): `useCart.ts`, `useCart()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 15`** (2 nodes): `setLanguage()`, `index.ts`
+- **Thin community `Community 15`** (2 nodes): `useIsMobile.ts`, `useIsMobile()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 16`** (2 nodes): `handlePlaceOrder()`, `CheckoutPage.tsx`
+- **Thin community `Community 16`** (2 nodes): `setLanguage()`, `index.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 17`** (2 nodes): `toggleType()`, `ShopPage.tsx`
+- **Thin community `Community 17`** (2 nodes): `handlePlaceOrder()`, `CheckoutPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 18`** (2 nodes): `HowItWorksPage()`, `HowItWorksPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
@@ -337,25 +337,25 @@ Nodes (1): Testimonials: masonry 3-col grid, NOT marquee or crossfade
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 33`** (1 nodes): `useToast hook`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (1 nodes): `Hero.tsx`
+- **Thin community `Community 34`** (1 nodes): `Pricing.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (1 nodes): `Pricing.tsx`
+- **Thin community `Community 35`** (1 nodes): `HowItWorks.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (1 nodes): `HowItWorks.tsx`
+- **Thin community `Community 36`** (1 nodes): `EmailCapture.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (1 nodes): `EmailCapture.tsx`
+- **Thin community `Community 37`** (1 nodes): `Testimonials.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (1 nodes): `Testimonials.tsx`
+- **Thin community `Community 38`** (1 nodes): `Footer.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (1 nodes): `Footer.tsx`
+- **Thin community `Community 39`** (1 nodes): `Navigation.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (1 nodes): `Navigation.tsx`
+- **Thin community `Community 40`** (1 nodes): `en.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (1 nodes): `en.ts`
+- **Thin community `Community 41`** (1 nodes): `pl.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (1 nodes): `pl.ts`
+- **Thin community `Community 42`** (1 nodes): `CartPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (1 nodes): `CartPage.tsx`
+- **Thin community `Community 43`** (1 nodes): `ShopPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 44`** (1 nodes): `AboutPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
