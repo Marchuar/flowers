@@ -25,7 +25,7 @@
       "label": "update()",
       "file_type": "code",
       "source_file": "src/App.tsx",
-      "source_location": "L68",
+      "source_location": "L64",
       "id": "app_update",
       "community": 3,
       "norm_label": "update()"
@@ -840,7 +840,7 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "src/App.tsx",
-      "source_location": "L68",
+      "source_location": "L64",
       "weight": 1.0,
       "_src": "src_app_tsx",
       "_tgt": "app_update",

@@ -30,37 +30,33 @@ function App() {
   // 'pending'    — waiting to see if load is slow (< 350ms, no visual)
   // 'preloading' — slow load detected, showing flower animation
   // 'done'       — fonts ready, app mounts and entrance animations play
-  const [phase, setPhase] = useState<'pending' | 'preloading' | 'done'>('pending')
+  // First visit in session → show preloader (fonts + images uncached)
+  // Returning visit → skip preloader (everything cached, instant load)
+  const [phase, setPhase] = useState<'pending' | 'preloading' | 'done'>(() =>
+    sessionStorage.getItem('stem_v') ? 'pending' : 'preloading'
+  )
 
   useEffect(() => {
-    // Explicitly request key fonts — in SPA, fonts.status is vacuously 'loaded'
-    // before React renders any text, so we must trigger loading manually.
     const fontsReady = Promise.all([
       document.fonts.load('300 16px Boska').catch(() => {}),
       document.fonts.load('700 16px Boska').catch(() => {}),
       document.fonts.load('500 16px "General Sans"').catch(() => {}),
     ])
 
-    let shownAt: number | null = null
+    if (sessionStorage.getItem('stem_v')) {
+      // Returning visit — fonts cached, transition to done immediately
+      fontsReady.then(() => setPhase('done'))
+      return
+    }
 
-    const threshold = setTimeout(() => {
-      shownAt = Date.now()
-      setPhase('preloading')
-    }, 150)
+    // First visit — mark session and keep preloader for full animation
+    sessionStorage.setItem('stem_v', '1')
+    const shownAt = Date.now()
 
     fontsReady.then(() => {
-      clearTimeout(threshold)
-      if (shownAt === null) {
-        // Fonts were cached — fast path, no preloader needed
-        setPhase('done')
-      } else {
-        // Preloader was shown — keep until animation completes (1600ms from appearance)
-        const remaining = Math.max(0, 1600 - (Date.now() - shownAt))
-        setTimeout(() => setPhase('done'), remaining)
-      }
+      const remaining = Math.max(0, 1600 - (Date.now() - shownAt))
+      setTimeout(() => setPhase('done'), remaining)
     })
-
-    return () => clearTimeout(threshold)
   }, [])
 
   useEffect(() => {
