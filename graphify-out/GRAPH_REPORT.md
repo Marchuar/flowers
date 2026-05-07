@@ -1,11 +1,11 @@
 # Graph Report - .  (2026-05-07)
 
 ## Corpus Check
-- 47 files · ~3,749,415 words
+- 48 files · ~3,749,953 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 136 nodes · 85 edges · 57 communities detected
+- 137 nodes · 85 edges · 58 communities detected
 - Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
@@ -67,6 +67,7 @@
 - [[_COMMUNITY_Community 54|Community 54]]
 - [[_COMMUNITY_Community 55|Community 55]]
 - [[_COMMUNITY_Community 56|Community 56]]
+- [[_COMMUNITY_Community 57|Community 57]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `STEM Business Plan` - 8 edges
@@ -240,15 +241,15 @@ Nodes (0):
 
 ### Community 35 - "Community 35"
 Cohesion: 1.0
-Nodes (1): Toast / ToastProvider (notifications)
+Nodes (0): 
 
 ### Community 36 - "Community 36"
 Cohesion: 1.0
-Nodes (1): useToast hook
+Nodes (1): Toast / ToastProvider (notifications)
 
 ### Community 37 - "Community 37"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): useToast hook
 
 ### Community 38 - "Community 38"
 Cohesion: 1.0
@@ -316,13 +317,17 @@ Nodes (0):
 
 ### Community 54 - "Community 54"
 Cohesion: 1.0
-Nodes (1): Design decision: Ticker marquee removed (ugly)
+Nodes (0): 
 
 ### Community 55 - "Community 55"
 Cohesion: 1.0
-Nodes (1): Rule: no inline botanical SVG line-art as background decoration
+Nodes (1): Design decision: Ticker marquee removed (ugly)
 
 ### Community 56 - "Community 56"
+Cohesion: 1.0
+Nodes (1): Rule: no inline botanical SVG line-art as background decoration
+
+### Community 57 - "Community 57"
 Cohesion: 1.0
 Nodes (1): Testimonials: masonry 3-col grid, NOT marquee or crossfade
 
@@ -373,51 +378,53 @@ Nodes (1): Testimonials: masonry 3-col grid, NOT marquee or crossfade
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 - **Thin community `Community 33`** (1 nodes): `flowerIcons.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (1 nodes): `FloatingInput.tsx`
+- **Thin community `Community 34`** (1 nodes): `Preloader.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (1 nodes): `Toast / ToastProvider (notifications)`
+- **Thin community `Community 35`** (1 nodes): `FloatingInput.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (1 nodes): `useToast hook`
+- **Thin community `Community 36`** (1 nodes): `Toast / ToastProvider (notifications)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (1 nodes): `Pricing.tsx`
+- **Thin community `Community 37`** (1 nodes): `useToast hook`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (1 nodes): `HowItWorks.tsx`
+- **Thin community `Community 38`** (1 nodes): `Pricing.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (1 nodes): `EmailCapture.tsx`
+- **Thin community `Community 39`** (1 nodes): `HowItWorks.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (1 nodes): `Testimonials.tsx`
+- **Thin community `Community 40`** (1 nodes): `EmailCapture.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (1 nodes): `Products.tsx`
+- **Thin community `Community 41`** (1 nodes): `Testimonials.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (1 nodes): `filterTypes.ts`
+- **Thin community `Community 42`** (1 nodes): `Products.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (1 nodes): `index.tsx`
+- **Thin community `Community 43`** (1 nodes): `filterTypes.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 44`** (1 nodes): `SeasonCard.tsx`
+- **Thin community `Community 44`** (1 nodes): `index.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (1 nodes): `heroFlowers.tsx`
+- **Thin community `Community 45`** (1 nodes): `SeasonCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (1 nodes): `Footer.tsx`
+- **Thin community `Community 46`** (1 nodes): `heroFlowers.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (1 nodes): `Navigation.tsx`
+- **Thin community `Community 47`** (1 nodes): `Footer.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (1 nodes): `en.ts`
+- **Thin community `Community 48`** (1 nodes): `Navigation.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 49`** (1 nodes): `pl.ts`
+- **Thin community `Community 49`** (1 nodes): `en.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 50`** (1 nodes): `CartPage.tsx`
+- **Thin community `Community 50`** (1 nodes): `pl.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 51`** (1 nodes): `ShopPage.tsx`
+- **Thin community `Community 51`** (1 nodes): `CartPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 52`** (1 nodes): `AboutPage.tsx`
+- **Thin community `Community 52`** (1 nodes): `ShopPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 53`** (1 nodes): `FaqPage.tsx`
+- **Thin community `Community 53`** (1 nodes): `AboutPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 54`** (1 nodes): `Design decision: Ticker marquee removed (ugly)`
+- **Thin community `Community 54`** (1 nodes): `FaqPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 55`** (1 nodes): `Rule: no inline botanical SVG line-art as background decoration`
+- **Thin community `Community 55`** (1 nodes): `Design decision: Ticker marquee removed (ugly)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 56`** (1 nodes): `Testimonials: masonry 3-col grid, NOT marquee or crossfade`
+- **Thin community `Community 56`** (1 nodes): `Rule: no inline botanical SVG line-art as background decoration`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 57`** (1 nodes): `Testimonials: masonry 3-col grid, NOT marquee or crossfade`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
