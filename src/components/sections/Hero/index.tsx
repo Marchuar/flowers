@@ -77,7 +77,7 @@ export default function Hero() {
       {/* Foreground flowers — all fully within screen bounds */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-[25]">
         <motion.div
-          className="absolute w-56 top-[1%] right-[1%] md:w-56 md:right-[2%] lg:w-60 lg:top-[0%] lg:right-[-3%] xl:w-72 xl:right-[2%] xl:top-[-2%]"
+          className="absolute w-56 top-[1%] right-[1%] md:w-56 md:right-[2%] lg:w-60 lg:top-[0%] lg:right-[-3%] xl:w-72 xl:right-[0%] xl:top-[-2%]"
           initial={{ scale: 0.7, opacity: 0, rotate: -15 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
