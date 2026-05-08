@@ -3,103 +3,8 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-
-function FlowerBlue() {
-  return (
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <g filter="url(#blur1)">
-        {[0,45,90,135,180,225,270,315].map((angle, i) => (
-          <ellipse key={i} cx="100" cy="100" rx="28" ry="55"
-            fill="#6B8CFF" transform={`rotate(${angle} 100 100)`} opacity="0.9" />
-        ))}
-        <circle cx="100" cy="100" r="28" fill="#E8A0C8" />
-      </g>
-      <defs>
-        <filter id="blur1" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" />
-        </filter>
-      </defs>
-    </svg>
-  )
-}
-
-function FlowerCoral() {
-  return (
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <g filter="url(#blur2)">
-        {[0,36,72,108,144,180,216,252,288,324].map((angle, i) => (
-          <ellipse key={i} cx="100" cy="100" rx="22" ry="48"
-            fill="#F5A27A" transform={`rotate(${angle} 100 100)`} opacity="0.88" />
-        ))}
-        <circle cx="100" cy="100" r="24" fill="#FFD166" />
-      </g>
-      <defs>
-        <filter id="blur2" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="2.5" />
-        </filter>
-      </defs>
-    </svg>
-  )
-}
-
-function FlowerGreen() {
-  return (
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <path d="M100 180 Q90 140 100 110" stroke="#5CB85C" strokeWidth="6" strokeLinecap="round" fill="none" />
-      <path d="M100 150 Q70 130 75 110 Q90 125 100 150Z" fill="#5CB85C" />
-      <g filter="url(#blur3)">
-        {[0,60,120,180,240,300].map((angle, i) => (
-          <ellipse key={i} cx="100" cy="90" rx="20" ry="40"
-            fill="#5CB85C" transform={`rotate(${angle} 100 90)`} opacity="0.9" />
-        ))}
-        <circle cx="100" cy="90" r="22" fill="#A8E063" />
-      </g>
-      <defs>
-        <filter id="blur3" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="2" />
-        </filter>
-      </defs>
-    </svg>
-  )
-}
-
-function FlowerPurple() {
-  return (
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <g filter="url(#blur4)">
-        {[0,45,90,135,180,225,270,315].map((angle, i) => (
-          <ellipse key={i} cx="100" cy="100" rx="25" ry="50"
-            fill="#B47FD4" transform={`rotate(${angle} 100 100)`} opacity="0.85" />
-        ))}
-        <circle cx="100" cy="100" r="26" fill="#E8C4E8" />
-      </g>
-      <defs>
-        <filter id="blur4" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="3" />
-        </filter>
-      </defs>
-    </svg>
-  )
-}
-
-function FlowerPink() {
-  return (
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
-      <g filter="url(#blur5)">
-        {[0,60,120,180,240,300].map((angle, i) => (
-          <ellipse key={i} cx="100" cy="100" rx="18" ry="42"
-            fill="#F2A0B8" transform={`rotate(${angle} 100 100)`} opacity="0.9" />
-        ))}
-        <circle cx="100" cy="100" r="20" fill="#FFE4EA" />
-      </g>
-      <defs>
-        <filter id="blur5" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="2.5" />
-        </filter>
-      </defs>
-    </svg>
-  )
-}
+import { SeasonCard } from './SeasonCard'
+import { FlowerBlue, FlowerCoral, FlowerGreen, FlowerPink } from './heroFlowers'
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null)
@@ -107,7 +12,6 @@ export default function Hero() {
 
   const stats = [
     { value: t('hero.statDeliveryValue'), label: t('hero.statDeliveryLabel') },
-    { value: '500+',                      label: t('hero.statCustomersLabel') },
     { value: '100%',                      label: t('hero.statWholesaleLabel') },
   ]
 
@@ -116,12 +20,12 @@ export default function Hero() {
       ref={ref}
       className="relative overflow-hidden md:min-h-[calc(100svh-4rem)] bg-[#FAFAF7]"
     >
-      {/* Gradient glow — fades in slowly */}
+      {/* Gradient glow */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 2.8, ease: 'easeOut', delay: 0.2 }}
+        transition={{ duration: 1.6, ease: 'easeOut', delay: 0.2 }}
         style={{
           background: `
             radial-gradient(ellipse 90% 80% at 105% 0%, rgba(180,127,212,0.22) 0%, transparent 65%),
@@ -139,86 +43,74 @@ export default function Hero() {
         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
       />
 
-      {/* Floating flowers */}
+      {/* Background flowers */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div
-          className="absolute w-52 md:w-80 lg:w-96 xl:w-[28rem] top-[2%] right-[2%] md:right-[5%] lg:right-[8%]"
-          initial={{ scale: 0.7, opacity: 0, rotate: -15 }}
-          animate={{ scale: 1, opacity: 1, rotate: 0 }}
-          transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        >
-          <div
-            className="animate-float-mobile md:animate-float md:drop-shadow-[0_24px_48px_rgba(107,140,255,0.3)]"
-            style={{ willChange: 'transform' }}
-          >
-            <FlowerBlue />
-          </div>
-        </motion.div>
-
-        <motion.div
-          className="absolute w-40 md:w-60 lg:w-72 xl:w-80 top-[58%] right-[-3%] md:right-[-1%] lg:right-[1%]"
+          className="absolute w-36 md:w-52 md:top-[25%] lg:w-64 lg:top-[65%] lg:right-[-2%] right-[0%] hidden md:block"
           initial={{ scale: 0.7, opacity: 0, rotate: 15 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-mobile-delay md:animate-float-delay md:drop-shadow-[0_20px_40px_rgba(245,162,122,0.3)]"
-            style={{ willChange: 'transform' }}
+            className="animate-float-mobile-delay md:animate-float-delay"
+            style={{ willChange: 'transform', filter: 'blur(2.5px) drop-shadow(0 20px 40px rgba(245,162,122,0.3))' }}
           >
             <FlowerCoral />
           </div>
         </motion.div>
 
         <motion.div
-          className="absolute w-28 md:w-36 bottom-[12%] left-[4%] md:left-[6%]"
-          initial={{ scale: 0.7, opacity: 0, rotate: -10 }}
-          animate={{ scale: 1, opacity: 1, rotate: 0 }}
-          transition={{ duration: 1.1, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute w-20 bottom-[55%] left-[2%] lg:bottom-[4%] hidden lg:block"
+            initial={{ scale: 0.7, opacity: 0, rotate: -10 }}
+            animate={{ scale: 1, opacity: 1, rotate: 0 }}
+            transition={{ duration: 1.1, delay: 1.0, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-mobile-slow md:animate-float-slow md:drop-shadow-[0_20px_40px_rgba(92,184,92,0.3)]"
-            style={{ willChange: 'transform' }}
+              className="animate-float-mobile-slow md:animate-float-slow"
+              style={{ willChange: 'transform', filter: 'blur(2px) drop-shadow(0 20px 40px rgba(92,184,92,0.3))' }}
           >
             <FlowerGreen />
           </div>
         </motion.div>
+      </div>
 
+      {/* Foreground flowers — all fully within screen bounds */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-[25]">
         <motion.div
-          className="absolute w-20 md:w-28 top-[18%] left-[2%] md:left-[4%] hidden md:block"
-          initial={{ scale: 0.7, opacity: 0, rotate: 10 }}
+          className="absolute w-56 top-[1%] right-[1%] md:w-56 md:right-[2%] lg:w-60 lg:top-[0%] lg:right-[-3%] xl:w-72 xl:right-[0%] xl:top-[-2%]"
+          initial={{ scale: 0.7, opacity: 0, rotate: -15 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
-          transition={{ duration: 1.1, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          transition={{ duration: 1.1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float-delay2 drop-shadow-[0_20px_40px_rgba(180,127,212,0.3)]"
-            style={{ willChange: 'transform' }}
+            className="animate-float-mobile md:animate-float"
+            style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 24px 48px rgba(107,140,255,0.28))' }}
           >
-            <FlowerPurple />
+            <FlowerBlue />
           </div>
         </motion.div>
 
         <motion.div
-          className="absolute w-28 md:w-44 lg:w-52 bottom-[4%] right-[16%] md:right-[20%] lg:right-[24%] hidden md:block"
+          className="md:hidden absolute w-32 top-[25%] right-[2%]"
           initial={{ scale: 0.7, opacity: 0, rotate: -8 }}
           animate={{ scale: 1, opacity: 1, rotate: 0 }}
           transition={{ duration: 1.1, delay: 1.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <div
-            className="animate-float drop-shadow-[0_16px_32px_rgba(242,160,184,0.3)]"
-            style={{ willChange: 'transform' }}
+            className="animate-float"
+            style={{ willChange: 'transform', filter: 'blur(2.5px) drop-shadow(0 16px 32px rgba(242,160,184,0.28))' }}
           >
             <FlowerPink />
           </div>
         </motion.div>
       </div>
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-10 lg:px-12 xl:px-16 h-full">
+      <div className="relative z-10 max-w-[1840px] mx-auto px-6 md:px-10 lg:px-12 xl:px-16 h-full">
         <div className="flex flex-col md:flex-row md:items-stretch md:min-h-[calc(100svh-4rem)]">
 
-          {/* ── LEFT COLUMN ─────────────────────────── */}
-          <div className="flex flex-col pt-10 pb-12 md:py-14 md:mr-8 xl:mr-12 md:w-[63%] lg:w-[61%] xl:w-[52%] md:justify-between gap-7 md:gap-0">
+          {/* Left column */}
+          <div className="flex flex-col pt-10 pb-12 md:w-[100%] md:py-14 lg:mr-8 xl:mr-12 lg:w-[58%] xl:w-[54%] md:justify-between gap-7 md:gap-0">
 
-            {/* Eyebrow */}
             <motion.div
               className="flex items-center gap-3"
               initial={{ opacity: 0, y: 12 }}
@@ -229,9 +121,8 @@ export default function Hero() {
               <span className="eyebrow text-accent">{t('hero.eyebrow')}</span>
             </motion.div>
 
-            {/* Headline */}
             <div>
-              <div className="overflow-hidden pb-[0.12em]">
+              <div className="pb-[0.12em]" style={{ clipPath: 'inset(0 -5rem 0 -5rem)' }}>
                 <motion.div
                   className="text-display text-text-primary"
                   initial={{ y: '105%' }}
@@ -241,7 +132,7 @@ export default function Hero() {
                   {t('hero.line1')}
                 </motion.div>
               </div>
-              <div className="overflow-hidden pb-[0.12em]">
+              <div className="pb-[0.12em]" style={{ clipPath: 'inset(0 -5rem 0 -5rem)' }}>
                 <motion.div
                   className="text-display italic text-accent"
                   initial={{ y: '105%' }}
@@ -251,7 +142,7 @@ export default function Hero() {
                   {t('hero.line2')}
                 </motion.div>
               </div>
-              <div className="overflow-hidden mt-1 pb-[0.2em]">
+              <div className="mt-1 pb-[0.2em]" style={{ clipPath: 'inset(0 -5rem 0 -5rem)' }}>
                 <motion.div
                   className="text-display text-text-primary"
                   initial={{ y: '105%' }}
@@ -264,7 +155,6 @@ export default function Hero() {
               </div>
             </div>
 
-            {/* Bottom: description + CTA + stats */}
             <motion.div
               className="flex flex-col gap-6 md:gap-8"
               initial={{ opacity: 0, y: 20 }}
@@ -291,7 +181,6 @@ export default function Hero() {
                 </Link>
               </div>
 
-              {/* Stats row */}
               <div className="flex items-center gap-6 md:gap-8 pt-2 border-t border-border">
                 {stats.map((s, i) => (
                   <motion.div
@@ -305,6 +194,28 @@ export default function Hero() {
                   </motion.div>
                 ))}
               </div>
+            </motion.div>
+
+            {/* Season card — mobile/tablet only */}
+            <motion.div
+              className="lg:hidden mt-6 md:flex items-center justify-center py-14 relative z-20"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 1.0 }}
+            >
+              <SeasonCard />
+            </motion.div>
+          </div>
+
+          {/* Right column — season card, lg+ only */}
+          <div className="hidden lg:flex flex-1 items-center justify-center py-14 relative z-20 pl-4">
+            <motion.div
+              className="w-full max-w-[380px] xl:max-w-[440px]"
+              initial={{ opacity: 0, y: 28, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 1.0, delay: 0.55, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <SeasonCard />
             </motion.div>
           </div>
         </div>

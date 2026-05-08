@@ -16,10 +16,14 @@ export default function CartDrawer() {
     if (!isCartOpen) return
     const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth
     document.documentElement.style.overflow = 'hidden'
-    if (scrollbarWidth > 0) document.documentElement.style.paddingRight = `${scrollbarWidth}px`
+    if (scrollbarWidth > 0) {
+      document.documentElement.style.paddingRight = `${scrollbarWidth}px`
+      document.documentElement.style.setProperty('--scrollbar-w', `${scrollbarWidth}px`)
+    }
     return () => {
       document.documentElement.style.overflow = ''
       document.documentElement.style.paddingRight = ''
+      document.documentElement.style.removeProperty('--scrollbar-w')
     }
   }, [isCartOpen])
 
@@ -150,6 +154,8 @@ export default function CartDrawer() {
                             width={72}
                             height={88}
                             className="w-full h-full object-cover"
+                            loading="lazy"
+                            decoding="async"
                           />
                         </div>
 

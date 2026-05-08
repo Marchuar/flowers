@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { CreditCard, Smartphone, Building2, Apple, Lock, Check } from 'lucide-react'
@@ -13,19 +13,19 @@ export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart()
   const { t } = useTranslation()
 
-  const timeSlots = [
+  const timeSlots = useMemo(() => [
     { id: '9-12',  label: '9:00–12:00',  note: t('checkout.slotMorning')   },
     { id: '12-15', label: '12:00–15:00', note: t('checkout.slotMidday')    },
     { id: '15-18', label: '15:00–18:00', note: t('checkout.slotAfternoon') },
     { id: '18-21', label: '18:00–21:00', note: t('checkout.slotEvening')   },
-  ]
+  ], [t])
 
-  const paymentMethods = [
+  const paymentMethods = useMemo(() => [
     { id: 'card',  label: t('checkout.payCard'), icon: CreditCard  },
     { id: 'blik',  label: 'BLIK',                icon: Smartphone  },
     { id: 'bank',  label: t('checkout.payBank'), icon: Building2   },
     { id: 'apple', label: 'Apple Pay',            icon: Apple       },
-  ]
+  ], [t])
 
   const [selectedSlot,    setSelectedSlot]    = useState('')
   const [selectedPayment, setSelectedPayment] = useState('card')
@@ -260,6 +260,8 @@ export default function CheckoutPage() {
                             width={40}
                             height={40}
                             className="w-full h-full object-cover"
+                            loading="lazy"
+                            decoding="async"
                           />
                         </div>
                         <div className="flex-1 min-w-0">

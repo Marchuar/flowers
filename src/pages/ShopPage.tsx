@@ -4,141 +4,49 @@ import { SlidersHorizontal, X } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { products, type Product } from '../constants/products'
 import { parsePrice } from '../lib/utils'
-import { ProductCard } from '../components/sections/Products'
+import { ProductCard } from '../components/ui/ProductCard'
 import ProductModal from '../components/ui/ProductModal'
+import { FilterSidebar } from '../components/sections/shop/FilterSidebar'
+import { type FilterState, EMPTY_FILTERS } from '../components/sections/shop/filterTypes'
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc'
-
-const allTypes = [...new Set(products.map(p => p.slug))]
-const allColors = products
-  .filter((p, i, arr) => arr.findIndex(x => x.color === p.color) === i)
-  .map(p => ({ slug: p.slug, color: p.color }))
-
-interface FilterSidebarProps {
-  selectedTypes: string[]
-  onToggle: (name: string) => void
-  onClear: () => void
-}
-
-function FilterSidebar({ selectedTypes, onToggle, onClear }: FilterSidebarProps) {
-  const { t } = useTranslation()
-  return (
-    <div className="flex flex-col gap-8">
-      {/* Flower type */}
-      <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.flowerType')}</div>
-        <div className="flex flex-col gap-2.5">
-          {allTypes.map(slug => (
-            <label key={slug} className="flex items-center gap-2.5 cursor-pointer group">
-              <input
-                type="checkbox"
-                className="sr-only peer"
-                checked={selectedTypes.includes(slug)}
-                onChange={() => onToggle(slug)}
-              />
-              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors flex-shrink-0
-                peer-checked:bg-text-primary peer-checked:border-text-primary
-                border-border/70 group-hover:border-text-primary/50
-                peer-focus-visible:ring-2 peer-focus-visible:ring-accent peer-focus-visible:ring-offset-1`}
-              >
-                {selectedTypes.includes(slug) && (
-                  <svg className="w-2.5 h-2.5 text-surface" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M2 6l3 3 5-5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
-              </div>
-              <span className="font-sans text-[13px] text-text-secondary group-hover:text-text-primary transition-colors">
-                {t(`products.${slug}.name`)}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* Color swatches */}
-      <div>
-        <div className="eyebrow text-text-secondary/50 mb-4">{t('shop.colour')}</div>
-        <div className="flex flex-wrap gap-2.5">
-          {allColors.map(({ slug, color }) => (
-            <button
-              key={slug}
-              type="button"
-              onClick={() => onToggle(slug)}
-              title={t(`products.${slug}.name`)}
-              className={`w-7 h-7 rounded-full border-2 transition-[border-color,transform] focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 ${
-                selectedTypes.includes(slug) ? 'border-text-primary scale-110' : 'border-transparent hover:border-text-primary/40'
-              }`}
-              style={{ backgroundColor: color }}
-              aria-label={t(`products.${slug}.name`)}
-              aria-pressed={selectedTypes.includes(slug)}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Price note */}
-      <div className="bg-bg-subtle rounded-xl p-4">
-        <div className="eyebrow text-text-secondary/50 mb-2">{t('shop.priceRange')}</div>
-        <p className="font-sans text-[12px] text-text-secondary leading-relaxed">
-          {t('shop.priceNote')}
-          <br />{t('shop.minOrder')}
-        </p>
-      </div>
-
-      {/* Clear filters */}
-      {selectedTypes.length > 0 && (
-        <button
-          type="button"
-          onClick={onClear}
-          className="flex items-center gap-1.5 font-sans text-[12px] text-text-secondary hover:text-accent-warm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
-        >
-          <X size={13} />
-          {t('shop.clearFilters')}
-        </button>
-      )}
-    </div>
-  )
-}
 
 export default function ShopPage() {
   const ref = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true })
   const { t } = useTranslation()
 
-  const [selectedTypes, setSelectedTypes] = useState<string[]>([])
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS)
   const [sortBy, setSortBy] = useState<SortOption>('default')
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
 
-  function toggleType(name: string) {
-    setSelectedTypes(prev =>
-      prev.includes(name) ? prev.filter(n => n !== name) : [...prev, name]
-    )
-  }
+  const hasAnyFilter =
+    filters.types.length > 0 ||
+    filters.properties.length > 0 ||
+    filters.height !== null ||
+    filters.fullness !== null ||
+    filters.colors.length > 0
 
   const filtered = useMemo(() => {
     let result = [...products]
-
-    if (selectedTypes.length > 0) {
-      result = result.filter(p => selectedTypes.includes(p.slug))
-    }
-
+    if (filters.types.length > 0)
+      result = result.filter(p => filters.types.includes(p.slug))
+    if (filters.properties.length > 0)
+      result = result.filter(p => filters.properties.every(prop => p.properties?.includes(prop)))
+    if (filters.height)
+      result = result.filter(p => p.height === filters.height)
+    if (filters.fullness)
+      result = result.filter(p => p.fullness === filters.fullness)
+    if (filters.colors.length > 0)
+      result = result.filter(p => filters.colors.includes(p.color))
     switch (sortBy) {
-      case 'price-asc':
-        result.sort((a, b) => parsePrice(a.price) - parsePrice(b.price))
-        break
-      case 'price-desc':
-        result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price))
-        break
-      case 'name-asc':
-        result.sort((a, b) =>
-          t(`products.${a.slug}.name`).localeCompare(t(`products.${b.slug}.name`))
-        )
-        break
+      case 'price-asc':  result.sort((a, b) => parsePrice(a.price) - parsePrice(b.price)); break
+      case 'price-desc': result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price)); break
+      case 'name-asc':   result.sort((a, b) => t(`products.${a.slug}.name`).localeCompare(t(`products.${b.slug}.name`))); break
     }
-
     return result
-  }, [selectedTypes, sortBy, t])
+  }, [filters, sortBy, t])
 
   return (
     <>
@@ -155,15 +63,14 @@ export default function ShopPage() {
             animate={inView ? { scale: 1, opacity: 0.55, rotate: 0 } : {}}
             transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="animate-float-slow" style={{ willChange: 'transform' }}>
+            <div className="animate-float-slow" style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 20px 40px rgba(107,140,255,0.25))' }}>
               <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
-                <g filter="url(#sh1)">
+                <g>
                   {[0,45,90,135,180,225,270,315].map((a,i) => (
                     <ellipse key={i} cx="100" cy="100" rx="28" ry="55" fill="#6B8CFF" transform={`rotate(${a} 100 100)`} opacity="0.9" />
                   ))}
                   <circle cx="100" cy="100" r="28" fill="#E8A0C8" />
                 </g>
-                <defs><filter id="sh1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter></defs>
               </svg>
             </div>
           </motion.div>
@@ -174,15 +81,14 @@ export default function ShopPage() {
             animate={inView ? { scale: 1, opacity: 0.45, rotate: 0 } : {}}
             transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="animate-float-delay" style={{ willChange: 'transform' }}>
+            <div className="animate-float-delay" style={{ willChange: 'transform', filter: 'blur(2.5px) drop-shadow(0 16px 32px rgba(245,162,122,0.25))' }}>
               <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
-                <g filter="url(#sh2)">
+                <g>
                   {[0,36,72,108,144,180,216,252,288,324].map((a,i) => (
                     <ellipse key={i} cx="100" cy="100" rx="22" ry="48" fill="#F5A27A" transform={`rotate(${a} 100 100)`} opacity="0.88" />
                   ))}
                   <circle cx="100" cy="100" r="24" fill="#FFD166" />
                 </g>
-                <defs><filter id="sh2" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" /></filter></defs>
               </svg>
             </div>
           </motion.div>
@@ -193,15 +99,14 @@ export default function ShopPage() {
             animate={inView ? { scale: 1, opacity: 0.35, rotate: 0 } : {}}
             transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="animate-float-delay2" style={{ willChange: 'transform' }}>
+            <div className="animate-float-delay2" style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 16px 32px rgba(180,127,212,0.25))' }}>
               <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
-                <g filter="url(#sh3)">
+                <g>
                   {[0,45,90,135,180,225,270,315].map((a,i) => (
                     <ellipse key={i} cx="100" cy="100" rx="25" ry="50" fill="#B47FD4" transform={`rotate(${a} 100 100)`} opacity="0.85" />
                   ))}
                   <circle cx="100" cy="100" r="26" fill="#E8C4E8" />
                 </g>
-                <defs><filter id="sh3" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3" /></filter></defs>
               </svg>
             </div>
           </motion.div>
@@ -264,7 +169,7 @@ export default function ShopPage() {
         >
           <p className="font-sans text-[13px] text-text-secondary">
             {filtered.length} {filtered.length === 1 ? t('shop.stem') : t('shop.stems')}
-            {selectedTypes.length > 0 && (
+            {hasAnyFilter && (
               <span className="ml-1.5 text-text-secondary/60">
                 · {t('shop.filtered')}
               </span>
@@ -279,7 +184,7 @@ export default function ShopPage() {
               className="md:hidden flex items-center gap-1.5 font-sans text-[12px] text-text-secondary border border-border/60 rounded-full px-3 py-1.5 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
             >
               <SlidersHorizontal size={12} />
-              {t('shop.filters')} {selectedTypes.length > 0 && `(${selectedTypes.length})`}
+              {t('shop.filters')} {hasAnyFilter && `(${[filters.types, filters.properties, filters.colors].flat().length + (filters.height ? 1 : 0) + (filters.fullness ? 1 : 0)})`}
             </button>
 
             {/* Sort select */}
@@ -301,12 +206,12 @@ export default function ShopPage() {
 
           {/* Sidebar — desktop */}
           <motion.aside
-            className="hidden md:block w-56 flex-shrink-0 sticky top-24"
+            className="hidden md:block w-64 flex-shrink-0 sticky top-24"
             initial={{ opacity: 0, x: -20 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.55, delay: 0.15 }}
           >
-            <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
+            <FilterSidebar filters={filters} onChange={setFilters} hasAnyFilter={hasAnyFilter} />
           </motion.aside>
 
           {/* Products grid */}
@@ -319,7 +224,7 @@ export default function ShopPage() {
                 <p className="font-sans text-[13px] text-text-secondary">{t('shop.noResultsDesc')}</p>
                 <button
                   type="button"
-                  onClick={() => setSelectedTypes([])}
+                  onClick={() => setFilters(EMPTY_FILTERS)}
                   className="mt-2 font-sans text-[12px] text-text-secondary border border-border rounded-full px-4 py-2 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
                 >
                   {t('shop.clearAllFilters')}
@@ -373,7 +278,7 @@ export default function ShopPage() {
                   <X size={18} />
                 </button>
               </div>
-              <FilterSidebar selectedTypes={selectedTypes} onToggle={toggleType} onClear={() => setSelectedTypes([])} />
+              <FilterSidebar filters={filters} onChange={setFilters} hasAnyFilter={hasAnyFilter} />
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(false)}

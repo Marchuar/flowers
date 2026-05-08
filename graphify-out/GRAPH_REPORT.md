@@ -1,12 +1,12 @@
-# Graph Report - .  (2026-04-30)
+# Graph Report - .  (2026-05-07)
 
 ## Corpus Check
-- 39 files · ~3,746,734 words
+- 48 files · ~3,749,965 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 122 nodes · 79 edges · 49 communities detected
-- Extraction: 85% EXTRACTED · 15% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.8)
+- 137 nodes · 85 edges · 58 communities detected
+- Extraction: 86% EXTRACTED · 14% INFERRED · 0% AMBIGUOUS · INFERRED: 12 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Community Hubs (Navigation)
@@ -59,6 +59,15 @@
 - [[_COMMUNITY_Community 46|Community 46]]
 - [[_COMMUNITY_Community 47|Community 47]]
 - [[_COMMUNITY_Community 48|Community 48]]
+- [[_COMMUNITY_Community 49|Community 49]]
+- [[_COMMUNITY_Community 50|Community 50]]
+- [[_COMMUNITY_Community 51|Community 51]]
+- [[_COMMUNITY_Community 52|Community 52]]
+- [[_COMMUNITY_Community 53|Community 53]]
+- [[_COMMUNITY_Community 54|Community 54]]
+- [[_COMMUNITY_Community 55|Community 55]]
+- [[_COMMUNITY_Community 56|Community 56]]
+- [[_COMMUNITY_Community 57|Community 57]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `STEM Business Plan` - 8 edges
@@ -124,18 +133,18 @@ Nodes (0):
 
 ### Community 8 - "Community 8"
 Cohesion: 0.5
-Nodes (4): Design rule: keep Hero GSAP word-drop + floating blurred SVG flowers, Mobile rule: KEEP blur on SVG flowers (design feature, never remove), Bug rule: never use transition-all on motion.div (causes flash on mobile), Mobile optimization: will-change transform + float-mobile keyframes
+Nodes (0): 
 
 ### Community 9 - "Community 9"
-Cohesion: 0.67
+Cohesion: 0.5
 Nodes (0): 
 
 ### Community 10 - "Community 10"
-Cohesion: 1.0
-Nodes (0): 
+Cohesion: 0.5
+Nodes (4): Design rule: keep Hero GSAP word-drop + floating blurred SVG flowers, Mobile rule: KEEP blur on SVG flowers (design feature, never remove), Bug rule: never use transition-all on motion.div (causes flash on mobile), Mobile optimization: will-change transform + float-mobile keyframes
 
 ### Community 11 - "Community 11"
-Cohesion: 1.0
+Cohesion: 0.67
 Nodes (0): 
 
 ### Community 12 - "Community 12"
@@ -176,27 +185,27 @@ Nodes (0):
 
 ### Community 21 - "Community 21"
 Cohesion: 1.0
-Nodes (2): src/assets/hero.png (isometric 3D product image, white/purple layers), Hero image: isometric 3D layered shapes (white top layer, purple-glowing bottom)
+Nodes (0): 
 
 ### Community 22 - "Community 22"
 Cohesion: 1.0
-Nodes (2): public/icons.svg (brand icon sprite), SVG symbol set: bluesky, discord, documentation, github, social, x icons
+Nodes (0): 
 
 ### Community 23 - "Community 23"
 Cohesion: 1.0
-Nodes (2): Typography rule: min font-400 for font-display headings (not font-light), Design system fonts: Boska display + General Sans body via Fontshare CDN
+Nodes (2): public/icons.svg (brand icon sprite), SVG symbol set: bluesky, discord, documentation, github, social, x icons
 
 ### Community 24 - "Community 24"
 Cohesion: 1.0
-Nodes (2): Design system colors: bg #FAFAF7, accent #2C5F3E sage green, accent-warm #C8622A terracotta, Design: single light theme only, no dark mode, no ThemeContext
+Nodes (2): src/assets/hero.png (isometric 3D product image, white/purple layers), Hero image: isometric 3D layered shapes (white top layer, purple-glowing bottom)
 
 ### Community 25 - "Community 25"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (2): Typography rule: min font-400 for font-display headings (not font-light), Design system fonts: Boska display + General Sans body via Fontshare CDN
 
 ### Community 26 - "Community 26"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (2): Design system colors: bg #FAFAF7, accent #2C5F3E sage green, accent-warm #C8622A terracotta, Design: single light theme only, no dark mode, no ThemeContext
 
 ### Community 27 - "Community 27"
 Cohesion: 1.0
@@ -220,11 +229,11 @@ Nodes (0):
 
 ### Community 32 - "Community 32"
 Cohesion: 1.0
-Nodes (1): Toast / ToastProvider (notifications)
+Nodes (0): 
 
 ### Community 33 - "Community 33"
 Cohesion: 1.0
-Nodes (1): useToast hook
+Nodes (0): 
 
 ### Community 34 - "Community 34"
 Cohesion: 1.0
@@ -236,11 +245,11 @@ Nodes (0):
 
 ### Community 36 - "Community 36"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): Toast / ToastProvider (notifications)
 
 ### Community 37 - "Community 37"
 Cohesion: 1.0
-Nodes (0): 
+Nodes (1): useToast hook
 
 ### Community 38 - "Community 38"
 Cohesion: 1.0
@@ -276,104 +285,154 @@ Nodes (0):
 
 ### Community 46 - "Community 46"
 Cohesion: 1.0
-Nodes (1): Design decision: Ticker marquee removed (ugly)
+Nodes (0): 
 
 ### Community 47 - "Community 47"
 Cohesion: 1.0
-Nodes (1): Rule: no inline botanical SVG line-art as background decoration
+Nodes (0): 
 
 ### Community 48 - "Community 48"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 49 - "Community 49"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 50 - "Community 50"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 51 - "Community 51"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 52 - "Community 52"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 53 - "Community 53"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 54 - "Community 54"
+Cohesion: 1.0
+Nodes (0): 
+
+### Community 55 - "Community 55"
+Cohesion: 1.0
+Nodes (1): Design decision: Ticker marquee removed (ugly)
+
+### Community 56 - "Community 56"
+Cohesion: 1.0
+Nodes (1): Rule: no inline botanical SVG line-art as background decoration
+
+### Community 57 - "Community 57"
 Cohesion: 1.0
 Nodes (1): Testimonials: masonry 3-col grid, NOT marquee or crossfade
 
 ## Knowledge Gaps
 - **26 isolated node(s):** `Toast / ToastProvider (notifications)`, `useToast hook`, `public/icons.svg (brand icon sprite)`, `public/favicon.svg (STEM brand favicon, purple lightning bolt)`, `src/assets/hero.png (isometric 3D product image, white/purple layers)` (+21 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **Thin community `Community 10`** (2 nodes): `ScrollToTop()`, `ScrollToTop.tsx`
+- **Thin community `Community 12`** (2 nodes): `ScrollToTop()`, `ScrollToTop.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 11`** (2 nodes): `onKeyDown()`, `CartDrawer.tsx`
+- **Thin community `Community 13`** (2 nodes): `onKeyDown()`, `CartDrawer.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 12`** (2 nodes): `Ticker.tsx`, `TickerItem()`
+- **Thin community `Community 14`** (2 nodes): `Ticker.tsx`, `TickerItem()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 13`** (2 nodes): `useCart.ts`, `useCart()`
+- **Thin community `Community 15`** (2 nodes): `stemIcons.tsx`, `TulipIcon()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 14`** (2 nodes): `useIsMobile.ts`, `useIsMobile()`
+- **Thin community `Community 16`** (2 nodes): `useCart.ts`, `useCart()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 15`** (2 nodes): `setLanguage()`, `index.ts`
+- **Thin community `Community 17`** (2 nodes): `useIsMobile.ts`, `useIsMobile()`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 16`** (2 nodes): `handlePlaceOrder()`, `CheckoutPage.tsx`
+- **Thin community `Community 18`** (2 nodes): `setLanguage()`, `index.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 17`** (2 nodes): `toggleType()`, `ShopPage.tsx`
+- **Thin community `Community 19`** (2 nodes): `handlePlaceOrder()`, `CheckoutPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 18`** (2 nodes): `HowItWorksPage()`, `HowItWorksPage.tsx`
+- **Thin community `Community 20`** (2 nodes): `HowItWorksPage()`, `HowItWorksPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 19`** (2 nodes): `RevealSection()`, `BusinessPage.tsx`
+- **Thin community `Community 21`** (2 nodes): `RevealSection()`, `BusinessPage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 20`** (2 nodes): `HomePage()`, `HomePage.tsx`
+- **Thin community `Community 22`** (2 nodes): `HomePage()`, `HomePage.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 21`** (2 nodes): `src/assets/hero.png (isometric 3D product image, white/purple layers)`, `Hero image: isometric 3D layered shapes (white top layer, purple-glowing bottom)`
+- **Thin community `Community 23`** (2 nodes): `public/icons.svg (brand icon sprite)`, `SVG symbol set: bluesky, discord, documentation, github, social, x icons`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 22`** (2 nodes): `public/icons.svg (brand icon sprite)`, `SVG symbol set: bluesky, discord, documentation, github, social, x icons`
+- **Thin community `Community 24`** (2 nodes): `src/assets/hero.png (isometric 3D product image, white/purple layers)`, `Hero image: isometric 3D layered shapes (white top layer, purple-glowing bottom)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 23`** (2 nodes): `Typography rule: min font-400 for font-display headings (not font-light)`, `Design system fonts: Boska display + General Sans body via Fontshare CDN`
+- **Thin community `Community 25`** (2 nodes): `Typography rule: min font-400 for font-display headings (not font-light)`, `Design system fonts: Boska display + General Sans body via Fontshare CDN`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 24`** (2 nodes): `Design system colors: bg #FAFAF7, accent #2C5F3E sage green, accent-warm #C8622A terracotta`, `Design: single light theme only, no dark mode, no ThemeContext`
+- **Thin community `Community 26`** (2 nodes): `Design system colors: bg #FAFAF7, accent #2C5F3E sage green, accent-warm #C8622A terracotta`, `Design: single light theme only, no dark mode, no ThemeContext`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 25`** (1 nodes): `tailwind.config.js`
+- **Thin community `Community 27`** (1 nodes): `tailwind.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 26`** (1 nodes): `eslint.config.js`
+- **Thin community `Community 28`** (1 nodes): `eslint.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 27`** (1 nodes): `vite.config.ts`
+- **Thin community `Community 29`** (1 nodes): `vite.config.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 28`** (1 nodes): `postcss.config.js`
+- **Thin community `Community 30`** (1 nodes): `postcss.config.js`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 29`** (1 nodes): `cartContextDef.ts`
+- **Thin community `Community 31`** (1 nodes): `cartContextDef.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 30`** (1 nodes): `products.ts`
+- **Thin community `Community 32`** (1 nodes): `products.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 31`** (1 nodes): `FloatingInput.tsx`
+- **Thin community `Community 33`** (1 nodes): `flowerIcons.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 32`** (1 nodes): `Toast / ToastProvider (notifications)`
+- **Thin community `Community 34`** (1 nodes): `Preloader.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 33`** (1 nodes): `useToast hook`
+- **Thin community `Community 35`** (1 nodes): `FloatingInput.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 34`** (1 nodes): `Hero.tsx`
+- **Thin community `Community 36`** (1 nodes): `Toast / ToastProvider (notifications)`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 35`** (1 nodes): `Pricing.tsx`
+- **Thin community `Community 37`** (1 nodes): `useToast hook`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 36`** (1 nodes): `HowItWorks.tsx`
+- **Thin community `Community 38`** (1 nodes): `Pricing.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 37`** (1 nodes): `EmailCapture.tsx`
+- **Thin community `Community 39`** (1 nodes): `HowItWorks.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 38`** (1 nodes): `Testimonials.tsx`
+- **Thin community `Community 40`** (1 nodes): `EmailCapture.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 39`** (1 nodes): `Footer.tsx`
+- **Thin community `Community 41`** (1 nodes): `Testimonials.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 40`** (1 nodes): `Navigation.tsx`
+- **Thin community `Community 42`** (1 nodes): `Products.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 41`** (1 nodes): `en.ts`
+- **Thin community `Community 43`** (1 nodes): `filterTypes.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 42`** (1 nodes): `pl.ts`
+- **Thin community `Community 44`** (1 nodes): `index.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 43`** (1 nodes): `CartPage.tsx`
+- **Thin community `Community 45`** (1 nodes): `SeasonCard.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 44`** (1 nodes): `AboutPage.tsx`
+- **Thin community `Community 46`** (1 nodes): `heroFlowers.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 45`** (1 nodes): `FaqPage.tsx`
+- **Thin community `Community 47`** (1 nodes): `Footer.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 46`** (1 nodes): `Design decision: Ticker marquee removed (ugly)`
+- **Thin community `Community 48`** (1 nodes): `Navigation.tsx`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 47`** (1 nodes): `Rule: no inline botanical SVG line-art as background decoration`
+- **Thin community `Community 49`** (1 nodes): `en.ts`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
-- **Thin community `Community 48`** (1 nodes): `Testimonials: masonry 3-col grid, NOT marquee or crossfade`
+- **Thin community `Community 50`** (1 nodes): `pl.ts`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 51`** (1 nodes): `CartPage.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 52`** (1 nodes): `ShopPage.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 53`** (1 nodes): `AboutPage.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 54`** (1 nodes): `FaqPage.tsx`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 55`** (1 nodes): `Design decision: Ticker marquee removed (ugly)`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 56`** (1 nodes): `Rule: no inline botanical SVG line-art as background decoration`
+  Too small to be a meaningful cluster - may be noise or needs more connections extracted.
+- **Thin community `Community 57`** (1 nodes): `Testimonials: masonry 3-col grid, NOT marquee or crossfade`
   Too small to be a meaningful cluster - may be noise or needs more connections extracted.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `STEM Business Plan` connect `Community 2` to `Community 5`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+  _High betweenness centrality (0.008) - this node is a cross-community bridge._
 - **Why does `Website goals: sell, SEO, explain concept, serve 3 segments` connect `Community 5` to `Community 2`?**
-  _High betweenness centrality (0.006) - this node is a cross-community bridge._
+  _High betweenness centrality (0.005) - this node is a cross-community bridge._
 - **What connects `Toast / ToastProvider (notifications)`, `useToast hook`, `public/icons.svg (brand icon sprite)` to the rest of the system?**
   _26 weakly-connected nodes found - possible documentation gaps or missing edges._
