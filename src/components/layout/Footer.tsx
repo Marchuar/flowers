@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next'
 export default function Footer() {
   const { t } = useTranslation()
 
-  const info = [
-    { name: t('footer.aboutUs'),     href: '/about' },
-    { name: t('footer.howItWorks'),  href: '/how-it-works' },
+  const navLinks = [
+    { name: t('nav.shop'),          href: '/shop' },
+    { name: t('nav.forBusinesses'), href: '/business' },
+    { name: t('footer.howItWorks'), href: '/how-it-works' },
+    { name: t('nav.faq'),           href: '/faq' },
+    { name: t('footer.aboutUs'),    href: '/about' },
   ]
 
   return (
@@ -15,7 +18,7 @@ export default function Footer() {
       <div className="relative max-w-7xl mx-auto">
 
         {/* Top */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 pb-8">
           <div>
             <Link
               to="/"
@@ -31,11 +34,11 @@ export default function Footer() {
           </div>
           <div className="flex items-center gap-4">
             <a
-              href="https://instagram.com"
+              href="https://instagram.com/stem_pl"
               target="_blank"
               rel="noopener noreferrer"
               className="group w-10 h-10 rounded-full border border-ink-text/[0.15] flex items-center justify-center hover:bg-ink-text/10 hover:border-ink-text/30 transition-colors duration-300"
-              aria-label="Instagram"
+              aria-label="Instagram @stem_pl"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="w-4 h-4 text-ink-text/60 group-hover:text-ink-text transition-colors duration-300">
                 <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -66,30 +69,66 @@ export default function Footer() {
             </span>
           </div>
 
-          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-8 py-12">
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-3 gap-8 py-8">
+
+            {/* Column 1: Navigate */}
             <div>
-              <div className="eyebrow text-ink-text/30 mb-5">{t('footer.infoHeading')}</div>
+              <div className="eyebrow text-ink-text/30 mb-5">{t('footer.navigate')}</div>
               <ul className="flex flex-col gap-2.5">
-                {info.map(i => (
-                  <li key={i.name}>
+                {navLinks.map(link => (
+                  <li key={link.href}>
                     <Link
-                      to={i.href}
+                      to={link.href}
                       className="font-sans text-[13px] text-ink-text/55 hover:text-ink-text transition-colors duration-200"
                     >
-                      {i.name}
+                      {link.name}
                     </Link>
                   </li>
                 ))}
               </ul>
             </div>
+
+            {/* Column 2: Contact */}
             <div>
               <div className="eyebrow text-ink-text/30 mb-5">{t('footer.contactHeading')}</div>
               <ul className="flex flex-col gap-2.5">
-                <li><span className="font-sans text-[13px] text-ink-text/55">Instagram</span></li>
-                <li><span className="font-sans text-[13px] text-ink-text/55">hello@stem.pl</span></li>
-                <li><span className="font-sans text-[13px] text-ink-text/55">Warsaw, Poland</span></li>
+                <li>
+                  <a
+                    href="mailto:hello@stem.pl"
+                    className="font-sans text-[13px] text-ink-text/55 hover:text-ink-text transition-colors duration-200"
+                  >
+                    hello@stem.pl
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="https://instagram.com/stem_pl"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-sans text-[13px] text-ink-text/55 hover:text-ink-text transition-colors duration-200"
+                  >
+                    @stem_pl
+                  </a>
+                </li>
+                <li>
+                  <span className="font-sans text-[13px] text-ink-text/55">Warsaw, Poland</span>
+                </li>
               </ul>
             </div>
+
+            {/* Column 3: Delivery */}
+            <div>
+              <div className="eyebrow text-ink-text/30 mb-5">{t('footer.deliveryHeading')}</div>
+              <ul className="flex flex-col gap-2.5">
+                <li>
+                  <span className="font-sans text-[13px] text-ink-text/55">{t('footer.deliveryText')}</span>
+                </li>
+                <li>
+                  <span className="font-sans text-[13px] text-ink-text/55">{t('footer.deliveryHours')}</span>
+                </li>
+              </ul>
+            </div>
+
           </div>
         </div>
 
@@ -98,6 +137,7 @@ export default function Footer() {
           <p className="font-sans text-[11.5px] font-[450] text-ink-text/40">{t('footer.copyright')}</p>
           <p className="font-sans text-[11.5px] font-[450] text-ink-text/35">{t('footer.orders')}</p>
         </div>
+
       </div>
     </footer>
   )
