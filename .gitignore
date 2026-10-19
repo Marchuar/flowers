@@ -20,3 +20,5 @@ graphify-out/
 .playwright-mcp/
 .idea/
 .vite/
+.junie/
+skills-lock.json

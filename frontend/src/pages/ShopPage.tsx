@@ -1,0 +1,299 @@
+import { useState, useMemo, useRef } from 'react'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { SlidersHorizontal, X } from 'lucide-react'
+import { useTranslation } from 'react-i18next'
+import { type Product } from '../constants/products'
+import { useMedusaProducts } from '../hooks/useMedusaProducts'
+import { parsePrice } from '../lib/utils'
+import { ProductCard } from '../components/ui/ProductCard'
+import ProductModal from '../components/ui/ProductModal'
+import { FilterSidebar } from '../components/sections/shop/FilterSidebar'
+import { type FilterState, EMPTY_FILTERS } from '../components/sections/shop/filterTypes'
+
+type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc'
+
+export default function ShopPage() {
+  const ref = useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, { once: true })
+  const { t } = useTranslation()
+  const { products } = useMedusaProducts()
+
+  const [filters, setFilters] = useState<FilterState>(EMPTY_FILTERS)
+  const [sortBy, setSortBy] = useState<SortOption>('default')
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+
+  const hasAnyFilter =
+    filters.types.length > 0 ||
+    filters.properties.length > 0 ||
+    filters.height !== null ||
+    filters.fullness !== null ||
+    filters.colors.length > 0
+
+  const filtered = useMemo(() => {
+    let result = [...products]
+    if (filters.types.length > 0)
+      result = result.filter(p => filters.types.includes(p.slug))
+    if (filters.properties.length > 0)
+      result = result.filter(p => filters.properties.every(prop => p.properties?.includes(prop)))
+    if (filters.height)
+      result = result.filter(p => p.height === filters.height)
+    if (filters.fullness)
+      result = result.filter(p => p.fullness === filters.fullness)
+    if (filters.colors.length > 0)
+      result = result.filter(p => filters.colors.includes(p.color))
+    switch (sortBy) {
+      case 'price-asc':  result.sort((a, b) => parsePrice(a.price) - parsePrice(b.price)); break
+      case 'price-desc': result.sort((a, b) => parsePrice(b.price) - parsePrice(a.price)); break
+      case 'name-asc':   result.sort((a, b) => t(`products.${a.slug}.name`).localeCompare(t(`products.${b.slug}.name`))); break
+    }
+    return result
+  }, [products, filters, sortBy, t])
+
+  return (
+    <>
+    <div ref={ref} className="pb-24 min-h-screen bg-bg">
+
+      {/* Page header */}
+      <div className="relative px-6 md:px-10 pt-10 pb-10 md:pb-14 overflow-hidden">
+
+        {/* Flowers — desktop, behind stats */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden hidden md:block" aria-hidden="true">
+          <motion.div
+            className="absolute w-56 -top-8 right-16 opacity-55"
+            initial={{ scale: 0.7, opacity: 0, rotate: -12 }}
+            animate={inView ? { scale: 1, opacity: 0.55, rotate: 0 } : {}}
+            transition={{ duration: 1.1, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="animate-float-slow" style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 20px 40px rgba(107,140,255,0.25))' }}>
+              <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
+                <g>
+                  {[0,45,90,135,180,225,270,315].map((a,i) => (
+                    <ellipse key={i} cx="100" cy="100" rx="28" ry="55" fill="#6B8CFF" transform={`rotate(${a} 100 100)`} opacity="0.9" />
+                  ))}
+                  <circle cx="100" cy="100" r="28" fill="#E8A0C8" />
+                </g>
+              </svg>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="absolute w-40 top-6 right-2 opacity-45"
+            initial={{ scale: 0.7, opacity: 0, rotate: 14 }}
+            animate={inView ? { scale: 1, opacity: 0.45, rotate: 0 } : {}}
+            transition={{ duration: 1.1, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="animate-float-delay" style={{ willChange: 'transform', filter: 'blur(2.5px) drop-shadow(0 16px 32px rgba(245,162,122,0.25))' }}>
+              <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
+                <g>
+                  {[0,36,72,108,144,180,216,252,288,324].map((a,i) => (
+                    <ellipse key={i} cx="100" cy="100" rx="22" ry="48" fill="#F5A27A" transform={`rotate(${a} 100 100)`} opacity="0.88" />
+                  ))}
+                  <circle cx="100" cy="100" r="24" fill="#FFD166" />
+                </g>
+              </svg>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="absolute w-28 -top-2 right-52 opacity-35"
+            initial={{ scale: 0.7, opacity: 0, rotate: 6 }}
+            animate={inView ? { scale: 1, opacity: 0.35, rotate: 0 } : {}}
+            transition={{ duration: 1.1, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div className="animate-float-delay2" style={{ willChange: 'transform', filter: 'blur(3px) drop-shadow(0 16px 32px rgba(180,127,212,0.25))' }}>
+              <svg viewBox="0 0 200 200" fill="none" className="w-full h-full">
+                <g>
+                  {[0,45,90,135,180,225,270,315].map((a,i) => (
+                    <ellipse key={i} cx="100" cy="100" rx="25" ry="50" fill="#B47FD4" transform={`rotate(${a} 100 100)`} opacity="0.85" />
+                  ))}
+                  <circle cx="100" cy="100" r="26" fill="#E8C4E8" />
+                </g>
+              </svg>
+            </div>
+          </motion.div>
+        </div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+
+            {/* Left: title */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-5 h-px bg-text-secondary/30" />
+                <span className="eyebrow text-text-secondary/60">{t('shop.eyebrow')}</span>
+              </div>
+              <h1 className="section-heading text-text-primary">
+                {t('shop.heading')}<br />
+                <span className="italic text-text-secondary/75">{t('shop.headingItalic')}</span>
+              </h1>
+            </motion.div>
+
+            {/* Right: editorial stats */}
+            <motion.div
+              className="hidden md:flex items-center gap-6 pb-1"
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : {}}
+              transition={{ delay: 0.3 }}
+            >
+              <div className="text-right">
+                <div className="font-display text-[42px] font-light text-text-primary leading-none tabular-nums">6</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.varieties')}</div>
+              </div>
+              <div className="w-px h-12 bg-border" />
+              <div className="text-right">
+                <div className="font-display text-[42px] font-light text-text-primary leading-none">1-2d</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.deliveryLabel')}</div>
+              </div>
+              <div className="w-px h-12 bg-border" />
+              <div className="text-right">
+                <div className="font-display text-[42px] font-light text-text-primary leading-none tabular-nums">2.20</div>
+                <div className="font-sans text-[11px] font-[500] text-text-secondary/50 mt-1 uppercase tracking-[0.1em]">{t('shop.fromLabel')}</div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+
+      <div className="px-6 md:px-10">
+      <div className="max-w-7xl mx-auto">
+
+        {/* Sort bar + mobile filter toggle */}
+        <motion.div
+          className="flex items-center justify-between mb-8 pb-4 border-b border-border/40"
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.2 }}
+        >
+          <p className="font-sans text-[13px] text-text-secondary">
+            {filtered.length} {filtered.length === 1 ? t('shop.stem') : t('shop.stems')}
+            {hasAnyFilter && (
+              <span className="ml-1.5 text-text-secondary/60">
+                · {t('shop.filtered')}
+              </span>
+            )}
+          </p>
+
+          <div className="flex items-center gap-3">
+            {/* Mobile filter button */}
+            <button
+              type="button"
+              onClick={() => setMobileFiltersOpen(true)}
+              className="md:hidden flex items-center gap-1.5 font-sans text-[12px] text-text-secondary border border-border/60 rounded-full px-3 py-1.5 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
+            >
+              <SlidersHorizontal size={12} />
+              {t('shop.filters')} {hasAnyFilter && `(${[filters.types, filters.properties, filters.colors].flat().length + (filters.height ? 1 : 0) + (filters.fullness ? 1 : 0)})`}
+            </button>
+
+            {/* Sort select */}
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as SortOption)}
+              className="bg-transparent border border-border/60 rounded-full font-sans text-[12px] text-text-secondary px-3 py-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 cursor-pointer hover:bg-bg-subtle transition-colors"
+            >
+              <option value="default">{t('shop.sortDefault')}</option>
+              <option value="price-asc">{t('shop.sortPriceAsc')}</option>
+              <option value="price-desc">{t('shop.sortPriceDesc')}</option>
+              <option value="name-asc">{t('shop.sortNameAsc')}</option>
+            </select>
+          </div>
+        </motion.div>
+
+        {/* Layout */}
+        <div className="flex gap-10 items-start">
+
+          {/* Sidebar — desktop */}
+          <motion.aside
+            className="hidden md:block w-64 flex-shrink-0 sticky top-24"
+            initial={{ opacity: 0, x: -20 }}
+            animate={inView ? { opacity: 1, x: 0 } : {}}
+            transition={{ duration: 0.55, delay: 0.15 }}
+          >
+            <FilterSidebar filters={filters} onChange={setFilters} hasAnyFilter={hasAnyFilter} />
+          </motion.aside>
+
+          {/* Products grid */}
+          <div className="flex-1">
+            {filtered.length === 0 ? (
+              <div className="flex flex-col items-center py-20 gap-4 text-center">
+                <p className="font-editorial text-[24px] font-light text-text-primary" style={{ fontVariationSettings: "'opsz' 36" }}>
+                  {t('shop.noResultsTitle')}
+                </p>
+                <p className="font-sans text-[13px] text-text-secondary">{t('shop.noResultsDesc')}</p>
+                <button
+                  type="button"
+                  onClick={() => setFilters(EMPTY_FILTERS)}
+                  className="mt-2 font-sans text-[12px] text-text-secondary border border-border rounded-full px-4 py-2 hover:bg-bg-subtle transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1"
+                >
+                  {t('shop.clearAllFilters')}
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-3.5">
+                {filtered.map((product, i) => (
+                  <ProductCard key={product.id} product={product} index={i} onOpenModal={setSelectedProduct} />
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+      </div>
+
+      {/* Mobile filters overlay */}
+      <AnimatePresence>
+        {mobileFiltersOpen && (
+          <motion.div
+            className="fixed inset-0 z-50 md:hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div
+              className="absolute inset-0 bg-ink/40"
+              onClick={() => setMobileFiltersOpen(false)}
+              aria-hidden="true"
+            />
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-label={t('shop.filters')}
+              className="absolute bottom-0 left-0 right-0 bg-surface rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto"
+              style={{ overscrollBehavior: 'contain' }}
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <span className="font-brand text-[16px] font-bold tracking-[0.08em] text-text-primary">{t('shop.filters')}</span>
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(false)}
+                  className="text-text-secondary hover:text-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-1 rounded"
+                  aria-label="Close filters"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+              <FilterSidebar filters={filters} onChange={setFilters} hasAnyFilter={hasAnyFilter} />
+              <button
+                type="button"
+                onClick={() => setMobileFiltersOpen(false)}
+                className="mt-6 w-full bg-text-primary text-surface font-sans text-[12px] font-[500] tracking-[0.08em] uppercase py-3.5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
+                {t('shop.showResults', { count: filtered.length })}
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+    <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
+    </>
+  )
+}

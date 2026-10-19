@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bloom & Co — Component Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Gloock:ital@0;1&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --cream:#F9F6F0;--petal:#F0E0D6;--rose:#B8635A;--deep:#1E1510;
+  --sage:#6B8A65;--gold:#C4A35A;--muted:#8A7A72;--white:#fff;--border:#E8DED5;
+}
+html{scroll-behavior:smooth}
+body{background:var(--cream);font-family:'Jost',sans-serif;color:var(--deep);overflow-x:hidden}
+
+/* ── FALLING PETALS BG ── */
+#petalCanvas{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55}
+
+/* ── STICKY NAV ── */
+.nav{
+  position:sticky;top:16px;z-index:100;
+  display:flex;justify-content:center;margin:16px 0 0;
+}
+.nav-pill{
+  display:inline-flex;align-items:center;gap:4px;
+  background:rgba(30,21,16,.88);backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.1);border-radius:50px;
+  padding:6px 8px;flex-wrap:wrap;justify-content:center;
+}
+.nav-logo{font-family:'Italiana',serif;font-size:1.1rem;color:var(--cream);padding:0 14px;margin-right:6px}
+.nav-link{
+  padding:7px 16px;border-radius:40px;font-size:.78rem;
+  color:rgba(249,246,240,.55);background:none;border:none;
+  cursor:pointer;font-family:'Jost',sans-serif;transition:all .2s;white-space:nowrap;
+}
+.nav-link:hover,.nav-link.active{background:var(--rose);color:#fff}
+
+/* ── SECTION WRAPPER ── */
+.section{max-width:1100px;margin:0 auto;padding:72px 24px;position:relative;z-index:1}
+.sec-header{margin-bottom:36px}
+.sec-num{font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--rose);margin-bottom:6px}
+.sec-title{font-family:'Gloock',serif;font-size:clamp(1.6rem,3vw,2.4rem);margin-bottom:8px}
+.sec-desc{font-size:.84rem;color:var(--muted);line-height:1.65;max-width:620px;margin-bottom:10px}
+.lib-links{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.lib-link{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:5px 13px;border-radius:20px;text-decoration:none;
+  border:1.5px solid var(--border);color:var(--muted);
+  transition:all .2s;background:var(--white);
+}
+.lib-link:hover{border-color:var(--rose);color:var(--rose);background:var(--petal)}
+.lib-link svg{width:12px;height:12px;flex-shrink:0}
+hr.div{border:none;border-top:1px solid var(--border);margin:0 24px}
+
+/* ═══════════════ 1. PRODUCT CARDS ═══════════════ */
+.cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:22px}
+.pcard{
+  background:var(--white);border-radius:18px;overflow:hidden;
+  border:1px solid var(--border);cursor:pointer;
+  transition:transform .38s cubic-bezier(.25,.8,.25,1),box-shadow .38s;
+  box-shadow:0 2px 10px rgba(30,21,16,.05);
+}
+.pcard:hover{transform:translateY(-8px) scale(1.01);box-shadow:0 20px 48px rgba(30,21,16,.11)}
+.pcard-img{aspect-ratio:4/5;background:var(--petal);display:flex;align-items:center;justify-content:center;font-size:4rem;position:relative;overflow:hidden}
+.pcard-img::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(30,21,16,.18),transparent 50%);opacity:0;transition:opacity .4s}
+.pcard:hover .pcard-img::after{opacity:1}
+.pcard-badge{position:absolute;top:12px;left:12px;background:var(--rose);color:#fff;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+.pcard-body{padding:16px 18px 18px}
+.pcard-cat{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:3px}
+.pcard-name{font-family:'Gloock',serif;font-size:1.1rem;margin-bottom:12px}
+.pcard-footer{display:flex;justify-content:space-between;align-items:center}
+.pcard-price{font-size:1rem;font-weight:500}
+.pcard-btn{width:32px;height:32px;border-radius:50%;background:var(--deep);color:#fff;border:none;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,transform .25s}
+.pcard-btn:hover{background:var(--rose);transform:rotate(90deg)}
+.pcard-wish{position:absolute;top:10px;right:10px;background:rgba(249,246,240,.85);backdrop-filter:blur(8px);border:none;border-radius:50%;width:32px;height:32px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .2s}
+.pcard-wish:hover{transform:scale(1.2)}
+
+/* ═══════════════ 2. COUNTERS ═══════════════ */
+.stats-dark{background:var(--deep);border-radius:22px;padding:48px;display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:32px;text-align:center}
+.stat-num{font-family:'Italiana',serif;font-size:3.5rem;color:var(--petal);line-height:1;display:block}
+.stat-num .acc{color:var(--gold)}
+.stat-lbl{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-top:6px;display:block}
+
+/* ═══════════════ 3. PRODUCT DETAIL ═══════════════ */
+.detail-wrap{background:var(--white);border-radius:20px;padding:36px;border:1px solid var(--border);max-width:500px}
+.detail-emoji{font-size:5rem;display:block;margin-bottom:16px}
+.detail-name{font-family:'Gloock',serif;font-size:1.9rem;margin-bottom:6px}
+.detail-desc{color:var(--muted);font-size:.88rem;line-height:1.65;margin-bottom:20px}
+.size-row{display:flex;gap:8px;margin-bottom:22px}
+.sz{padding:8px 18px;border-radius:30px;border:1.5px solid var(--border);background:none;font-family:'Jost',sans-serif;font-size:.84rem;cursor:pointer;transition:all .2s;color:var(--deep)}
+.sz.on,.sz:hover{border-color:var(--rose);background:var(--rose);color:#fff}
+.qty-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.qty-ctrl{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:30px;overflow:hidden}
+.qty-b{width:36px;height:36px;border:none;background:none;font-size:1.2rem;cursor:pointer;color:var(--deep);transition:background .2s}
+.qty-b:hover{background:var(--petal)}
+.qty-v{min-width:32px;text-align:center;font-size:.95rem}
+.price-big{font-family:'Italiana',serif;font-size:2.2rem}
+.cta-btn{width:100%;padding:15px;background:var(--deep);color:var(--cream);border:none;border-radius:14px;font-family:'Jost',sans-serif;font-size:.95rem;letter-spacing:.06em;cursor:pointer;position:relative;overflow:hidden;transition:background .3s}
+.cta-btn::before{content:'';position:absolute;inset:0;background:var(--rose);transform:translateY(101%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.cta-btn:hover::before{transform:translateY(0)}
+.cta-btn span{position:relative;z-index:1}
+
+/* ═══════════════ 4. ACCORDION ═══════════════ */
+.acc-wrap{display:flex;flex-direction:column;gap:2px}
+.acc-item{background:var(--white);border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.acc-trigger{width:100%;background:none;border:none;padding:20px 24px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:'Gloock',serif;font-size:1.1rem;color:var(--deep);text-align:left;transition:background .2s}
+.acc-trigger:hover{background:var(--cream)}
+.acc-icon{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--rose);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--rose);transition:transform .35s cubic-bezier(.4,0,.2,1),background .2s;flex-shrink:0}
+.acc-item.open .acc-icon{transform:rotate(45deg);background:var(--rose);color:#fff}
+.acc-body{max-height:0;overflow:hidden;transition:max-height .45s cubic-bezier(.4,0,.2,1)}
+.acc-item.open .acc-body{max-height:200px}
+.acc-content{padding:0 24px 20px;color:var(--muted);font-size:.9rem;line-height:1.7}
+
+/* ═══════════════ 5. TOAST ═══════════════ */
+.toast-stack{display:flex;flex-direction:column;gap:10px;max-width:360px}
+.toast{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:14px;padding:14px 18px;box-shadow:0 8px 30px rgba(30,21,16,.1);border-left:4px solid var(--sage);animation:slideIn .5s cubic-bezier(.34,1.56,.64,1) forwards}
+.toast.warn{border-left-color:var(--gold)}
+.toast.err{border-left-color:var(--rose)}
+.toast-icon{font-size:1.3rem}
+.toast-body strong{display:block;font-size:.9rem;margin-bottom:2px}
+.toast-body span{font-size:.8rem;color:var(--muted)}
+@keyframes slideIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.toast-btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.tbtn{padding:9px 20px;border-radius:10px;border:none;cursor:pointer;font-family:'Jost',sans-serif;font-size:.82rem;transition:all .2s}
+.tbtn-add{background:var(--deep);color:var(--cream)}
+.tbtn-add:hover{background:var(--rose)}
+.tbtn-del{background:none;border:1.5px solid var(--border);color:var(--muted)}
+.tbtn-del:hover{border-color:var(--rose);color:var(--rose)}
+
+/* ═══════════════ 6. STAGGERED LIST ═══════════════ */
+.stagger-list{list-style:none;display:flex;flex-direction:column;gap:2px}
+.stagger-item{display:flex;align-items:center;gap:20px;padding:20px 24px;background:var(--white);border-radius:14px;border:1px solid var(--border);opacity:0;transform:translateX(-24px);transition:opacity .5s ease,transform .5s ease,background .2s}
+.stagger-item.vis{opacity:1;transform:translateX(0)}
+.stagger-item:hover{background:var(--petal)}
+.stagger-num{font-family:'Italiana',serif;font-size:1.8rem;color:var(--rose);opacity:.4;min-width:36px}
+.stagger-ico{font-size:1.8rem}
+.stagger-text h4{font-size:.98rem;font-weight:500;margin-bottom:2px}
+.stagger-text p{font-size:.82rem;color:var(--muted);line-height:1.5}
+
+/* ═══════════════ 7. FALLING PETALS HERO ═══════════════ */
+.petals-hero{position:relative;height:420px;background:linear-gradient(160deg,var(--cream),var(--petal));border-radius:24px;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.petals-hero-content{position:relative;z-index:2;text-align:center;pointer-events:none}
+.petals-title{font-family:'Italiana',serif;font-size:clamp(3rem,8vw,6rem);color:var(--deep);line-height:.95;margin-bottom:10px}
+.petals-sub{font-size:.88rem;color:var(--muted);letter-spacing:.1em}
+
+/* ═══════════════ 8. BLUR PANEL ═══════════════ */
+.blur-card{position:relative;height:420px;border-radius:24px;overflow:hidden;display:flex;align-items:flex-end}
+.blur-bg{position:absolute;inset:0;background:linear-gradient(135deg,#3D1A14,#8A3A30,#2A3A28);display:flex;align-items:center;justify-content:center;font-size:160px;line-height:1}
+.blur-panel{position:relative;z-index:2;width:100%;padding:28px 32px;background:rgba(249,246,240,.1);backdrop-filter:blur(20px);border-top:1px solid rgba(255,255,255,.15);display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.blur-info h3{font-family:'Gloock',serif;font-size:1.5rem;color:var(--cream);margin-bottom:4px}
+.blur-info p{font-size:.82rem;color:rgba(249,246,240,.55)}
+.blur-right{display:flex;align-items:center;gap:14px}
+.blur-price{font-family:'Italiana',serif;font-size:2.2rem;color:var(--cream)}
+.blur-btn{background:var(--rose);color:#fff;border:none;padding:12px 24px;border-radius:12px;font-family:'Jost',sans-serif;font-size:.85rem;cursor:pointer;transition:background .2s;white-space:nowrap}
+.blur-btn:hover{background:var(--gold)}
+
+/* ═══════════════ 9. CHECKOUT ═══════════════ */
+.checkout-grid{display:grid;grid-template-columns:1fr 360px;gap:24px;align-items:start}
+@media(max-width:780px){.checkout-grid{grid-template-columns:1fr}}
+.co-panel{background:var(--white);border-radius:20px;padding:28px;border:1px solid var(--border)}
+.co-sec-title{font-family:'Gloock',serif;font-size:1rem;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.co-num{width:24px;height:24px;border-radius:50%;background:var(--deep);color:var(--cream);font-size:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.frow.full{grid-template-columns:1fr}
+.field{position:relative}
+.field input,.field textarea{width:100%;padding:18px 14px 6px;border:1.5px solid var(--border);border-radius:12px;background:var(--cream);font-family:'Jost',sans-serif;font-size:.9rem;color:var(--deep);outline:none;transition:border-color .22s}
+.field input:focus,.field textarea:focus{border-color:var(--rose);background:var(--white)}
+.field label{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:.85rem;color:var(--muted);pointer-events:none;transition:all .22s}
+.field input:focus+label,.field input:not(:placeholder-shown)+label{top:6px;transform:none;font-size:.67rem;color:var(--rose);letter-spacing:.06em}
+.field textarea{height:76px;padding-top:20px;resize:none}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.slot{border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;text-align:center;cursor:pointer;transition:all .22s;background:var(--cream)}
+.slot:hover,.slot.on{border-color:var(--rose);background:var(--petal)}
+.slot-t{font-size:.8rem;font-weight:500;margin-bottom:2px}
+.slot-l{font-size:.68rem;color:var(--muted)}
+.slot.on .slot-l{color:var(--rose)}
+.pay-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.pay{flex:1;min-width:70px;border:1.5px solid var(--border);border-radius:12px;padding:11px 8px;text-align:center;cursor:pointer;transition:all .22s;background:var(--cream);font-size:1.1rem}
+.pay.on{border-color:var(--deep);background:var(--white)}
+.pay-l{font-size:.68rem;color:var(--muted);margin-top:3px}
+/* summary */
+.sum-title{font-family:'Gloock',serif;font-size:1.05rem;margin-bottom:18px}
+.sum-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border)}
+.sum-item:last-of-type{border:none}
+.sum-emo{font-size:1.8rem;background:var(--petal);width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sum-info{flex:1}
+.sum-name{font-size:.88rem;font-weight:500;margin-bottom:2px}
+.sum-det{font-size:.74rem;color:var(--muted)}
+.sum-price{font-size:.92rem;font-weight:500}
+.sum-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.88rem;transition:color .2s}
+.sum-x:hover{color:var(--rose)}
+.sum-totals{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+.sum-row{display:flex;justify-content:space-between;font-size:.83rem;color:var(--muted)}
+.sum-row.tot{font-size:.98rem;font-weight:600;color:var(--deep);padding-top:10px;border-top:1.5px solid var(--border);margin-top:4px}
+.promo{display:flex;border:1.5px solid var(--border);border-radius:12px;overflow:hidden;margin:14px 0}
+.promo input{flex:1;border:none;background:var(--cream);padding:11px 14px;font-family:'Jost',sans-serif;font-size:.84rem;outline:none}
+.promo button{background:var(--deep);color:var(--cream);border:none;padding:11px 16px;font-family:'Jost',sans-serif;font-size:.8rem;cursor:pointer;transition:background .2s;white-space:nowrap}
+.promo button:hover{background:var(--rose)}
+.co-submit{width:100%;background:var(--deep);color:var(--cream);border:none;padding:15px;border-radius:14px;font-family:'Jost',sans-serif;font-size:.93rem;letter-spacing:.05em;cursor:pointer;margin-top:8px;position:relative;overflow:hidden;transition:background .3s}
+.co-submit::before{content:'';position:absolute;inset:0;background:var(--rose);transform:translateX(-101%);transition:transform .4s cubic-bezier(.4,0,.2,1)}
+.co-submit:hover::before{transform:translateX(0)}
+.co-submit span{position:relative;z-index:1}
+.secure{text-align:center;font-size:.7rem;color:var(--muted);margin-top:8px}
+
+/* ═══════════════ 10. 404 ═══════════════ */
+.nf-wrap{background:var(--deep);border-radius:28px;min-height:480px;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.nf-blobs{position:absolute;inset:0;pointer-events:none}
+.nf-blob{position:absolute;border-radius:50%;filter:blur(70px);opacity:.22;animation:nfDrift ease-in-out infinite}
+@keyframes nfDrift{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(18px,-14px) scale(1.08)}}
+.nf-blob:nth-child(1){width:380px;height:380px;background:var(--rose);top:-80px;left:-60px;animation-duration:9s}
+.nf-blob:nth-child(2){width:280px;height:280px;background:var(--sage);bottom:-60px;right:-40px;animation-duration:11s;animation-delay:2s}
+.nf-ghost{font-family:'Italiana',serif;font-size:clamp(7rem,20vw,15rem);color:rgba(249,246,240,.04);line-height:1;position:absolute;top:50%;left:50%;transform:translate(-50%,-55%);pointer-events:none;white-space:nowrap}
+.nf-content{position:relative;z-index:2;text-align:center;padding:48px 32px}
+.nf-emo{font-size:3.5rem;margin-bottom:16px;display:block;animation:wilt 3s ease-in-out infinite}
+@keyframes wilt{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(5deg)}}
+.nf-title{font-family:'Italiana',serif;font-size:clamp(2rem,5vw,3.2rem);color:var(--cream);margin-bottom:10px}
+.nf-sub{font-size:.86rem;color:rgba(249,246,240,.45);line-height:1.7;max-width:300px;margin:0 auto 26px}
+.nf-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.nf-btn-p{background:var(--rose);color:#fff;border:none;padding:12px 26px;border-radius:12px;font-family:'Jost',sans-serif;font-size:.86rem;cursor:pointer;transition:background .2s,transform .2s}
+.nf-btn-p:hover{background:var(--gold);transform:translateY(-2px)}
+.nf-btn-g{background:rgba(255,255,255,.08);color:rgba(249,246,240,.65);border:1px solid rgba(255,255,255,.14);padding:12px 26px;border-radius:12px;font-family:'Jost',sans-serif;font-size:.86rem;cursor:pointer;transition:background .2s}
+.nf-btn-g:hover{background:rgba(255,255,255,.14)}
+
+/* ═══════════════ 11. SHOP + FILTERS ═══════════════ */
+.shop-layout{display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start}
+@media(max-width:680px){.shop-layout{grid-template-columns:1fr}}
+.sidebar{background:var(--white);border-radius:18px;padding:22px;border:1px solid var(--border);position:sticky;top:90px}
+.sb-heading{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.sb-section{margin-bottom:24px}
+.sb-section:last-child{margin-bottom:0}
+.chk{display:flex;align-items:center;gap:9px;margin-bottom:9px;cursor:pointer}
+.chk-box{width:17px;height:17px;border-radius:5px;border:1.5px solid var(--border);background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:.6rem;color:#fff;flex-shrink:0;transition:all .2s}
+.chk.on .chk-box{background:var(--rose);border-color:var(--rose)}
+.chk-lbl{font-size:.86rem}
+.chk-cnt{font-size:.73rem;color:var(--muted);margin-left:auto}
+.color-row{display:flex;gap:8px;flex-wrap:wrap}
+.csw{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .2s,border-color .2s}
+.csw:hover{transform:scale(1.12)}
+.csw.on{border-color:var(--deep);transform:scale(1.15)}
+.sort-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.sort-cnt{font-size:.8rem;color:var(--muted)}
+.sort-sel{background:var(--white);border:1.5px solid var(--border);border-radius:10px;padding:7px 12px;font-family:'Jost',sans-serif;font-size:.83rem;color:var(--deep);cursor:pointer;outline:none}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px}
+
+/* ── HERO ── */
+.page-hero{
+  min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  text-align:center;padding:120px 24px 80px;
+  position:relative;z-index:1;
+}
+.hero-tag{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;background:rgba(30,21,16,.06);padding:6px 16px;border-radius:20px;display:inline-block}
+.hero-h1{font-family:'Italiana',serif;font-size:clamp(4rem,12vw,9rem);color:var(--deep);line-height:.9;margin-bottom:18px}
+.hero-sub{font-size:.92rem;color:var(--muted);max-width:380px;line-height:1.7;margin-bottom:36px}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.hero-btn-p{background:var(--deep);color:var(--cream);border:none;padding:14px 32px;border-radius:50px;font-family:'Jost',sans-serif;font-size:.9rem;cursor:pointer;transition:background .3s,transform .2s;box-shadow:0 4px 20px rgba(30,21,16,.15)}
+.hero-btn-p:hover{background:var(--rose);transform:translateY(-2px)}
+.hero-btn-s{background:none;border:1.5px solid var(--border);color:var(--deep);padding:14px 32px;border-radius:50px;font-family:'Jost',sans-serif;font-size:.9rem;cursor:pointer;transition:all .2s}
+.hero-btn-s:hover{border-color:var(--rose);color:var(--rose)}
+.component-count{font-family:'Italiana',serif;font-size:5rem;color:rgba(30,21,16,.06);position:absolute;bottom:20px;right:24px;line-height:1;pointer-events:none}
+</style>
+</head>
+<body>
+
+<!-- FALLING PETALS BACKGROUND -->
+<canvas id="petalCanvas"></canvas>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-pill">
+    <span class="nav-logo">Bloom</span>
+    <button class="nav-link active" onclick="scrollTo('#cards')">Cards</button>
+    <button class="nav-link" onclick="scrollTo('#counters')">Counters</button>
+    <button class="nav-link" onclick="scrollTo('#detail')">Detail</button>
+    <button class="nav-link" onclick="scrollTo('#faq')">FAQ</button>
+    <button class="nav-link" onclick="scrollTo('#toast')">Toast</button>
+    <button class="nav-link" onclick="scrollTo('#how')">How</button>
+    <button class="nav-link" onclick="scrollTo('#petals')">Petals</button>
+    <button class="nav-link" onclick="scrollTo('#blur')">Blur</button>
+    <button class="nav-link" onclick="scrollTo('#checkout')">Checkout</button>
+    <button class="nav-link" onclick="scrollTo('#nf')">404</button>
+    <button class="nav-link" onclick="scrollTo('#shop')">Shop</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="page-hero">
+  <span class="hero-tag">✦ Component Showcase · 11 components</span>
+  <h1 class="hero-h1">Bloom &amp;<br>Co.</h1>
+  <p class="hero-sub">All selected UI components in one place. Scroll to explore each one with its library source.</p>
+  <div class="hero-ctas">
+    <button class="hero-btn-p" onclick="document.getElementById('cards').scrollIntoView({behavior:'smooth'})">View components ↓</button>
+    <button class="hero-btn-s">Download assets</button>
+  </div>
+  <span class="component-count">11</span>
+</div>
+
+<!-- ═══════ 1. PRODUCT CARDS ═══════ -->
+<hr class="div"><div class="section" id="cards">
+  <div class="sec-header">
+    <div class="sec-num">01 / 11</div>
+    <h2 class="sec-title">Product Cards</h2>
+    <p class="sec-desc">Hover-lift cards with badge, wishlist toggle, and quick-add button. Smooth cubic-bezier transform on hover.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://www.reactbits.dev/components/tilted-card" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>React Bits</a>
+      <a class="lib-link" href="https://www.shadcnblocks.com/components/card" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Shadcnblocks</a>
+    </div>
+  </div>
+  <div class="cards-grid">
+    <div class="pcard"><div class="pcard-img" style="background:#F5E0E0">🌹<span class="pcard-badge">Bestseller</span><button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Roses</div><div class="pcard-name">Velvet Romance</div><div class="pcard-footer"><span class="pcard-price">€54</span><button class="pcard-btn">+</button></div></div></div>
+    <div class="pcard"><div class="pcard-img" style="background:#FCE8EC">🌸<button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Peonies</div><div class="pcard-name">Pink Cloud</div><div class="pcard-footer"><span class="pcard-price">€68</span><button class="pcard-btn">+</button></div></div></div>
+    <div class="pcard"><div class="pcard-img" style="background:#E8F0E4">🌿<span class="pcard-badge" style="background:var(--sage)">New</span><button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Seasonal</div><div class="pcard-name">Wild Garden</div><div class="pcard-footer"><span class="pcard-price">€42</span><button class="pcard-btn">+</button></div></div></div>
+    <div class="pcard"><div class="pcard-img" style="background:#FFF3DE">🌻<button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Mixed</div><div class="pcard-name">Sunny Days</div><div class="pcard-footer"><span class="pcard-price">€46</span><button class="pcard-btn">+</button></div></div></div>
+  </div>
+</div>
+
+<!-- ═══════ 2. COUNTERS ═══════ -->
+<hr class="div"><div class="section" id="counters">
+  <div class="sec-header">
+    <div class="sec-num">02 / 11</div>
+    <h2 class="sec-title">Animated Counters</h2>
+    <p class="sec-desc">Numbers count up when scrolled into view using IntersectionObserver.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://magicui.design/docs/components/number-ticker" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Magic UI — Number Ticker</a>
+      <a class="lib-link" href="https://ui.aceternity.com/components/3d-card-effect" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Aceternity UI</a>
+    </div>
+  </div>
+  <div class="stats-dark">
+    <div><span class="stat-num" data-target="12000">0<span class="acc">+</span></span><span class="stat-lbl">Happy customers</span></div>
+    <div><span class="stat-num" data-target="340">0<span class="acc">+</span></span><span class="stat-lbl">Bouquet varieties</span></div>
+    <div><span class="stat-num" data-target="4">0<span class="acc">h</span></span><span class="stat-lbl">Avg. delivery time</span></div>
+    <div><span class="stat-num" data-target="98">0<span class="acc">%</span></span><span class="stat-lbl">5-star reviews</span></div>
+  </div>
+</div>
+
+<!-- ═══════ 3. PRODUCT DETAIL ═══════ -->
+<hr class="div"><div class="section" id="detail">
+  <div class="sec-header">
+    <div class="sec-num">03 / 11</div>
+    <h2 class="sec-title">Product Detail — Qty + Size Selector</h2>
+    <p class="sec-desc">Size pills, quantity stepper, live price update, and a ripple-effect CTA button.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://www.shadcnblocks.com/components/card" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Shadcnblocks</a>
+    </div>
+  </div>
+  <div class="detail-wrap">
+    <span class="detail-emoji">🌹</span>
+    <div class="detail-name">Grand Velvet Rose</div>
+    <div class="detail-desc">Deep-crimson roses hand-tied with seasonal greenery and satin ribbon. Perfect for special occasions.</div>
+    <div class="size-row">
+      <button class="sz" onclick="pickSize(this,38)">Small · 15</button>
+      <button class="sz on" onclick="pickSize(this,54)">Medium · 25</button>
+      <button class="sz" onclick="pickSize(this,78)">Large · 40</button>
+    </div>
+    <div class="qty-row">
+      <div class="qty-ctrl">
+        <button class="qty-b" onclick="chQty(-1)">−</button>
+        <span class="qty-v" id="qv">1</span>
+        <button class="qty-b" onclick="chQty(1)">+</button>
+      </div>
+      <span class="price-big" id="pb">€54</span>
+    </div>
+    <button class="cta-btn"><span>Add to basket — <span id="ctap">€54</span></span></button>
+  </div>
+</div>
+
+<!-- ═══════ 4. ACCORDION ═══════ -->
+<hr class="div"><div class="section" id="faq">
+  <div class="sec-header">
+    <div class="sec-num">04 / 11</div>
+    <h2 class="sec-title">Smooth Accordion — FAQ</h2>
+    <p class="sec-desc">CSS max-height transition with cubic-bezier. Icon rotates on open.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://www.shadcnblocks.com/components/accordion" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Shadcnblocks</a>
+      <a class="lib-link" href="https://21st.dev/s/accordion" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>21st.dev</a>
+    </div>
+  </div>
+  <div class="acc-wrap">
+    <div class="acc-item"><button class="acc-trigger" onclick="togAcc(this)">How fresh are your bouquets?<div class="acc-icon">+</div></button><div class="acc-body"><div class="acc-content">All flowers are sourced from local growers and Dutch farms. Every bouquet is assembled the same day it's delivered, guaranteeing freshness for 7–10 days with proper care.</div></div></div>
+    <div class="acc-item"><button class="acc-trigger" onclick="togAcc(this)">Do you offer same-day delivery?<div class="acc-icon">+</div></button><div class="acc-body"><div class="acc-content">Yes! Orders placed before 1 PM are eligible for same-day delivery within the city. A small express surcharge of €5 applies. We deliver 7 days a week, including holidays.</div></div></div>
+    <div class="acc-item"><button class="acc-trigger" onclick="togAcc(this)">Can I customise my bouquet?<div class="acc-icon">+</div></button><div class="acc-body"><div class="acc-content">Absolutely. Use the notes field at checkout to request specific flowers, colours, or ribbon preferences. Our florists will do their best to accommodate every request.</div></div></div>
+    <div class="acc-item"><button class="acc-trigger" onclick="togAcc(this)">What if my flowers arrive damaged?<div class="acc-icon">+</div></button><div class="acc-body"><div class="acc-content">We offer a full replacement or refund within 24 hours of delivery. Just send us a photo and we'll sort it immediately, no questions asked.</div></div></div>
+  </div>
+</div>
+
+<!-- ═══════ 5. TOAST ═══════ -->
+<hr class="div"><div class="section" id="toast">
+  <div class="sec-header">
+    <div class="sec-num">05 / 11</div>
+    <h2 class="sec-title">Toast Notifications</h2>
+    <p class="sec-desc">Slide-in toasts with cubic-bezier spring. Click the buttons to trigger them live.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://magicui.design/docs/components/animated-list" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Magic UI</a>
+      <a class="lib-link" href="https://www.shadcnblocks.com/components/alert" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Shadcnblocks</a>
+    </div>
+  </div>
+  <div id="toastStack" class="toast-stack"></div>
+  <div class="toast-btn-row">
+    <button class="tbtn tbtn-add" onclick="showToast('success')">🌸 Added to basket</button>
+    <button class="tbtn tbtn-add" onclick="showToast('delivery')">🚚 Delivery confirmed</button>
+    <button class="tbtn tbtn-del" onclick="showToast('error')">⚠️ Out of stock</button>
+  </div>
+</div>
+
+<!-- ═══════ 6. HOW IT WORKS ═══════ -->
+<hr class="div"><div class="section" id="how">
+  <div class="sec-header">
+    <div class="sec-num">06 / 11</div>
+    <h2 class="sec-title">How It Works — Staggered Reveal</h2>
+    <p class="sec-desc">Steps slide in from the left one-by-one as they enter the viewport.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://magicui.design/docs/components/animated-list" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Magic UI — Animated List</a>
+    </div>
+  </div>
+  <ul class="stagger-list">
+    <li class="stagger-item"><span class="stagger-num">01</span><span class="stagger-ico">🛒</span><div class="stagger-text"><h4>Choose your bouquet</h4><p>Browse hundreds of arrangements by flower type, colour, or occasion.</p></div></li>
+    <li class="stagger-item"><span class="stagger-num">02</span><span class="stagger-ico">✍️</span><div class="stagger-text"><h4>Add a personal note</h4><p>Write a heartfelt message — we'll include it in a handwritten card.</p></div></li>
+    <li class="stagger-item"><span class="stagger-num">03</span><span class="stagger-ico">🌿</span><div class="stagger-text"><h4>We handcraft your order</h4><p>Our florists assemble your bouquet fresh the morning of delivery.</p></div></li>
+    <li class="stagger-item"><span class="stagger-num">04</span><span class="stagger-ico">🚚</span><div class="stagger-text"><h4>Same-day delivery</h4><p>Delivered in eco-friendly packaging within your chosen time window.</p></div></li>
+  </ul>
+</div>
+
+<!-- ═══════ 7. FALLING PETALS ═══════ -->
+<hr class="div"><div class="section" id="petals">
+  <div class="sec-header">
+    <div class="sec-num">07 / 11</div>
+    <h2 class="sec-title">Falling Petals — Animated Background</h2>
+    <p class="sec-desc">CSS keyframe petals with randomised timing, size, and horizontal position. The full-page background uses the same system.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://threejs.org/examples/#webgl_points_sprites" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Three.js — Points / Sprites</a>
+      <a class="lib-link" href="https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>CSS Animations</a>
+    </div>
+  </div>
+  <div class="petals-hero" id="petalsBox">
+    <div class="petals-hero-content">
+      <div class="petals-title">Every stem<br>is a story</div>
+      <div class="petals-sub">Handcrafted with love · Same-day delivery</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 8. BLUR PANEL ═══════ -->
+<hr class="div"><div class="section" id="blur">
+  <div class="sec-header">
+    <div class="sec-num">08 / 11</div>
+    <h2 class="sec-title">Blur Panel Over Image — Product Hero</h2>
+    <p class="sec-desc">Full-height card with a frosted glass info bar. <code>backdrop-filter: blur(20px)</code> over any background.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://ui.aceternity.com/components/card-hover-effect" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Aceternity UI</a>
+      <a class="lib-link" href="https://www.shadcnblocks.com/components/card" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Shadcnblocks</a>
+    </div>
+  </div>
+  <div class="blur-card">
+    <div class="blur-bg">🌹</div>
+    <div class="blur-panel">
+      <div class="blur-info"><h3>Grand Velvet Rose</h3><p>40 stems · deep crimson · hand-tied with satin ribbon</p></div>
+      <div class="blur-right"><span class="blur-price">€88</span><button class="blur-btn">Add to basket</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 9. CHECKOUT ═══════ -->
+<hr class="div"><div class="section" id="checkout">
+  <div class="sec-header">
+    <div class="sec-num">09 / 11</div>
+    <h2 class="sec-title">Checkout — Form + Order Summary</h2>
+    <p class="sec-desc">Floating label inputs, time slot picker, payment method selector, sticky summary with promo code.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://www.shadcnblocks.com/components/card" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Shadcnblocks</a>
+      <a class="lib-link" href="https://21st.dev/s/forms" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>21st.dev</a>
+    </div>
+  </div>
+  <div class="checkout-grid">
+    <div class="co-panel">
+      <div class="co-sec-title"><div class="co-num">1</div>Delivery details</div>
+      <div class="frow"><div class="field"><input type="text" placeholder=" " id="fn"><label for="fn">First name</label></div><div class="field"><input type="text" placeholder=" " id="ln"><label for="ln">Last name</label></div></div>
+      <div class="frow full"><div class="field"><input type="text" placeholder=" " id="addr"><label for="addr">Delivery address</label></div></div>
+      <div class="frow" style="margin-bottom:22px"><div class="field"><input type="text" placeholder=" " id="city"><label for="city">City</label></div><div class="field"><input type="text" placeholder=" " id="zip"><label for="zip">Postcode</label></div></div>
+      <div class="co-sec-title"><div class="co-num">2</div>Delivery time</div>
+      <div class="slots" id="slots">
+        <div class="slot" onclick="pickSlot(this)"><div class="slot-t">9–12 AM</div><div class="slot-l">Morning</div></div>
+        <div class="slot on" onclick="pickSlot(this)"><div class="slot-t">12–3 PM</div><div class="slot-l">Afternoon</div></div>
+        <div class="slot" onclick="pickSlot(this)"><div class="slot-t">3–7 PM</div><div class="slot-l">Evening</div></div>
+      </div>
+      <div class="co-sec-title" style="margin-top:6px"><div class="co-num">3</div>Payment</div>
+      <div class="pay-row" id="pays">
+        <div class="pay on" onclick="pickPay(this)">💳<div class="pay-l">Card</div></div>
+        <div class="pay" onclick="pickPay(this)">🍎<div class="pay-l">Apple Pay</div></div>
+        <div class="pay" onclick="pickPay(this)">🅶<div class="pay-l">Google</div></div>
+        <div class="pay" onclick="pickPay(this)">🏦<div class="pay-l">Bank</div></div>
+      </div>
+      <div class="frow"><div class="field"><input type="text" placeholder=" " id="cnum"><label for="cnum">Card number</label></div><div class="field"><input type="text" placeholder=" " id="exp"><label for="exp">MM/YY</label></div></div>
+    </div>
+    <div class="co-panel">
+      <div class="sum-title">Your order</div>
+      <div class="sum-item"><div class="sum-emo">🌹</div><div class="sum-info"><div class="sum-name">Velvet Romance</div><div class="sum-det">25 stems · Medium</div></div><div style="display:flex;align-items:center;gap:8px"><span class="sum-price">€54</span><button class="sum-x">✕</button></div></div>
+      <div class="sum-item"><div class="sum-emo">🌸</div><div class="sum-info"><div class="sum-name">Pink Cloud</div><div class="sum-det">15 stems · Small</div></div><div style="display:flex;align-items:center;gap:8px"><span class="sum-price">€68</span><button class="sum-x">✕</button></div></div>
+      <div class="sum-item"><div class="sum-emo">🎀</div><div class="sum-info"><div class="sum-name">Ribbon upgrade</div><div class="sum-det">Satin · Ivory</div></div><div style="display:flex;align-items:center;gap:8px"><span class="sum-price">€8</span><button class="sum-x">✕</button></div></div>
+      <div class="promo"><input type="text" placeholder="Promo code"><button>Apply</button></div>
+      <div class="sum-totals">
+        <div class="sum-row"><span>Subtotal</span><span>€130</span></div>
+        <div class="sum-row"><span>Delivery</span><span>€5</span></div>
+        <div class="sum-row" style="color:var(--sage)"><span>Discount (BLOOM10)</span><span>−€13</span></div>
+        <div class="sum-row tot"><span>Total</span><span>€122</span></div>
+      </div>
+      <button class="co-submit"><span>Place order · €122</span></button>
+      <div class="secure">🔒 Secure checkout · SSL encrypted</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 10. 404 ═══════ -->
+<hr class="div"><div class="section" id="nf">
+  <div class="sec-header">
+    <div class="sec-num">10 / 11</div>
+    <h2 class="sec-title">404 — Wilted Flower</h2>
+    <p class="sec-desc">Aurora blobs, wilting animation, ghost "404" watermark, and clear CTAs back to shop.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://21st.dev/s/empty-states" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>21st.dev</a>
+      <a class="lib-link" href="https://ui.aceternity.com/components/background-beams" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Aceternity UI</a>
+    </div>
+  </div>
+  <div class="nf-wrap">
+    <div class="nf-blobs"><div class="nf-blob"></div><div class="nf-blob"></div></div>
+    <div class="nf-ghost">404</div>
+    <div class="nf-content">
+      <span class="nf-emo">🥀</span>
+      <div class="nf-title">This bloom got lost</div>
+      <div class="nf-sub">The page you're looking for has wilted away — but our flowers are fresher than ever.</div>
+      <div class="nf-btns">
+        <button class="nf-btn-p">Back to shop 🌹</button>
+        <button class="nf-btn-g">Go home</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ 11. SHOP + FILTERS ═══════ -->
+<hr class="div"><div class="section" id="shop">
+  <div class="sec-header">
+    <div class="sec-num">11 / 11</div>
+    <h2 class="sec-title">Product List — Sidebar Filters</h2>
+    <p class="sec-desc">Sticky sidebar with checkboxes and colour swatches. Product grid with hover lift and wishlist.</p>
+    <div class="lib-links">
+      <a class="lib-link" href="https://www.shadcnblocks.com/components/checkbox" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>Shadcnblocks</a>
+      <a class="lib-link" href="https://21st.dev/s/sidebar" target="_blank"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>21st.dev</a>
+    </div>
+  </div>
+  <div class="shop-layout">
+    <div class="sidebar">
+      <div class="sb-section">
+        <div class="sb-heading">Occasion</div>
+        <label class="chk on" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Birthday</span><span class="chk-cnt">24</span></label>
+        <label class="chk" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Anniversary</span><span class="chk-cnt">18</span></label>
+        <label class="chk on" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Just because</span><span class="chk-cnt">41</span></label>
+        <label class="chk" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Sympathy</span><span class="chk-cnt">12</span></label>
+      </div>
+      <div class="sb-section">
+        <div class="sb-heading">Colour</div>
+        <div class="color-row">
+          <div class="csw on"  style="background:#C4736A" onclick="this.classList.toggle('on')"></div>
+          <div class="csw"     style="background:#E8C4D0" onclick="this.classList.toggle('on')"></div>
+          <div class="csw"     style="background:#7A9175" onclick="this.classList.toggle('on')"></div>
+          <div class="csw on"  style="background:#F5E870" onclick="this.classList.toggle('on')"></div>
+          <div class="csw"     style="background:#9B89B0" onclick="this.classList.toggle('on')"></div>
+          <div class="csw"     style="background:#F9F6F0;border:1.5px solid #ddd" onclick="this.classList.toggle('on')"></div>
+        </div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-heading">Flower type</div>
+        <label class="chk on" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Roses</span><span class="chk-cnt">32</span></label>
+        <label class="chk" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Peonies</span><span class="chk-cnt">14</span></label>
+        <label class="chk on" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Mixed</span><span class="chk-cnt">28</span></label>
+        <label class="chk" onclick="this.classList.toggle('on')"><div class="chk-box">✓</div><span class="chk-lbl">Seasonal</span><span class="chk-cnt">19</span></label>
+      </div>
+    </div>
+    <div>
+      <div class="sort-bar"><span class="sort-cnt">Showing <strong>24</strong> of 104 bouquets</span><select class="sort-sel"><option>Sort: Featured</option><option>Price: Low→High</option><option>Price: High→Low</option><option>Newest first</option></select></div>
+      <div class="product-grid">
+        <div class="pcard"><div class="pcard-img" style="background:#F5E0E0;font-size:3rem">🌹<button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Roses</div><div class="pcard-name">Red Romance</div><div class="pcard-footer"><span class="pcard-price">€54</span><button class="pcard-btn">+</button></div></div></div>
+        <div class="pcard"><div class="pcard-img" style="background:#FCE8EC;font-size:3rem">🌸<button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Peonies</div><div class="pcard-name">Blush Dream</div><div class="pcard-footer"><span class="pcard-price">€68</span><button class="pcard-btn">+</button></div></div></div>
+        <div class="pcard"><div class="pcard-img" style="background:#E8F0E4;font-size:3rem">🌿<button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Seasonal</div><div class="pcard-name">Wild Garden</div><div class="pcard-footer"><span class="pcard-price">€42</span><button class="pcard-btn">+</button></div></div></div>
+        <div class="pcard"><div class="pcard-img" style="background:#FFF3DE;font-size:3rem">🌻<button class="pcard-wish">🤍</button></div><div class="pcard-body"><div class="pcard-cat">Mixed</div><div class="pcard-name">Sunny Days</div><div class="pcard-footer"><span class="pcard-price">€46</span><button class="pcard-btn">+</button></div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height:80px"></div>
+
+<script>
+// ── NAV SCROLL ──
+function scrollTo(id){ document.querySelector(id).scrollIntoView({behavior:'smooth'}) }
+
+// ── ACTIVE NAV ──
+const sections = ['cards','counters','detail','faq','toast','how','petals','blur','checkout','nf','shop'];
+const navLinks  = document.querySelectorAll('.nav-link');
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      navLinks.forEach(l=>l.classList.remove('active'));
+      const idx = sections.indexOf(e.target.id);
+      if(idx>-1) navLinks[idx].classList.add('active');
+    }
+  });
+},{threshold:.3});
+sections.forEach(id=>{ const el=document.getElementById(id); if(el) io.observe(el); });
+
+// ── FALLING PETALS BG ──
+(()=>{
+  const c  = document.getElementById('petalCanvas');
+  const cx = c.getContext('2d');
+  let W,H;
+  function resize(){ W=c.width=innerWidth; H=c.height=innerHeight; }
+  resize(); addEventListener('resize',resize);
+  const E=['🌸','🌹','🌷','🌺','🌼'];
+  const ps=[];
+  for(let i=0;i<18;i++) ps.push({
+    x:Math.random()*1400, y:Math.random()*900,
+    vy:.06+Math.random()*.10, size:16+Math.random()*20,
+    sA:(0.5+Math.random()*.8), sF:.0003+Math.random()*.0004, sP:Math.random()*Math.PI*2,
+    rot:Math.random()*360, rV:(Math.random()-.5)*.06,
+    alpha:.06+Math.random()*.10, t:Math.random()*40000,
+    emoji:E[Math.floor(Math.random()*E.length)]
+  });
+  let last=null;
+  function frame(now){
+    if(!last)last=now; const dt=Math.min(now-last,40); const sc=dt/16.667; last=now;
+    cx.clearRect(0,0,W,H);
+    ps.forEach(p=>{
+      p.t+=dt; p.y+=p.vy*sc; p.rot+=p.rV*sc;
+      if(p.y>H+p.size){p.y=-p.size;p.x=Math.random()*W;}
+      const sx=Math.sin(p.t*p.sF+p.sP)*(p.sA/100)*W;
+      cx.save();cx.translate(p.x+sx,p.y);cx.rotate(p.rot*Math.PI/180);
+      cx.globalAlpha=p.alpha;cx.filter=`blur(${2+p.size*.06}px)`;
+      cx.font=`${p.size}px serif`;cx.textAlign='center';cx.textBaseline='middle';
+      cx.fillText(p.emoji,0,0);cx.restore();
+    });
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+
+// ── PETALS HERO BOX ──
+(()=>{
+  const box=document.getElementById('petalsBox');
+  const E=['🌸','🌹','🌷','🌺','🌼'];
+  function spawn(){
+    const el=document.createElement('div');
+    const size=.8+Math.random()*1.3;
+    el.style.cssText=`position:absolute;top:-40px;left:${Math.random()*100}%;font-size:${size}rem;pointer-events:none;animation:petalFall ${4+Math.random()*6}s linear forwards;opacity:0`;
+    el.textContent=E[Math.floor(Math.random()*E.length)];
+    box.appendChild(el); setTimeout(()=>el.remove(),11000);
+  }
+  const style=document.createElement('style');
+  style.textContent=`@keyframes petalFall{0%{opacity:0;transform:translateY(-20px) rotate(0deg)}10%{opacity:.8}90%{opacity:.4}100%{opacity:0;transform:translateY(460px) rotate(360deg) translateX(30px)}}`;
+  document.head.appendChild(style);
+  setInterval(spawn,350);
+})();
+
+// ── COUNTERS ──
+document.querySelectorAll('[data-target]').forEach(el=>{
+  const acc=el.querySelector('.acc');
+  const target=parseInt(el.dataset.target);
+  const oi=new IntersectionObserver(entries=>{
+    if(!entries[0].isIntersecting)return;
+    let cur=0; const step=Math.ceil(target/60);
+    const t=setInterval(()=>{
+      cur=Math.min(cur+step,target);
+      el.innerHTML=cur.toLocaleString()+(acc?acc.outerHTML:'');
+      if(cur>=target)clearInterval(t);
+    },20);
+    oi.disconnect();
+  },{threshold:.5});
+  oi.observe(el);
+});
+
+// ── DETAIL ──
+let qty=1,base=54;
+function chQty(d){ qty=Math.max(1,qty+d); document.getElementById('qv').textContent=qty; const p='€'+(base*qty); document.getElementById('pb').textContent=p; document.getElementById('ctap').textContent=p; }
+function pickSize(b,p){ document.querySelectorAll('.sz').forEach(s=>s.classList.remove('on')); b.classList.add('on'); base=p; chQty(0); }
+
+// ── ACCORDION ──
+function togAcc(btn){ const item=btn.closest('.acc-item'); const was=item.classList.contains('open'); document.querySelectorAll('.acc-item.open').forEach(i=>i.classList.remove('open')); if(!was)item.classList.add('open'); }
+
+// ── TOAST ──
+const TOASTS={
+  success:{icon:'🌸',title:'Added to basket!',sub:'Velvet Romance · 25 stems',color:'var(--sage)'},
+  delivery:{icon:'🚚',title:'Delivery confirmed',sub:'Estimated arrival: today by 5 PM',color:'var(--gold)'},
+  error:{icon:'⚠️',title:'Out of stock',sub:'Pink Cloud is unavailable today',color:'var(--rose)'}
+};
+function showToast(type){
+  const d=TOASTS[type];
+  const t=document.createElement('div');
+  t.className='toast'; t.style.borderLeftColor=d.color; t.style.animation='none';
+  t.innerHTML=`<span class="toast-icon">${d.icon}</span><div class="toast-body"><strong>${d.title}</strong><span>${d.sub}</span></div>`;
+  t.style.opacity='0'; t.style.transform='translateX(40px)';
+  document.getElementById('toastStack').prepend(t);
+  requestAnimationFrame(()=>{ t.style.transition='all .45s cubic-bezier(.34,1.56,.64,1)'; t.style.opacity='1'; t.style.transform='translateX(0)'; });
+  setTimeout(()=>{ t.style.transition='all .3s ease'; t.style.opacity='0'; t.style.transform='translateX(40px)'; setTimeout(()=>t.remove(),320); },3500);
+}
+
+// ── STAGGER ──
+const staggerObs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('vis'),i*110); staggerObs.unobserve(e.target); } });
+},{threshold:.15});
+document.querySelectorAll('.stagger-item').forEach(el=>staggerObs.observe(el));
+
+// ── CHECKOUT ──
+function pickSlot(el){ document.querySelectorAll('.slot').forEach(s=>s.classList.remove('on')); el.classList.add('on'); }
+function pickPay(el){ document.querySelectorAll('.pay').forEach(p=>p.classList.remove('on')); el.classList.add('on'); }
+
+// ── WISHLIST ──
+document.querySelectorAll('.pcard-wish').forEach(b=>b.addEventListener('click',e=>{ e.stopPropagation(); b.textContent=b.textContent==='🤍'?'❤️':'🤍'; }));
+</script>
+</body>
+</html>
