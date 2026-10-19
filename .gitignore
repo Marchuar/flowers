@@ -1,0 +1,22 @@
+# Root-level ignores
+node_modules/
+dist/
+.DS_Store
+
+# Backend secrets
+backend/apps/backend/.env
+backend/.env
+
+# Frontend secrets
+frontend/.env.local
+frontend/.env.*.local
+
+# AI tooling / local editor files
+.agents/
+.claude/
+.mcp.json
+CLAUDE.md
+graphify-out/
+.playwright-mcp/
+.idea/
+.vite/
