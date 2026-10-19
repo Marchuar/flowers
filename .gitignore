@@ -22,3 +22,8 @@ graphify-out/
 .vite/
 .junie/
 skills-lock.json
+
+# Local reference images and duplicates
+frontend/Examples/
+frontend/bugs/
+frontend/public/images/before-after/* ([0-9]).png
