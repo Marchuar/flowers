@@ -43,7 +43,7 @@ yarn dev           # Frontend und Backend zusammen starten
 ```
 
 Umgebungsvariablen:
-- `backend/apps/backend/.env`: aus `.env.template` kopieren, dazu `DATABASE_URL`, `STRIPE_API_KEY` und `STORE_CORS=http://localhost:5173` setzen
+- `backend/apps/backend/.env`: aus `.env.template` kopieren und `DATABASE_URL` sowie `STRIPE_API_KEY` (Stripe-Testschlüssel `sk_test_…`) eintragen
 - `frontend/.env.local`: `VITE_MEDUSA_BACKEND_URL`, `VITE_MEDUSA_PUBLISHABLE_KEY`, `VITE_STRIPE_PUBLISHABLE_KEY`
 
 Nur das Frontend, ohne Backend (mit statischen Produktdaten):
